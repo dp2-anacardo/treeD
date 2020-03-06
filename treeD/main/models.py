@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Categoria(models.Model):
+    idCategoria = models.AutoField(primary_key=True)
+    nombre = models.TextField(verbose_name='Categoría', unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        ordering = ('idCategoria', )
+
+
+
 class Impresion(models.Model):
     idImpresion = models.AutoField(primary_key=True)
     nombre = models.TextField(verbose_name='Nombre')
@@ -9,6 +21,7 @@ class Impresion(models.Model):
     precio = models.FloatField(verbose_name='Precio')
     imagen = models.ImageField(verbose_name = 'Imagen')
     publicador = models.ForeignKey('Perfil', on_delete=models.SET_NULL, null=True)
+    categorias = models.ManyToManyField(Categoria)
     
     def __str__(self):
         return self.nombre
@@ -43,3 +56,4 @@ class Compra(models.Model):
 
     class Meta:
         ordering = ('idCompra', 'fechaDeCompra', )
+

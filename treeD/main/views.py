@@ -37,7 +37,7 @@ def crearImpresion(request):
             post=formulario.save(commit=False)
             post.vendedor = usuarioLogueado()
             post.save()
-            return redirect('nombrePaginaDestino')
+            return redirect('mostrarTodasMisImpresiones_url')
         else:
             formulario = ImpresionForm()
     return render(request, 'carpeta/archivo.html',{'form':formulario})
@@ -53,7 +53,7 @@ def editarImpresion(request, idImpresion):
             formulario = ImpresionForm(request.POST, instance=impresion)
             if formulario.is_valid:
                 formulario.save()
-            return redirect('nombrePaginaDestino')
+            return redirect('mostrarTodasMisImpresiones_url')
         return render(request, 'carpeta/archivo.html',{'form':formulario})
     else:
         return redirect('paginaError.html')
@@ -73,7 +73,7 @@ def eliminarImpresion(request, idImpresion):
             if impresion in u.impresionesCompradas:
                 u.impresionesCompradas.remove(impresion)
         impresion.delete()
-        return render(request, 'carpeta/archivo.html',{})
+        return redirect('mostrarTodasMisImpresiones_url')
     else:
         #Se envia a la vista de error con su mensaje correspondiente
         mensajeError='Ha habido un error inesperado'

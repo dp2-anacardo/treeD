@@ -17,8 +17,6 @@ class Impresion(models.Model):
         ordering = ('idImpresion', )
 
 
-
-
 class Usuario(models.Model):
     idUsuario = models.AutoField(primary_key=True)
     impresionesCompradas = models.ManyToManyField(Impresion, blank=True)

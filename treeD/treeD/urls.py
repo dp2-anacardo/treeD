@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import mostrarImpresion, mostrarTodasMisImpresiones 
+from main import views
+from main.views import mostrarImpresion, mostrarTodasMisImpresiones,crearImpresion,editarImpresion,eliminarImpresion
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('carpeta/archivo/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
-    path('carpeta/archivo/', views.mostrarTodasMisImpresiones, name="mostrarTodasMisImpresiones_url"),
-    path('carpeta/archivo/', views.crearImpresion, name="crearImpresion_url"),
-    path('carpeta/archivo/<idImpresion>/', views.editarImpresion, name="editarImpresion_url"),
-    path('carpeta/archivo/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
+    path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
+    path('impresion/listarImpresiones/', views.mostrarTodasMisImpresiones, name="mostrarTodasMisImpresiones_url"),
+    path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
+    path('impresion/crearImpresion/<idImpresion>/', views.editarImpresion, name="editarImpresion_url"),
+    path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
 ]

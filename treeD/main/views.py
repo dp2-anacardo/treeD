@@ -15,7 +15,7 @@ def mostrarImpresion(request, idImpresion):
     
     #Obtener la impresion seleccionada
     impresion = Impresion.objects.get(idImpresion=idImpresion)
-    return render(request, 'carpeta/archivo.html', {'impresion':impresion})
+    return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion})
 
 def mostrarTodasMisImpresiones(request):
 
@@ -24,7 +24,7 @@ def mostrarTodasMisImpresiones(request):
     #Filtrar todas las impresiones por el usuario logueado en el sistema
     usuarioActual = usuarioLogueado()
     impresionesUsuario = impresiones.filter(vendedor__usuario = usuarioActual)
-    return render(request, 'carpeta/archivo.html',{'impresionesUsuario': impresionesUsuario})
+    return render(request, 'impresiones/listarImpresiones.html',{'impresionesUsuario': impresionesUsuario})
 
 def crearImpresion(request):
 
@@ -40,7 +40,7 @@ def crearImpresion(request):
             return redirect('mostrarTodasMisImpresiones_url')
         else:
             formulario = ImpresionForm()
-    return render(request, 'carpeta/archivo.html',{'form':formulario})
+    return render(request, 'impresiones/crearImpresion.html',{'form':formulario})
 
 def editarImpresion(request, idImpresion):
 
@@ -54,7 +54,7 @@ def editarImpresion(request, idImpresion):
             if formulario.is_valid:
                 formulario.save()
             return redirect('mostrarTodasMisImpresiones_url')
-        return render(request, 'carpeta/archivo.html',{'form':formulario})
+        return render(request, 'impresiones/crearImpresion.html',{'form':formulario})
     else:
         return redirect('paginaError.html')
 

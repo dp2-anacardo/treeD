@@ -2,6 +2,7 @@
 """
 
 from django import forms
+from django.core.exceptions import ValidationError
 from main.models import Categoria
 
 class BuscadorForm(forms.Form):
@@ -12,20 +13,6 @@ class BuscadorForm(forms.Form):
     - precio_min: el buscador busca impresiones cuyo precio sea mayor que precio_min
     - precio_max: el buscador busca impresiones cuyo precio sea menor que precio_max
     """
-    def validar_precios(self):
-        """Valida si esta bien el rango de precio
-        """
-        cleaned_data = super().clean()
-        precio_min = cleaned_data.get("precio_min")
-        precio_max = cleaned_data.get("precio_max")
-
-        if precio_min >= precio_max:
-            msg = "El precio minimo no puede ser mayor que el precio maximo"
-            #self.add_error("precio_min", msg)
-            self._errors["precio_min"] = self.error_class([msg])
-
-            del cleaned_data["precio_min"]
-            del cleaned_data["precio_max"]
 
     CATEGORIAS = [(c.idCategoria, c.categoria) for c in Categoria.objects.all()]
 
@@ -33,5 +20,18 @@ class BuscadorForm(forms.Form):
     categorias = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple, label='Categorias', choices=CATEGORIAS, required=False)
     precio_min = forms.FloatField(
-        label='Precio Minimo', required=False, validators=[validar_precios])
+        label='Precio Minimo', required=False)
     precio_max = forms.FloatField(label='Precio Maximo', required=False)
+
+    def clean(self):
+        """Valida si esta bien el rango de precio
+        """
+        cleaned_data = self.cleaned_data
+        precio_min = cleaned_data.get("precio_min")
+        precio_max = cleaned_data.get("precio_max")
+
+        if precio_min is not None and precio_max is not None:
+            if precio_min >= precio_max:
+                msg = "El precio minimo no puede ser mayor que el precio maximo"
+                #self.add_error("precio_min", msg)
+                raise ValidationError({'precio_min': [msg,]})

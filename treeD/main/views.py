@@ -1,13 +1,9 @@
-from functools import reduce
-import operator
-
-from django.http import HttpResponseRedirect
+""" Vistas del sistema
+"""
 from django.shortcuts import render
-from django.db.models import Q
 from main.forms import BuscadorForm
 from main.models import Impresion
 
-# Create your views here.
 def buscador_impresiones_3d(request):
     """
     Funcion que busca impresiones 3D que cumplen una serie de parametros
@@ -23,10 +19,10 @@ def buscador_impresiones_3d(request):
             precio_max = form.cleaned_data.get("precio_max")
 
             if nombre != '':
-                query = query.objects.filter(nombre__icontains=nombre)
+                query = query.filter(nombre__icontains=nombre)
             if categorias:
-                query = query.filter(reduce(
-                    operator.and_, (Q(categorias__contains=c) for c in categorias)))
+                for id_ in categorias:
+                    query = query.filter(categorias__in=[id_]).distinct()
             if precio_min is not None:
                 query = query.filter(precio__gt=precio_min)
             if precio_max is not None:

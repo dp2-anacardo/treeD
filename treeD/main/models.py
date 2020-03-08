@@ -35,11 +35,7 @@ class Impresion(models.Model):
         return self.nombre
     
     class Meta:
-<<<<<<< HEAD
         ordering = ('idImpresion', )    
-=======
-        ordering = ('idImpresion', )
->>>>>>> 48d7b65c7bdd6f11d690f03b0aed536448bcaffa
 
 
 class Perfil(models.Model):

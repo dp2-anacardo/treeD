@@ -69,3 +69,8 @@ def eliminarImpresion(request, idImpresion):
         impresion.delete()
     return redirect('index')
 
+def listarImpresiones(request):
+
+    impresiones = Impresion.objects.all()
+    return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
+

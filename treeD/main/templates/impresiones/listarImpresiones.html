@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Crear impresion</title>
+  </head>
+  <body>
+    <table>
+        <thread>
+            <tr>
+              <td>Nombre</td>
+              <td>Descripcion</td>
+              <td>Precio</td>
+              <td>Publicador</td>
+            </tr>
+        </thread>
+        <tbody>
+          {% for i in impresiones %}
+          <tr>
+            
+              <td>{{i.nombre}}</td>
+              <td>{{i.descripcion}}</td>
+              <td>{{i.precio}}</td>
+              <td>{{i.publicador}}</td>
+          {% endfor %}
+          </tr>
+        </tbody>
+    </table>
+  </body>
+</html>

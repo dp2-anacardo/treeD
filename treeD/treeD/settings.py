@@ -52,6 +52,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'treeD.urls'
 
+MEDIA_ROOT = ''
+
+MEDIA_URL = '/images/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

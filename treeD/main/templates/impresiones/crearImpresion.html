@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Crear impresion</title>
+  </head>
+  <body>
+    <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
+        {% csrf_token %}
+        {{formulario1.as_p}}
+        {{ formulario2.as_p }}
+        {{ formulario3.as_p }}
+        {{ formulario4.as_p }}
+        {{ formulario5.as_p }}
+        <button type='submit'>Crear</button>
+    </form>
+  </body>
+</html>

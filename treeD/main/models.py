@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Imagen(models.Model):
     idImagen = models.AutoField(primary_key=True)
-    imagen = models.ImageField(verbose_name='Imagen')
+    imagen = models.ImageField(upload_to='imagenes',verbose_name='Imagen')
     impresion = models.ForeignKey('Impresion', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -12,6 +12,16 @@ class Imagen(models.Model):
 
     class Meta:
         ordering = ('idImagen', )
+
+class Categoria(models.Model):
+    idCategoria = models.AutoField(primary_key=True)
+    categoria = models.TextField(verbose_name='Categoría')
+
+    def __str__(self):
+        return self.categoria
+    
+    class Meta:
+        ordering = ('idCategoria', )
 
 class Impresion(models.Model):
     idImpresion = models.AutoField(primary_key=True)
@@ -53,12 +63,4 @@ class Compra(models.Model):
         ordering = ('idCompra', 'fechaDeCompra', )
 
 
-class Categoria(models.Model):
-    idCategoria = models.AutoField(primary_key=True)
-    categoria = models.TextField(verbose_name='Categoría')
 
-    def __str__(self):
-        return self.categoria
-    
-    class Meta:
-        ordering = ('categoria', )

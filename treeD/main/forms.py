@@ -1,5 +1,5 @@
 from django import forms
-from main.models import Impresion
+from main.models import Impresion, Imagen
 
 
 class ImpresionForm(forms.ModelForm):
@@ -9,5 +9,13 @@ class ImpresionForm(forms.ModelForm):
             'nombre',
             'descripcion',
             'precio',
-            'imagen',
+            'publicador',
+            'categorias',
         }
+
+class CargarImagenForm(forms.ModelForm):
+    class Meta:
+        model = Imagen
+        fields = [
+            'imagen',
+        ]

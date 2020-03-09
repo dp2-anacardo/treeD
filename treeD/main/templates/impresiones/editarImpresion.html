@@ -1,13 +1,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Crear impresion</title>
+    <title>Editar impresion</title>
   </head>
   <body>
     <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
         {% csrf_token %}
         {{formulario1.as_p}}
-        {{formularioImagen.as_p}}
+        {% for i in imagenes %}
+            {{i.imagen}}
+            <a href="{% url 'eliminarImagen_url' i.idImagen %}">Eliminar imagen</a>
+        {% endfor %}
+        <a href="{% url 'añadirImagen_url' id %}">Añadir imagen</a>
         <button type='submit'>Crear</button>
     </form>
   </body>

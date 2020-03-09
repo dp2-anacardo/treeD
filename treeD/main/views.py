@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Imagen, Compra
 from main.forms import ImpresionForm, CargarImagenForm
+from django.forms import modelformset_factory
 
 #Metodo para obtener el usuario actualmente logueado
 def usuarioLogueado(request):
@@ -22,36 +23,26 @@ def mostrarImpresion(request, idImpresion):
     return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion})
 
 #Falta añadir a mano el publicador que seria el usuario logueado
-def crearImpresionUnificada(request):
+def crearImpresion(request):
 
+    numeroImagenes = 4
     if request.method == "POST":
         formImpresion = ImpresionForm(request.POST)
-        formImagen1 = CargarImagenForm(request.POST, request.FILES)
-        formImagen2 = CargarImagenForm(request.POST, request.FILES)
-        formImagen3= CargarImagenForm(request.POST, request.FILES)
-        formImagen4=CargarImagenForm(request.POST, request.FILES)
-        if formImpresion.is_valid() and formImagen1.is_valid():
-            imagen1 = formImagen1.save(commit=False)
-            imagen2 = formImagen2.save(commit=False)
-            imagen3= formImagen3.save(commit=False)
-            imagen4= formImagen4.save(commit=False)
-            imagen1.impresion= formImpresion.save()
-            imagen2.impresion=formImpresion.save()
-            imagen3.impresion=formImpresion.save()
-            imagen4.impresion=formImpresion.save()
-            imagen1.save() 
-            imagen2.save()
-            imagen3.save()
-            imagen4.save()
+        formImagen= CargarImagenForm(request.POST, request.FILES)
+        files = request.FILES.getlist('imagen')
+        if formImpresion.is_valid() and formImagen.is_valid():
+            impresion = formImpresion.save()
+            contador = 1
+            for i in files:
+                if contador <= numeroImagenes:
+                    imagen = Imagen(imagen=i, impresion=impresion)
+                    imagen.save()
+                contador = contador + 1
             return redirect('index')
     else:
         formImpresion = ImpresionForm()
-        formImagen1 = CargarImagenForm()
-        formImagen2=CargarImagenForm()
-        formImagen3= CargarImagenForm()
-        formImagen4=CargarImagenForm()
-    return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formulario2':formImagen1,
-     'formulario3':formImagen2, 'formulario4':formImagen3,'formulario5':formImagen4})
+        formImagen=CargarImagenForm(request.FILES)
+    return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formularioImagen':formImagen})
 
 #Falta hacer comprobacion de que solo el publicador de la impresion pueda eliminarla
 def eliminarImpresion(request, idImpresion):
@@ -68,4 +59,56 @@ def eliminarImpresion(request, idImpresion):
         imagenesImpresion.delete()
         impresion.delete()
     return redirect('index')
+
+#Falta hacer comprobacion de que solo el publicador de la impresion pueda editarla
+def editarImpresion(request, idImpresion):
+
+    impresion= Impresion.objects.get(idImpresion = idImpresion)
+    imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
+
+    if request.method == 'GET':
+        formImpresion= ImpresionForm(instance= impresion)
+        return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion, 'imagenes':imagenesImpresion, 'id':idImpresion})
+    else:
+        formImpresion = ImpresionForm(request.POST, instance=impresion)
+        if formImpresion.is_valid():
+            formImpresion.save()
+            return redirect('index')
+
+def eliminarImagen(request, idImagen):
+
+    img = Imagen.objects.get(idImagen = idImagen)
+    idImpresion = img.impresion.idImpresion
+    img.delete()
+
+    impresion= Impresion.objects.get(idImpresion = idImpresion)
+    imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
+    formImpresion= ImpresionForm(instance= impresion)
+    return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion,'imagenes':imagenesImpresion})
+
+def añadirImagen(request, idImpresion):
+
+    numeroImagenes = 4
+    impresion = Impresion.objects.get(idImpresion = idImpresion)
+    imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
+    formImpresion= ImpresionForm(instance= impresion)
+    numeroImagenesImpresiones = len(imagenesImpresion)
+    print(numeroImagenesImpresiones)
+
+    if request.method == "POST":
+        formImagen= CargarImagenForm(request.POST, request.FILES)
+        files = request.FILES.getlist('imagen')
+        if formImagen.is_valid():
+            contador = 1
+            for i in files:
+                if contador + numeroImagenesImpresiones <= numeroImagenes:
+                    imagen = Imagen(imagen=i, impresion=impresion)
+                    imagen.save()
+                contador = contador + 1
+            return redirect('index')
+    else:
+        formImagen=CargarImagenForm(request.FILES)
+    return render(request, 'impresiones/añadirImagen.html',{'formularioImagen':formImagen})
+
+    
 

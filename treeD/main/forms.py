@@ -14,8 +14,7 @@ class ImpresionForm(forms.ModelForm):
         }
 
 class CargarImagenForm(forms.ModelForm):
+    imagen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))    
     class Meta:
         model = Imagen
-        fields = [
-            'imagen',
-        ]
+        fields = ('imagen', )

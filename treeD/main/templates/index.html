@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<div class="mishuevos" style="flex: 1">
 <div class="jumbotron">
     <h1 class="display-1 text-center ">Bienvenido a TreeD</h1>
     <p class="lead text-center">Aquí encontrarás piezas y modelos 3D</p>
@@ -17,8 +18,8 @@
       </div>
   </div>
   </div>
-  <div class="container">
-<div class="row">
+
+<div class="d-flex flex-row justify-content-center">
     <div class="col-md-4">
       <img style="margin: auto;display:block;" src="{% static "3d-printer.png" %}" alt="Smiley face" height="120" width="120">
       <h3 class="text-center">Impresiones 3D</h3>
@@ -35,20 +36,6 @@
       <p class="lead mb-0 text-center">Forma parte de nuestro sistema de afliados y aumenta tus ventas</p>
       </div>
   </div>
-  </div>
 
-<footer class="bg-dark text-white mt-4 w-100">
-  <div class="container-fluid py-3">
-    <div class="d-flex justify-content-around">
-      <div class="col-lg-4 ">
-        <a href="#" class="text-light text-lg-left"> Sobre nosotros</a>
-      </div>
-  <div class="col-lg-4 text-light text-lg-center" >© 2020 Copyright: TreeD
-  </div>
-  <div class="col-lg-4 text-lg-right">
-    <a href="#" class="text-light"> Términos de Uso</a>
-
-  </div>
 </div>
-</footer>
 {% endblock %}

@@ -27,7 +27,7 @@
         <field type="IntegerField" name="is_superuser">0</field>
         <field type="IntegerField" name="is_staff">0</field>
     </object>
-    <!--PERFIL-->
+    <!--PERFILES-->
     <object pk="3" model="main.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">2</field>
     </object>

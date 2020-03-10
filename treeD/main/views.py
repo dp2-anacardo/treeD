@@ -69,11 +69,17 @@ def eliminarImpresion(request, idImpresion):
         impresion.delete()
     return redirect('index')
 
+def error(request):
+    return render(request, 'impresiones/paginaError.html')
+
 def listarImpresiones(request):
 
-    impresiones = Impresion.objects.all()
-    categorias = Categoria.objects.all()
-    return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias})
+    try:
+        usuario = usuarioLogueado(request)
+        impresiones = Impresion.objects.all()
+        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
+    except:
+        return redirect('error_url')
 
 def index(request):
     return render(request, 'index.html',)

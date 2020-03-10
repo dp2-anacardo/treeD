@@ -5,6 +5,9 @@ from main.forms import BuscadorForm
 from main.models import Impresion
 
 def index(request):
+    """
+    Funcion que carga la pagina principal
+    """
     return render(request, 'index.html',)
 
 def buscador_impresiones_3d(request):

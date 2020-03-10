@@ -33,5 +33,4 @@ class BuscadorForm(forms.Form):
         if precio_min is not None and precio_max is not None:
             if precio_min >= precio_max:
                 msg = "El precio minimo no puede ser mayor que el precio maximo"
-                #self.add_error("precio_min", msg)
                 raise ValidationError({'precio_min': [msg,]})

@@ -19,10 +19,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from main import views
 
-from main import views
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
+    path('', views.index),
     path('list/', views.buscador_impresiones_3d)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

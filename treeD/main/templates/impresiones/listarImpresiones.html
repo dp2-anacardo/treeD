@@ -1,29 +1,26 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Crear impresion</title>
-  </head>
-  <body>
-    <table>
-        <thread>
-            <tr>
-              <td>Nombre</td>
-              <td>Descripcion</td>
-              <td>Precio</td>
-              <td>Publicador</td>
-            </tr>
-        </thread>
-        <tbody>
-          {% for i in impresiones %}
-          <tr>
-            
-              <td>{{i.nombre}}</td>
-              <td>{{i.descripcion}}</td>
-              <td>{{i.precio}}</td>
-              <td>{{i.publicador}}</td>
-          {% endfor %}
-          </tr>
-        </tbody>
-    </table>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="bottom-footer">
+<div class="container">
+<form>
+  <div class="form-inline justify-content-center">
+    <input type="text" class="form-control " placeholder="Buscar piezas 3D"/> <button type="submit" class="btn btn-primary">Submit</button>
+    <br>
+  </div>
+  <br>
+  <br>
+<!-- 
+    <br>
+    {% for cat in categorias %}
+    <div class="form-check form-check-inline ">
+      <input class="form-check-input" type="checkbox" id={{cat.categoria}} value={{cat.categoria}}>
+      <label class="form-check-label" for={{cat.categoria}}>{{cat.categoria}}</label>
+    </div>
+    {% endfor %}
+  </div> -->
+  
+
+</form>
+</div>
+</div>
+{% endblock %}

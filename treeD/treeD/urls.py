@@ -22,10 +22,11 @@ from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.home, name="index"),
+    path('',views.index),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresionUnificada, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
-     path('paginaError/', views.error, name="error_url"),
+    path('paginaError/', views.error, name="error_url"),
+     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

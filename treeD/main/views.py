@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Imagen, Compra
+from main.models import Impresion, Perfil, Imagen, Compra,Categoria
 from main.forms import ImpresionForm, CargarImagenForm
 
 #Metodo para obtener el usuario actualmente logueado
@@ -80,4 +80,7 @@ def listarImpresiones(request):
         return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
     except:
         return redirect('error_url')
+
+def index(request):
+    return render(request, 'index.html',)
 

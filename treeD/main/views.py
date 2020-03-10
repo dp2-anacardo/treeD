@@ -4,6 +4,9 @@ from django.shortcuts import render
 from main.forms import BuscadorForm
 from main.models import Impresion
 
+def index(request):
+    return render(request, 'index.html',)
+
 def buscador_impresiones_3d(request):
     """
     Funcion que busca impresiones 3D que cumplen una serie de parametros

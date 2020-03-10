@@ -27,4 +27,5 @@ urlpatterns = [
     path('impresion/editarImpresion/<idImpresion>/', views.editarImpresion, name="editarImpresion_url"),
     path('impresion/eliminarImagen/<idImagen>/', views.eliminarImagen, name="eliminarImagen_url"),
     path('impresion/añadirImagen/<idImpresion>/', views.añadirImagen, name="añadirImagen_url"),
+    path('paginaError/', views.error, name="error_url"),
 ]

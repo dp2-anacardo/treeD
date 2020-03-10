@@ -74,3 +74,6 @@ def listarImpresiones(request):
     impresiones = Impresion.objects.all()
     return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
 
+def index(request):
+    return render(request, 'index.html',)
+

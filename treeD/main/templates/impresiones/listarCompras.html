@@ -7,17 +7,19 @@
     <table>
         <thread>
             <tr>
+              <td>Fecha de compra</td>
               <td>Nombre</td>
-              <td>Descripcion</td>
               <td>Precio</td>
             </tr>
         </thread>
         <tbody>
-          {% for i in impresiones %}
+          {% for c in compras %}
           <tr>
-              <td>{{i.nombre}}</td>
-              <td>{{i.descripcion}}</td>
-              <td>{{i.precio}}</td>
+              <td>{{c.fechaDeCompra}}</td>
+          {% endfor %}
+          {% for i in impresiones %}
+            <td>{{i.nombre}}</td>
+            <td>{{i.precio}}</td>
           {% endfor %}
           </tr>
         </tbody>

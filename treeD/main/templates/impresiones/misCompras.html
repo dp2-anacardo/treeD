@@ -7,20 +7,20 @@
     <table>
         <thread>
             <tr>
-              <td>Impresion</td>
               <td>Fecha de compra</td>
+              <td>Impresion</td>
               <td>Precio</td>
             </tr>
         </thread>
         <tbody>
-          {% for c in diccionario.keys %}
+            {% for c, i in diccionario.items %}
                     <tr>
-                        <td>{{diccionario[c].nombre}}</td>
                         <td>{{c.fechaDeCompra}}</td>
-                        <td>{{diccionario[c].precio}}</td>
-          {% endfor %}
-          </tr>
-        </tbody>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.precio}}</td>
+                    </tr>
+            {% endfor %}
+          </tbody>
     </table>
   </body>
 </html>

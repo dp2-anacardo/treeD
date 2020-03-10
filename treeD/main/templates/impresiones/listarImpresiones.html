@@ -4,23 +4,61 @@
 <div class="container">
 <form>
   <div class="form-inline justify-content-center">
-    <input type="text" class="form-control " placeholder="Buscar piezas 3D"/> <button type="submit" class="btn btn-primary">Submit</button>
-    <br>
+    <input type="text" class="form-control w-50 mr-2" placeholder="Buscar piezas 3D"/> 
+    <div class="btn-toolbar">
+    <button type="submit" class="btn btn-primary mr-2">Buscar</button>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" 
+    aria-controls="multiCollapseExample1 multiCollapseExample2">Filtros</button>
+  </div>
   </div>
   <br>
-  <br>
-<!-- 
-    <br>
-    {% for cat in categorias %}
-    <div class="form-check form-check-inline ">
-      <input class="form-check-input" type="checkbox" id={{cat.categoria}} value={{cat.categoria}}>
-      <label class="form-check-label" for={{cat.categoria}}>{{cat.categoria}}</label>
-    </div>
-    {% endfor %}
-  </div> -->
-  
+  <div class="row">
+    <div class="col">
+      <div class="collapse multi-collapse" id="multiCollapseExample1">
+        <div class="card card-body">
+          {% for cat in categorias %}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id={{cat.categoria}} value={{cat.categoria}}>
+        <label class="form-check-label" for={{cat.categoria}}>{{cat.categoria}}</label>
+      </div>
+        {% endfor %}
+      </div>
+        </div>
+      </div>
+    <div class="col">
+      <div class="collapse multi-collapse" id="multiCollapseExample2">
+        <div class="card card-body">
+          <label for="minPriceId">Precio Minimo</label>
+          <input type="range" class="custom-range" id="minPriceId" value="1" min="1" max="500" oninput="minPriceOutputId.value = minPriceId.value">
+          <output id="minPriceOutputId">1</output>
 
+          <label for="maxPriceId">Precio Máximo</label>
+          <input type="range" class="custom-range" id="maxPriceId" value="2000" min="500" max="2000" oninput="maxPriceOutputId.value = maxPriceId.value">
+          <output id="maxPriceOutputId">2000</output>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
+</div>
+<br>
+<div class="container">
+<div class="row">
+{% for impresion in impresiones %}
+<div class="col-lg-4">
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" src={{impresion.imagen_set.all.0.imagen.url}} height="190" width="286" >
+  <div class="card-body">
+    <h5 class="card-title text-center">{{impresion.nombre}}</h5>
+    <p class="card-text text-center">{{impresion.precio}}€</p>
+    <div class="col text-center">
+    <a href="#" class="btn btn-primary m-auto">Ver</a>
+  </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+</div>
 </div>
 </div>
 {% endblock %}

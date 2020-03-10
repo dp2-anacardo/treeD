@@ -1,28 +1,26 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Listar compras</title>
+    <title>Mis impresiones</title>
   </head>
   <body>
     <table>
         <thread>
             <tr>
               <td>Fecha de compra</td>
-              <td>Nombre</td>
+              <td>Impresion</td>
               <td>Precio</td>
             </tr>
         </thread>
         <tbody>
-          {% for c in compras %}
-          <tr>
-              <td>{{c.fechaDeCompra}}</td>
-          {% endfor %}
-          {% for i in impresiones %}
-            <td>{{i.nombre}}</td>
-            <td>{{i.precio}}</td>
-          {% endfor %}
-          </tr>
-        </tbody>
+            {% for c, i in diccionario.items %}
+                    <tr>
+                        <td>{{c.fechaDeCompra}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.precio}}</td>
+                    </tr>
+            {% endfor %}
+          </tbody>
     </table>
   </body>
 </html>

@@ -19,8 +19,7 @@ class BuscadorForm(forms.Form):
     nombre = forms.CharField(label='Nombre de la impresion', required=False)
     categorias = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple, label='Categorias', choices=CATEGORIAS, required=False)
-    precio_min = forms.FloatField(
-        label='Precio Minimo', required=False)
+    precio_min = forms.FloatField(label='Precio Minimo', required=False)
     precio_max = forms.FloatField(label='Precio Maximo', required=False)
 
     def clean(self):

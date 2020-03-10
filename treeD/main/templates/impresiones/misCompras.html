@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mis impresiones</title>
+  </head>
+  <body>
+    <table>
+        <thread>
+            <tr>
+              <td>Impresion</td>
+              <td>Fecha de compra</td>
+              <td>Precio</td>
+            </tr>
+        </thread>
+        <tbody>
+          {% for c in diccionario.keys %}
+                    <tr>
+                        <td>{{diccionario[c].nombre}}</td>
+                        <td>{{c.fechaDeCompra}}</td>
+                        <td>{{diccionario[c].precio}}</td>
+          {% endfor %}
+          </tr>
+        </tbody>
+    </table>
+  </body>
+</html>

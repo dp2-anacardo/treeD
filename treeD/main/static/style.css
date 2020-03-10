@@ -1,3 +1,14 @@
-.carousel-inner > .item {
-  height: 59px;
+#body{
+  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.bottom-footer{
+  flex:1;
+}
+
+.index-icons{
+  margin: auto;display:block;
 }

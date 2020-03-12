@@ -75,9 +75,9 @@ def error(request):
 def listarImpresiones(request):
 
     try:
-        usuario = usuarioLogueado(request)
         impresiones = Impresion.objects.all()
-        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
+        categorias = Categoria.objects.all()
+        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias})
     except:
         return redirect('error_url')
 

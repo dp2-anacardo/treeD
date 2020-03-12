@@ -75,7 +75,6 @@ def error(request):
 def listarImpresiones(request):
 
     try:
-        usuario = usuarioLogueado(request)
         impresiones = Impresion.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
     except:

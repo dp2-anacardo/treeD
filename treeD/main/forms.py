@@ -14,11 +14,9 @@ class BuscadorForm(forms.Form):
     - precio_max: el buscador busca impresiones cuyo precio sea menor que precio_max
     """
 
-    CATEGORIAS = [(c.idCategoria, c.categoria) for c in Categoria.objects.all()]
-
     nombre = forms.CharField(label='Nombre de la impresion', required=False)
-    categorias = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple, label='Categorias', choices=CATEGORIAS, required=False)
+    categorias = forms.ModelMultipleChoiceField(
+        queryset=Categoria.objects, widget=forms.CheckboxSelectMultiple(), required=False)
     precio_min = forms.FloatField(label='Precio Minimo', required=False)
     precio_max = forms.FloatField(label='Precio Maximo', required=False)
 

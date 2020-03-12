@@ -23,6 +23,6 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index),
-    path('login/', LoginView.as_view(), name="login_url")
+    path('base.html/', LoginView.as_view(), name="login_url")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

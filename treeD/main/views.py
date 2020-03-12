@@ -76,7 +76,8 @@ def listarImpresiones(request):
 
     try:
         impresiones = Impresion.objects.all()
-        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones})
+        categorias = Categoria.objects.all()
+        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias})
     except:
         return redirect('error_url')
 

@@ -7,3 +7,4 @@ admin.site.register(Perfil)
 admin.site.register(Compra)
 admin.site.register(Imagen)
 admin.site.register(Categoria)
+

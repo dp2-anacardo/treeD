@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
 from main import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', views.home, name="index"),
+    path('',views.index),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
@@ -28,4 +30,6 @@ urlpatterns = [
     path('impresion/eliminarImagen/<idImagen>/', views.eliminarImagen, name="eliminarImagen_url"),
     path('impresion/añadirImagen/<idImpresion>/', views.añadirImagen, name="añadirImagen_url"),
     path('paginaError/', views.error, name="error_url"),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+  

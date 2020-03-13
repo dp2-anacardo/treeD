@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+<div class="jumbotron">
+    <h1 class="display-1 text-center ">Bienvenido a TreeD</h1>
+    <p class="lead text-center">Aquí encontrarás piezas y modelos 3D</p>
+    <hr class="my-4">
+    <div class="row">
+      <div class="col-lg-4"></div>
+      <div class="col-lg-4 ">
+          <div class="input-group">
+              <input type="text" class="form-control" placeholder="Buscar piezas 3D"/> 
+              <span class="input-group-btn">
+                  <button class="btn btn-dark" type="button">Buscar</button>
+              </span>
+          </div>
+      </div>
+  </div>
+  </div>
+
+<div class="d-flex flex-row justify-content-center">
+    <div class="col-md-4">
+      <img class="index-icons" src="{% static "3d-printer.png" %}" alt="Smiley face" height="120" width="120">
+      <h3 class="text-center">Impresiones 3D</h3>
+      <p class="lead mb-0 text-center">Vende tus impresiones 3D y saca partido a tu impresora 3D</p>
+    </div>
+    <div class="col-md-4">
+      <img class="index-icons" src="{% static "3d.png" %}" alt="Smiley face" height="120" width="120">
+      <h3 class="text-center">Modelos 3D</h3>
+      <p class="lead mb-0 text-center">Vende tus modelos para impresiones 3D</p>
+    </div>
+    <div class="col-md-4">
+      <img class="index-icons" src="{% static "group.png" %}" alt="Smiley face" height="120" width="120">
+      <h3 class="text-center">Afiliados</h3>
+      <p class="lead mb-0 text-center">Forma parte de nuestro sistema de afliados y aumenta tus ventas</p>
+      </div>
+  </div>
+
+</div>
+{% endblock %}

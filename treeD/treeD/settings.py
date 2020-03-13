@@ -52,6 +52,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'treeD.urls'
 
+MEDIA_ROOT = ''
+
+MEDIA_URL = '/images/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -123,5 +127,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'carga')
-MEDIA_URL ='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'carga/imagenes')
+MEDIA_URL ='/carga/imagenes/'

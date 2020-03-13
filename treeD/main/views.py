@@ -21,15 +21,14 @@ def error(request):
 def mostrarImpresion(request, idImpresion):
     
     try:
-        idUser=request.user.id
-        userActual = get_object_or_404(User, pk = idUser)
         impresion = Impresion.objects.get(idImpresion=idImpresion)
+        imagenesTotales= Imagen.objects.all()
+        categorias = impresion.categorias.all()
+        imagenesImpresion = imagenesTotales.filter(impresion = impresion)
+        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
     except:
         return redirect('error_url')
-    imagenesTotales= Imagen.objects.all()
-    categorias = impresion.categorias.all()
-    imagenesImpresion = imagenesTotales.filter(impresion = impresion)
-    return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
+    
 
 def crearImpresion(request):
 
@@ -149,4 +148,6 @@ def añadirImagen(request, idImpresion):
         return redirect('error_url')
 
     
+def index(request):
+    return render(request, 'index.html',)
 

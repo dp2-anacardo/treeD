@@ -23,6 +23,7 @@ from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('list/', views.buscador_impresiones_3d),
     path('',views.index),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),

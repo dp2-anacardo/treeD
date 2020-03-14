@@ -2,9 +2,13 @@
 {% block content %}
 <div class="bottom-footer">
 <div class="container">
-<form>
+<form action="/list/" method="post">
+  {% csrf_token %}
   <div class="form-inline justify-content-center">
-    <input type="text" class="form-control w-50 mr-2" placeholder="Buscar piezas 3D"/> 
+    <!--
+    <input type="text" class="form-control w-50 mr-2" placeholder="Buscar piezas 3D" name="busqueda"/> 
+    -->
+    {{form.nombre}}
     <div class="btn-toolbar">
     <button type="submit" class="btn btn-dark mr-2">Buscar</button>
     <button class="btn btn-dark" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" 
@@ -12,30 +16,27 @@
   </div>
   </div>
   <br>
+  {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            El precio minimo no puede ser mayor que el precio maximo
+          </div>
+            {% endif %}
   <div class="row">
     <div class="col">
       <div class="collapse multi-collapse" id="multiCollapseExample1">
-        <div class="card card-body">
-          {% for cat in categorias %}
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id={{cat.categoria}} value={{cat.categoria}}>
-        <label class="form-check-label" for={{cat.categoria}}>{{cat.categoria}}</label>
-      </div>
-        {% endfor %}
+        <div class="card card-body ">
+          <ul class="list-unstyled">
+          {{form.categorias}}
+        </ul>
       </div>
         </div>
       </div>
     <div class="col">
       <div class="collapse multi-collapse" id="multiCollapseExample2">
         <div class="card card-body">
-          <label for="minPriceId">Precio Minimo</label>
-          <input type="range" class="custom-range" id="minPriceId" value="1" min="1" max="500" oninput="minPriceOutputId.value = minPriceId.value">
-          <output id="minPriceOutputId">1</output>
-
-          <label for="maxPriceId">Precio Máximo</label>
-          <input type="range" class="custom-range" id="maxPriceId" value="2000" min="500" max="2000" oninput="maxPriceOutputId.value = maxPriceId.value">
-          <output id="maxPriceOutputId">2000</output>
-        </div>
+          {{form.precio_min}}
+          <br>
+          {{form.precio_max}}
       </div>
     </div>
   </div>
@@ -56,6 +57,7 @@
   </div>
   </div>
 </div>
+<br>
 </div>
 {% if forloop.counter|divisibleby:3 %}
   </div>
@@ -64,6 +66,7 @@
     {% empty %}
       <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
 {% endfor %}
+</div>
 </div>
 </div>
 </div>

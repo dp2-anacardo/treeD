@@ -12,4 +12,6 @@
 .index-icons{
   margin: auto;display:block;
 }
-
+ul{
+  list-style-type:none;
+}

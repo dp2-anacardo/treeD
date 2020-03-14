@@ -25,7 +25,7 @@ class Impresion(models.Model):
         return str(self.idImpresion)
     
     class Meta:
-        ordering = ('idImpresion', )
+        ordering = ('idImpresion',)
 
 
 class Perfil(models.Model):

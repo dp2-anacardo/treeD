@@ -19,7 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from main import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
+    path('paginaError/', views.error, name="error_url"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

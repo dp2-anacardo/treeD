@@ -118,6 +118,10 @@
         <field type="ImageField" name="imagen">image3.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">19</field>
     </object>
+    <object pk="23" model="main.imagen">
+        <field type="ImageField" name="imagen">image4.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
+    </object>
     <!--COMPRAS-->
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="idPerfil" rel="OneToOneRel">24</field>

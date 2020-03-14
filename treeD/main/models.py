@@ -40,7 +40,6 @@ class Impresion(models.Model):
 
 class Perfil(models.Model):
     idPerfil = models.AutoField(primary_key=True)
-    impresionesCompradas = models.ManyToManyField(Impresion, through='Compra', blank=True)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=False)
     
     def __str__(self):

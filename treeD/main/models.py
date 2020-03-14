@@ -28,8 +28,6 @@ class Impresion(models.Model):
         ordering = ('idImpresion', )
 
 
-
-
 class Perfil(models.Model):
     idPerfil = models.AutoField(primary_key=True)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=False)

@@ -3,6 +3,21 @@
 from django.shortcuts import render
 from main.forms import BuscadorForm
 from main.models import Impresion
+from django.shortcuts import render, redirect
+from main.models import Impresion,Categoria
+
+def error(request):
+    return render(request, 'impresiones/paginaError.html')
+
+def listarImpresiones(request):
+
+    try:
+        form = BuscadorForm(request.POST)
+        impresiones = Impresion.objects.all()
+        categorias = Categoria.objects.all()
+        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias,'form':form})
+    except EmptyResultSet:
+        return redirect('error_url')
 
 def index(request):
     """
@@ -37,4 +52,5 @@ def buscador_impresiones_3d(request):
     else:
         form = BuscadorForm()
 
-    return render(request, "list.html", {"form": form, "query": query})
+    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
+

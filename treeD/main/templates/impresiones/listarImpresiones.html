@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bottom-footer">
+<div class="container">
+<form action="/list/" method="post">
+  {% csrf_token %}
+  <div class="form-inline justify-content-center">
+    <!--
+    <input type="text" class="form-control w-50 mr-2" placeholder="Buscar piezas 3D" name="busqueda"/> 
+    -->
+    {{form.nombre}}
+    <div class="btn-toolbar">
+    <button type="submit" class="btn btn-dark mr-2">Buscar</button>
+    <button class="btn btn-dark" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" 
+    aria-controls="multiCollapseExample1 multiCollapseExample2">Filtros</button>
+  </div>
+  </div>
+  <br>
+  {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
+            El precio minimo no puede ser mayor que el precio maximo
+          </div>
+            {% endif %}
+  <div class="row">
+    <div class="col">
+      <div class="collapse multi-collapse" id="multiCollapseExample1">
+        <div class="card card-body ">
+          <ul class="list-unstyled">
+          {{form.categorias}}
+        </ul>
+      </div>
+        </div>
+      </div>
+    <div class="col">
+      <div class="collapse multi-collapse" id="multiCollapseExample2">
+        <div class="card card-body">
+          {{form.precio_min}}
+          <br>
+          {{form.precio_max}}
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+<br>
+<div class="container">
+<div class="row">
+{% for impresion in impresiones %}
+<div class="col-lg-4">
+<div class="card mx-auto" style="width: 18rem;">
+  <img class="card-img-top" src={{impresion.imagen_set.all.0.imagen.url}} height="190" width="286" >
+  <div class="card-body">
+    <h5 class="card-title text-center">{{impresion.nombre}}</h5>
+    <p class="card-text text-center">{{impresion.precio}}€</p>
+    <div class="col text-center">
+    <a href="#" class="btn btn-dark m-auto">Ver</a>
+  </div>
+  </div>
+</div>
+<br>
+</div>
+{% if forloop.counter|divisibleby:3 %}
+  </div>
+    <div class="row">
+    {% endif %}
+    {% empty %}
+      <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
+{% endfor %}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

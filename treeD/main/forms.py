@@ -4,6 +4,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from main.models import Categoria
+from django import forms
 
 class BuscadorForm(forms.Form):
 
@@ -14,11 +15,11 @@ class BuscadorForm(forms.Form):
     - precio_max: el buscador busca impresiones cuyo precio sea menor que precio_max
     """
 
-    nombre = forms.CharField(label='Nombre de la impresion', required=False)
+    nombre = forms.CharField(label='Nombre de la impresion', required=False,widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2','placeholder': 'Buscar Piezas 3D'}))
     categorias = forms.ModelMultipleChoiceField(
         queryset=Categoria.objects, widget=forms.CheckboxSelectMultiple(), required=False)
-    precio_min = forms.FloatField(label='Precio Minimo', required=False)
-    precio_max = forms.FloatField(label='Precio Maximo', required=False)
+    precio_min = forms.FloatField(label='Precio Minimo', required=False,widget=forms.NumberInput(attrs={'class': 'form-control w-100 ','placeholder': 'Precio Minimo'}))
+    precio_max = forms.FloatField(label='Precio Maximo', required=False,widget=forms.NumberInput(attrs={'class': 'form-control w-100 ','placeholder': 'Precio Maximo'}))
 
     def clean(self):
         """Valida si esta bien el rango de precio
@@ -31,3 +32,4 @@ class BuscadorForm(forms.Form):
             if precio_min >= precio_max:
                 msg = "El precio minimo no puede ser mayor que el precio maximo"
                 raise ValidationError({'precio_min': [msg,]})
+

@@ -25,5 +25,4 @@ urlpatterns = [
     path('',views.index),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
     path('paginaError/', views.error, name="error_url"),
-     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

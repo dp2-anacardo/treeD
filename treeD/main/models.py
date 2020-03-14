@@ -11,7 +11,7 @@ class Imagen(models.Model):
         return str(self.idImagen)
 
     class Meta:
-        ordering = ('idImagen', )
+        ordering = ('idImagen',)
 
 class Categoria(models.Model):
     idCategoria = models.AutoField(primary_key=True)

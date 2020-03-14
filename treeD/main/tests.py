@@ -20,7 +20,7 @@ class BuscadorFormTest(TestCase):
             'precio_min': 19.0,
             'precio_max': 21.0
         })
-        self.assertEqual(response.context['query'].first(), result.first())
+        self.assertQuerysetEqual(response.context['impresiones'], result,transform=lambda x: x)
 # Create your tests here.
 
 class listarImpresionesTest(TestCase):

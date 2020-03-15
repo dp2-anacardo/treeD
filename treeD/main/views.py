@@ -19,14 +19,15 @@ def error(request):
 
 def mostrarImpresion(request, idImpresion):
     
-    try:
+    #try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
         imagenesTotales= Imagen.objects.all()
         categorias = impresion.categorias.all()
         imagenesImpresion = imagenesTotales.filter(impresion = impresion)
         return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
-    except:
-        return redirect('error_url')
+    
+    #except:
+     #   return redirect('error_url')
     
 
 def crearImpresion(request):

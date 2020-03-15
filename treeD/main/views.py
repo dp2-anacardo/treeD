@@ -55,6 +55,9 @@ def crearImpresion(request):
             files = request.FILES.getlist('imagen')
             if formImpresion.is_valid() and formImagen.is_valid():
                 categorias = formImpresion.cleaned_data.get("categorias")
+                print(categorias)
+                if not categorias:
+                    categorias = Categoria.objects.filter(categoria = 'OTRAS COSAS')
                 impresion = formImpresion.save(commit=False)
                 impresion.vendedor = usuarioLogueado(request)
                 impresion.save()

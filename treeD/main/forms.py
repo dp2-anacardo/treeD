@@ -43,6 +43,13 @@ class ImpresionForm(forms.ModelForm):
             'precio',
             'categorias',
         }
+        widgets = {
+            'nombre':forms.TextInput(attrs={'class': 'form-control','placeholder':'Titulo'}),
+            'descripcion':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripcion','rows':4}),
+            'precio':forms.NumberInput(attrs={'class':'form-control','placeholder':'Precio'}),
+            'categorias':forms.CheckboxSelectMultiple(),
+
+        }
     def clean(self):
         """Valida si el precio es positivo
         """
@@ -54,7 +61,7 @@ class ImpresionForm(forms.ModelForm):
             raise ValidationError({'precio': [msg,]})
 
 class CargarImagenForm(forms.ModelForm):
-    imagen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))    
+    imagen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True,'class':'form-control-file'}))    
     class Meta:
         model = Imagen
         fields = ('imagen', )

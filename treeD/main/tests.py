@@ -54,24 +54,6 @@ class crudImpresiones3D(TestCase):
         self.assertEqual(response.status_code,200)
         c.logout()
 
-    def test_eliminar_imagen(self):
-        """ Test que comprueba el modificar de una impresion 3d .
-        """
-        c=Client()
-        c.login(username='usuario1', password='usuario1')
-        response = c.get('/impresion/eliminarImagen/20/')
-        self.assertEqual(response.status_code,200)
-        c.logout()
-
-    def test_añadir_imagen(self):
-        """ Test que comprueba el modificar de una impresion 3d .
-        """
-        c=Client()
-        c.login(username='usuario1', password='usuario1')
-        response = c.get('/impresion/añadirImagen/17/')
-        self.assertEqual(response.status_code,200)
-        c.logout()
-
 class listarImpresionesTest(TestCase):
     """ Test referentes al listar de impresiones 3D.
     """

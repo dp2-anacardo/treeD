@@ -9,7 +9,6 @@
         {{formulario1.as_p}}
         {% for i in imagenes %}
             {{i.imagen}}
-            <a href="{% url 'eliminarImagen_url' i.idImagen %}">Eliminar imagen</a>
         {% endfor %}
         <button type='submit'>Crear</button>
     </form>

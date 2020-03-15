@@ -1,10 +1,10 @@
-""" Vistas del sistema
-"""
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
 from main.forms import BuscadorForm
-from main.models import Impresion
+from main.models import Impresion, Perfil
 from django.shortcuts import render, redirect
 from main.models import Impresion,Categoria,Imagen
+from main.forms import ImpresionForm, CargarImagenForm
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
@@ -19,7 +19,6 @@ def listarImpresiones(request):
     except EmptyResultSet:
         return redirect('error_url')
 
-#Metodo para obtener el usuario actualmente logueado
 def usuarioLogueado(request):
 
     idUser=request.user.id
@@ -56,7 +55,7 @@ def crearImpresion(request):
             files = request.FILES.getlist('imagen')
             if formImpresion.is_valid() and formImagen.is_valid():
                 impresion = formImpresion.save(commit=False)
-                impresion.publicador = usuarioLogueado(request)
+                impresion.vendedor = usuarioLogueado(request)
                 impresion.save()
                 contador = 1
                 for i in files:
@@ -97,10 +96,10 @@ def editarImpresion(request, idImpresion):
 
     try:
         impresion= Impresion.objects.get(idImpresion = idImpresion)
-        publicadorImpresion = impresion.publicador
+        vendedorImpresion = impresion.vendedor
         imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
         usuario = usuarioLogueado(request)
-        if publicadorImpresion != usuario:
+        if vendedorImpresion != usuario:
             return redirect('error_url') 
         if request.method == 'GET':
             formImpresion= ImpresionForm(instance= impresion)
@@ -112,57 +111,6 @@ def editarImpresion(request, idImpresion):
                 return redirect('index')
     except:
         return redirect('error_url')
-
-def eliminarImagen(request, idImagen):
-
-    try:
-        img = Imagen.objects.get(idImagen = idImagen)
-        impresion = img.impresion
-        publicadorImpresion = impresion.publicador
-        idImpresion = impresion.idImpresion
-        usuario = usuarioLogueado(request)
-        if publicadorImpresion != usuario:
-            return redirect('error_url')
-        img.delete()
-
-        impresion= Impresion.objects.get(idImpresion = idImpresion)
-        imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
-        formImpresion= ImpresionForm(instance= impresion)
-        return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion,'imagenes':imagenesImpresion})
-    except:
-        return redirect('error_url')
-
-def añadirImagen(request, idImpresion):
-
-    try:
-        numeroImagenes = 4
-        impresion = Impresion.objects.get(idImpresion = idImpresion)
-        publicadorImpresion = impresion.publicador
-        imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
-        formImpresion= ImpresionForm(instance= impresion)
-        numeroImagenesImpresiones = len(imagenesImpresion)
-
-        usuario = usuarioLogueado(request)
-        if publicadorImpresion != usuario:
-            return redirect('error_url')
-
-        if request.method == "POST":
-            formImagen= CargarImagenForm(request.POST, request.FILES)
-            files = request.FILES.getlist('imagen')
-            if formImagen.is_valid():
-                contador = 1
-                for i in files:
-                    if contador + numeroImagenesImpresiones <= numeroImagenes:
-                        imagen = Imagen(imagen=i, impresion=impresion)
-                        imagen.save()
-                    contador = contador + 1
-                return redirect('index')
-        else:
-            formImagen=CargarImagenForm(request.FILES)
-        return render(request, 'impresiones/añadirImagen.html',{'formularioImagen':formImagen})
-    except:
-        return redirect('error_url')
-
     
 def index(request):
     return render(request, 'index.html',)

@@ -23,13 +23,11 @@ from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
+    path('',views.index, name='index'),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
     path('impresion/editarImpresion/<idImpresion>/', views.editarImpresion, name="editarImpresion_url"),
-    path('impresion/eliminarImagen/<idImagen>/', views.eliminarImagen, name="eliminarImagen_url"),
-    path('impresion/añadirImagen/<idImpresion>/', views.añadirImagen, name="añadirImagen_url"),
     path('paginaError/', views.error, name="error_url"),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),

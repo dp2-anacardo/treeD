@@ -11,6 +11,7 @@
               <td>Impresion</td>
               <td>Precio</td>
               <td>Vendedor</td>
+              <td>Imagen</td>
             </tr>
         </thread>
         <tbody>
@@ -20,6 +21,7 @@
                         <td>{{c.nombreImpresion}}</td>
                         <td>{{c.precioImpresion}}</td>
                         <td>{{c.vendedor}}</td>
+                        <td><img class="card-img-top" src={{c.imagen_set.all.0.imagen.url}} height="190" width="286"></td>
                     </tr>
             {% endfor %}
           </tbody>

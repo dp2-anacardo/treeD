@@ -52,9 +52,9 @@ class Perfil(models.Model):
 class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
     idPerfil = models.ForeignKey(Perfil, on_delete=models.CASCADE)
-    nombreImpresion = models.TextField(verbose_name='Nombre de la impresión')
-    descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión')
-    precioImpresion = models.FloatField(verbose_name='Precio de la impresión')
+    nombreImpresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
+    descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión', blank= True)
+    precioImpresion = models.FloatField(verbose_name='Precio de la impresión', null = True)
     fechaDeCompra = models.DateField(verbose_name="Fecha de compra")
 
     def __str__(self):

@@ -38,11 +38,10 @@ def comprarImpresion3D(request, idImpresion):
     try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
         comprador = usuarioLogueado(request)
-        idPerfil = comprador.idPerfil
         
         assert impresion.vendedor != comprador
 
-        compras = list(Compra.objects.all().filter(comprador = idPerfil))
+        compras = list(Compra.objects.all().filter(comprador = comprador))
         fechaActual = date.today()
 
         compra = Compra(comprador= comprador, vendedor= impresion.vendedor,

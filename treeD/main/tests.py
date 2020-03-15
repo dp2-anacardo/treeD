@@ -1,6 +1,6 @@
 """ Tests del sistema
 """
-from django.test import TestCase
+from django.test import TestCase, Client
 from main.models import Impresion
 
 class BuscadorFormTest(TestCase):
@@ -36,3 +36,31 @@ class listarImpresionesTest(TestCase):
         response = self.client.get('/impresion/listarImpresiones/')
         self.assertEquals(len(response.context['impresiones']),len(result))
         self.assertQuerysetEqual(response.context['impresiones'],result, transform=lambda x: x)
+
+class comprarImpresionesTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_comprar_impresion_comprador(self):
+
+        c=Client()
+        c.login(username='usuario2', password='usuario2')
+        response = c.get('/impresion/comprar/17/')
+        self.assertEqual(response.status_code, 200)
+        c.logout
+
+    def test_comprar_impresion_vendedor(self):
+
+        c=Client()
+        c.login(username='usuario1', password='usuario1')
+        response = c.get('/impresion/comprar/17/')
+        self.assertEqual(response.status_code, 302)
+        c.logout
+
+    def test_comprar_impresion_inexistente(self):
+
+        c=Client()
+        c.login(username='usuario2', password='usuario2')
+        response = c.get('/impresion/comprar/999/')
+        self.assertEqual(response.status_code, 302)
+        c.logout

@@ -6,6 +6,7 @@ class Imagen(models.Model):
     idImagen = models.AutoField(primary_key=True)
     imagen = models.ImageField(upload_to='imagenes',verbose_name='Imagen')
     impresion = models.ForeignKey('Impresion', on_delete=models.CASCADE)
+    compra = models.ForeignKey('Compra', on_delete=models.SET_NULL, null= True)
 
     def __str__(self):
         return str(self.idImagen)

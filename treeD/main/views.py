@@ -4,7 +4,7 @@ from django.shortcuts import render
 from main.forms import BuscadorForm
 from main.models import Impresion
 from django.shortcuts import render, redirect
-from main.models import Impresion,Categoria
+from main.models import Impresion, Categoria, Perfil, Compra
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
@@ -16,7 +16,7 @@ def listarImpresiones(request):
         impresiones = Impresion.objects.all()
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias,'form':form})
-    except EmptyResultSet:
+    except:
         return redirect('error_url')
 
 def index(request):
@@ -54,3 +54,13 @@ def buscador_impresiones_3d(request):
 
     return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
 
+def listar_ventas_realizadas(request):
+    """
+    Funcion que lista las impresiones vendidas por un vendedor
+    """
+    if request.user.is_authenticated:
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Compra.objects.filter(vendedor=perfil_user)
+        return render(request, "list2.html", {"query": query})
+
+    return render(request, 'index.html')

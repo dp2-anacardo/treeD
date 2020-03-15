@@ -1,7 +1,7 @@
 """ Tests del sistema
 """
 from django.test import TestCase
-from main.models import Impresion
+from main.models import Impresion, Compra
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D
@@ -36,3 +36,25 @@ class listarImpresionesTest(TestCase):
         response = self.client.get('/impresion/listarImpresiones/')
         self.assertEquals(len(response.context['impresiones']),len(result))
         self.assertQuerysetEqual(response.context['impresiones'],result, transform=lambda x: x)
+
+class ListarVentasRealizadas(TestCase):
+    """ Test referentes al listar de impresiones vendidas por un vendedor
+    """
+    fixtures = ["initialize.xml"]
+
+    def test_listar_ventas_realizadas_no_logeado(self):
+        """ Testea que si no hay usuario logeado retorna al
+            index.html
+        """
+        response = self.client.get('/list2/')
+        self.assertTemplateUsed(response, 'index.html')
+
+    def test_listar_ventas_realizadas_vendedor(self):
+        """ Testea que devuelve las impresiones vendidas
+            del vendedor
+        """
+        self.client.login(username="usuario1", password="usuario1")
+        response = self.client.get('/list2/')
+        result = Compra.objects.filter(vendedor=3)
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        

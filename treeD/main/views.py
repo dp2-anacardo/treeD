@@ -75,19 +75,13 @@ def eliminarImpresion(request, idImpresion):
 
     try:
         impresion= Impresion.objects.get(idImpresion = idImpresion)
-        publicadorImpresion= impresion.publicador
+        vendedorImpresion= impresion.vendedor
         usuario = usuarioLogueado(request)
-        if publicadorImpresion != usuario:
+        if vendedorImpresion != usuario:
             return redirect('error_url') 
         imagenesImpresion=Imagen.objects.all().filter(impresion=impresion)
-        compras= Compra.objects.all().filter(idImpresion = idImpresion)
-        if len(compras)>0:
-            impresion.publicador=None
-            impresion.save()
-            return redirect('index')
-        else:
-            imagenesImpresion.delete()
-            impresion.delete()
+        imagenesImpresion.delete()
+        impresion.delete()
         return redirect('index')
     except:
         return redirect('error_url')

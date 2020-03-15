@@ -25,20 +25,17 @@ class BuscadorFormTest(TestCase):
 # Create your tests here.
 
 class crudImpresiones3D(TestCase):
-    """ Test referentes al crud de impresiones 3D.
-    """
+
     fixtures = ["initialize.xml"]
 
     def test_mostrar_impresion_3d(self):
-        """ Test que comprueba que el resultado es la impresion de la base de datos.
-        """
+        
         result = Impresion.objects.filter(pk=17)
         response = self.client.get('/impresion/mostrarImpresion/17/')
         self.assertEqual(response.context['impresion'],result.first())
 
     def test_crear_impresion_3d(self):
-        """ Test que comprueba el crear de impresion 3d .
-        """
+        
         c=Client()
         c.login(username='usuario1', password='usuario1')
         response = c.get('/impresion/crearImpresion/')
@@ -46,12 +43,21 @@ class crudImpresiones3D(TestCase):
         c.logout()
 
     def test_modificar_impresion_3d(self):
-        """ Test que comprueba el modificar de una impresion 3d .
-        """
+        
         c=Client()
         c.login(username='usuario1', password='usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code,200)
+        c.logout()
+    
+    def test_eliminar_impresion_3d(self):
+        
+        c=Client()
+        c.login(username='usuario1', password='usuario1')
+        tamañoA=len(Impresion.objects.all())
+        response = c.get('/impresion/eliminarImpresion/18/')
+        tamañoD=len(Impresion.objects.all())
+        self.assertNotEquals(tamañoA,tamañoD)
         c.logout()
 
 class listarImpresionesTest(TestCase):

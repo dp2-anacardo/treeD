@@ -37,17 +37,17 @@ def usuarioLogueado(request):
 def comprarImpresion3D(request, idImpresion):
     try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
-        perfil = usuarioLogueado(request)
-        idPerfil = perfil.idPerfil
+        comprador = usuarioLogueado(request)
+        idPerfil = comprador.idPerfil
         
-        assert impresion.publicador != perfil
+        assert impresion.vendedor != comprador
 
         compras = list(Compra.objects.all().filter(idPerfil = idPerfil))
         fechaActual = date.today()
 
-        compra = Compra(idPerfil=perfil, nombreImpresion=impresion.nombre, 
-        descripcionImpresion=impresion.descripcion, precioImpresion= impresion.precio,
-        fechaDeCompra=fechaActual)
+        compra = Compra(idPerfil=perfil, comprador= comprador, vendedor= impresion.vendedor,
+         nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
+         precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
         compra.save()
 
         compras.append(compra)

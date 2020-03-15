@@ -2,7 +2,6 @@
 """
 
 from django import forms
-from django.core.exceptions import ValidationError
 from main.models import Categoria
 from django import forms
 from main.models import Impresion, Imagen
@@ -65,9 +64,9 @@ class ImpresionForm(forms.ModelForm):
         self.fields['categorias'].required = False
 
 class CargarImagenForm(forms.ModelForm):
-    imagen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True,'class':'form-control-file'}))    
+    imagen=forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple':True,'class':'form-control-file'}))    
     class Meta:
         model = Imagen
-        fields = ('imagen', )
+        fields = ('imagen',)
         
 

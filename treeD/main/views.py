@@ -1,10 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from main.forms import BuscadorForm
-from main.models import Impresion, Perfil
 from django.shortcuts import render, redirect
-from main.models import Impresion,Categoria,Imagen
-from main.forms import ImpresionForm, CargarImagenForm
+from main.models import Impresion,Categoria,Imagen, Perfil
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
@@ -28,9 +26,6 @@ def usuarioLogueado(request):
 
 def home(request):
     return render(request, 'impresiones/index.html')
-
-def error(request):
-    return render(request, 'impresiones/paginaError.html')
 
 def mostrarImpresion(request, idImpresion):
     
@@ -99,7 +94,7 @@ def editarImpresion(request, idImpresion):
         imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
         usuario = usuarioLogueado(request)
         if vendedorImpresion != usuario:
-            return redirect('error_url') 
+            return redirect('error_url')
         if request.method == 'GET':
             formImpresion= ImpresionForm(instance= impresion)
             return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion, 'imagenes':imagenesImpresion, 'id':idImpresion})

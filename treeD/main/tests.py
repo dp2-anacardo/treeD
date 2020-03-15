@@ -55,7 +55,7 @@ class crudImpresiones3D(TestCase):
         c=Client()
         c.login(username='usuario1', password='usuario1')
         tamañoA=len(Impresion.objects.all())
-        response = c.get('/impresion/eliminarImpresion/18/')
+        c.get('/impresion/eliminarImpresion/18/')
         tamañoD=len(Impresion.objects.all())
         self.assertNotEquals(tamañoA,tamañoD)
         c.logout()

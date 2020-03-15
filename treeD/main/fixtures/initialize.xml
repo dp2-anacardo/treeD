@@ -79,7 +79,7 @@
         <field type="CharField" name="nombre">Impresion 1</field>
         <field type="CharField" name="descripcion">Esto es la impresion 1</field>
         <field type="FloatField" name="precio">15.0</field>
-        <field to="main.perfil" name="publicador" rel="ManyToOneRel">3</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
             <object pk="4"></object>
             <object pk="6"></object>
@@ -89,7 +89,7 @@
         <field type="CharField" name="nombre">Impresion 2</field>
         <field type="CharField" name="descripcion">Esto es la impresion 2</field>
         <field type="FloatField" name="precio">20.0</field>
-        <field to="main.perfil" name="publicador" rel="ManyToOneRel">3</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
             <object pk="9"></object>
             <object pk="11"></object>
@@ -120,13 +120,19 @@
     </object>
     <!--COMPRAS-->
     <object pk="25" model="main.compra">
-        <field to="main.perfil" name="idPerfil" rel="OneToOneRel">24</field>
-        <field to="main.perfil" name="idImpresion" rel="OneToOneRel">17</field>
+        <field to="main.perfil" name="idVendedor" rel="OneToOneRel">3</field>
+        <field to="main.perfil" name="idComprador" rel="OneToOneRel">24</field>
+        <field type="CharField" name="nombre">Impresion 1</field>
+        <field type="CharField" name="descripcion">Esto es la impresion 1</field>
+        <field type="FloatField" name="precio">15.0</field>
         <field type="DateField" name="fechaDeCompra">2020-03-05</field>
     </object>
     <object pk="26" model="main.compra">
-        <field to="main.perfil" name="idPerfil" rel="OneToOneRel">24</field>
-        <field to="main.perfil" name="idImpresion" rel="OneToOneRel">18</field>
+        <field to="main.perfil" name="idVendedor" rel="OneToOneRel">3</field>
+        <field to="main.perfil" name="idComprador" rel="OneToOneRel">24</field>
+        <field type="CharField" name="nombre">Impresion 2</field>
+        <field type="CharField" name="descripcion">Esto es la impresion 2</field>
+        <field type="FloatField" name="precio">20.0</field>
         <field type="DateField" name="fechaDeCompra">2020-03-05</field>
     </object>
 </django-objects>

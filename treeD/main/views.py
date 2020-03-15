@@ -30,8 +30,8 @@ def listar_impresiones_publicadas(request):
     """
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
-        query = Impresion.objects.filter(publicador=perfil_user)
-        return render(request, "list2.html", {"query": query})
+        query = Impresion.objects.filter(vendedor=perfil_user)
+        return render(request, "misPublicaciones.html", {"query": query})
 
     return render(request, 'index.html')
 

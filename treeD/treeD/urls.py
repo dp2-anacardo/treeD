@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
     path('', views.index),
-    path('list2/', views.listar_impresiones_publicadas),
+    path('misPublicaciones/', views.listar_impresiones_publicadas),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),

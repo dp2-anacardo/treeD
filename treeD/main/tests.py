@@ -32,7 +32,7 @@ class ListarImpresionesPublicadasTest(TestCase):
         """ Testea que si no hay usuario logeado retorna al
             index.html
         """
-        response = self.client.get('/list2/')
+        response = self.client.get('/misPublicaciones/')
         self.assertTemplateUsed(response, 'index.html')
 
     def test_listar_impresiones_publicadas_usuario(self):
@@ -40,8 +40,8 @@ class ListarImpresionesPublicadasTest(TestCase):
             del vendedor
         """
         self.client.login(username="usuario1", password="usuario1")
-        response = self.client.get('/list2/')
-        result = Impresion.objects.filter(publicador=3)
+        response = self.client.get('/misPublicaciones/')
+        result = Impresion.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
 
 class listarImpresionesTest(TestCase):

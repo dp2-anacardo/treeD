@@ -60,6 +60,10 @@ class ImpresionForm(forms.ModelForm):
             msg = "Precio no valido"
             raise ValidationError({'precio': [msg,]})
 
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
+        self.fields['categorias'].required = False
+
 class CargarImagenForm(forms.ModelForm):
     imagen = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True,'class':'form-control-file'}))    
     class Meta:

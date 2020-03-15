@@ -47,7 +47,7 @@ def mostrarImpresion(request, idImpresion):
 
 def crearImpresion(request):
 
-    #try:
+    try:
         numeroImagenes = 4
         if request.method == "POST":
             formImpresion = ImpresionForm(request.POST)
@@ -70,8 +70,8 @@ def crearImpresion(request):
             formImpresion = ImpresionForm()
             formImagen=CargarImagenForm(request.FILES)
         return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formularioImagen':formImagen})
-    #except:
-        #return redirect('error_url')
+    except:
+        return redirect('error_url')
 
 def eliminarImpresion(request, idImpresion):
 

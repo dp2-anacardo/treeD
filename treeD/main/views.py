@@ -42,20 +42,20 @@ def comprarImpresion3D(request, idImpresion):
         
         assert impresion.vendedor != comprador
 
-        compras = list(Compra.objects.all().filter(idPerfil = idPerfil))
+        compras = list(Compra.objects.all().filter(comprador = idPerfil))
         fechaActual = date.today()
 
-        compra = Compra(idPerfil=perfil, comprador= comprador, vendedor= impresion.vendedor,
-         nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
-         precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
+        compra = Compra(comprador= comprador, vendedor= impresion.vendedor,
+        nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
+        precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
         compra.save()
 
         compras.append(compra)
 
         return render(request, 'impresiones/misCompras.html', {'compras':compras})
+        
     except:
         return redirect('error_url')
-
 
 def buscador_impresiones_3d(request):
     """

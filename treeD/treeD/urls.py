@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 from main import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
@@ -29,5 +28,6 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
-    path('paginaError/', views.error, name="error_url")  
+    path('paginaError/', views.error, name="error_url")
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

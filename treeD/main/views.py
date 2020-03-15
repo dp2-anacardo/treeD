@@ -1,9 +1,9 @@
 """ Vistas del sistema
 """
 from main.forms import BuscadorForm
-from main.models import Impresion
 from django.shortcuts import render, redirect
 from main.models import Impresion, Categoria, Perfil
+from django.core.exceptions import EmptyResultSet
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')

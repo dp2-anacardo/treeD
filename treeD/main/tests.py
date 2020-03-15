@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-from django.test import TestCase, Client
-=======
+
 """ Tests del sistema
 """
-from django.test import TestCase
->>>>>>> e694869df35f03ebb17cfac9b459a8283a1f03b2
+from django.test import TestCase,Client
 from main.models import Impresion
 
 class BuscadorFormTest(TestCase):
@@ -27,7 +24,6 @@ class BuscadorFormTest(TestCase):
         self.assertQuerysetEqual(response.context['impresiones'], result,transform=lambda x: x)
 # Create your tests here.
 
-<<<<<<< HEAD
 class crudImpresiones3D(TestCase):
     """ Test referentes al crud de impresiones 3D.
     """
@@ -75,7 +71,7 @@ class crudImpresiones3D(TestCase):
         response = c.get('/impresion/añadirImagen/17/')
         self.assertEqual(response.status_code,200)
         c.logout()
-=======
+
 class listarImpresionesTest(TestCase):
     """ Test referentes al listar de impresiones 3D.
     """
@@ -89,4 +85,3 @@ class listarImpresionesTest(TestCase):
         response = self.client.get('/impresion/listarImpresiones/')
         self.assertEquals(len(response.context['impresiones']),len(result))
         self.assertQuerysetEqual(response.context['impresiones'],result, transform=lambda x: x)
->>>>>>> e694869df35f03ebb17cfac9b459a8283a1f03b2

@@ -13,11 +13,11 @@
             </tr>
         </thread>
         <tbody>
-            {% for c, i in diccionario.items %}
+            {% for c in compras %}
                     <tr>
                         <td>{{c.fechaDeCompra}}</td>
-                        <td>{{i.nombre}}</td>
-                        <td>{{i.precio}}</td>
+                        <td>{{c.nombreImpresion}}</td>
+                        <td>{{c.precioImpresion}}</td>
                     </tr>
             {% endfor %}
           </tbody>

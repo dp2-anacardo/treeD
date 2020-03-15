@@ -6,7 +6,7 @@ from main.forms import BuscadorForm
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
-    
+
 
 def listarImpresiones(request):
 
@@ -45,27 +45,14 @@ def comprarImpresion3D(request, idImpresion):
         compras = list(Compra.objects.all().filter(idPerfil = idPerfil))
         fechaActual = date.today()
 
-        compra = Compra(idPerfil=perfil, idImpresion=impresion, fechaDeCompra=fechaActual)
+        compra = Compra(idPerfil=perfil, nombreImpresion=impresion.nombre, 
+        descripcionImpresion=impresion.descripcion, precioImpresion= impresion.precio,
+        fechaDeCompra=fechaActual)
         compra.save()
 
         compras.append(compra)
 
-        impresiones=[]
-        diccionario={}
-
-        for c in compras:
-            impresionCompra= Impresion.objects.get(idImpresion = c.idImpresion.idImpresion)
-            impresiones.append(impresionCompra)
-
-
-        for c in compras:
-            for i in impresiones:
-                if c.idImpresion.idImpresion == i.idImpresion:
-                    diccionario[c]=i
-                    impresiones.remove(i)
-                    break
-
-        return render(request, 'impresiones/misCompras.html', {'diccionario':diccionario})
+        return render(request, 'impresiones/misCompras.html', {'compras':compras})
     except:
         return redirect('error_url')
 

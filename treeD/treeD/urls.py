@@ -25,15 +25,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
     path('',views.index),
-<<<<<<< HEAD
-    path('impresiones/comprar/<idImpresion>/', views.comprarImpresion3D, name="comprarImpresion_url")
-=======
+    path('impresiones/comprar/<idImpresion>/', views.comprarImpresion3D, name="comprarImpresion_url"),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
     path('paginaError/', views.error, name="error_url"),
     
->>>>>>> e694869df35f03ebb17cfac9b459a8283a1f03b2
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

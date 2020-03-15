@@ -47,16 +47,18 @@ def mostrarImpresion(request, idImpresion):
 
 def crearImpresion(request):
 
-    try:
+    #try:
         numeroImagenes = 4
         if request.method == "POST":
             formImpresion = ImpresionForm(request.POST)
             formImagen= CargarImagenForm(request.POST, request.FILES)
             files = request.FILES.getlist('imagen')
             if formImpresion.is_valid() and formImagen.is_valid():
+                categorias = formImpresion.cleaned_data.get("categorias")
                 impresion = formImpresion.save(commit=False)
                 impresion.vendedor = usuarioLogueado(request)
                 impresion.save()
+                impresion.categorias.set(categorias)
                 contador = 1
                 for i in files:
                     if contador <= numeroImagenes:
@@ -68,8 +70,8 @@ def crearImpresion(request):
             formImpresion = ImpresionForm()
             formImagen=CargarImagenForm(request.FILES)
         return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formularioImagen':formImagen})
-    except:
-        return redirect('error_url')
+    #except:
+        #return redirect('error_url')
 
 def eliminarImpresion(request, idImpresion):
 

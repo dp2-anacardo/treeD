@@ -17,10 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView,LogoutView
 from main import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('list/', views.buscador_impresiones_3d),
     path('',views.index),
     path('list2/', views.listar_impresiones_publicadas)
+    path('login/', LoginView.as_view(), name="login_url"),
+    path('logout/', LogoutView.as_view(), name="logout_url"),
+    path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
+    path('paginaError/', views.error, name="error_url"),
+    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+

@@ -10,14 +10,16 @@
               <td>Fecha de compra</td>
               <td>Impresion</td>
               <td>Precio</td>
+              <td>Vendedor</td>
             </tr>
         </thread>
         <tbody>
-            {% for c, i in diccionario.items %}
+            {% for c in compras %}
                     <tr>
-                        <td>{{c.fechaDeCompra}}</td>
-                        <td>{{i.nombre}}</td>
-                        <td>{{i.precio}}</td>
+                      <td>{{c.fechaDeCompra}}</td>
+                      <td>{{c.nombreImpresion}}</td>
+                      <td>{{c.precioImpresion}}</td>
+                      <td>{{c.vendedor}}</td>
                     </tr>
             {% endfor %}
           </tbody>

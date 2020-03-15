@@ -28,7 +28,7 @@ class Impresion(models.Model):
     nombre = models.TextField(verbose_name='Nombre')
     descripcion = models.TextField(verbose_name='Descripción') 
     precio = models.FloatField(verbose_name='Precio')
-    publicador = models.ForeignKey('Perfil', on_delete=models.SET_NULL, null=True)
+    vendedor = models.ForeignKey('Perfil', on_delete=models.CASCADE, null = True)
     categorias = models.ManyToManyField('Categoria')
     
     def __str__(self):
@@ -53,8 +53,11 @@ class Perfil(models.Model):
 
 class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
-    idPerfil = models.ForeignKey(Perfil, on_delete=models.CASCADE)
-    idImpresion = models.ForeignKey(Impresion, on_delete=models.CASCADE)
+    comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null = True)
+    vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null = True)
+    nombreImpresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
+    descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión', blank= True)
+    precioImpresion = models.FloatField(verbose_name='Precio de la impresión', null = True)
     fechaDeCompra = models.DateField(verbose_name="Fecha de compra")
 
     def __str__(self):

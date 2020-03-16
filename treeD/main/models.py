@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Imagen(models.Model):
     idImagen = models.AutoField(primary_key=True)
-    imagen = models.ImageField(upload_to='imagenes',verbose_name='Imagen')
+    imagen = models.ImageField(upload_to='',verbose_name='Imagen')
     impresion = models.ForeignKey('Impresion', on_delete=models.SET_NULL, null= True)
 
     def __str__(self):

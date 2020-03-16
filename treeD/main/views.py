@@ -141,10 +141,16 @@ def comprarImpresion3D(request, idImpresion):
         compras = list(Compra.objects.all().filter(comprador = comprador))
         fechaActual = date.today()
 
+        imagenes = Imagen.objects.all().filter(impresion=impresion)
+
         compra = Compra(comprador= comprador, vendedor= impresion.vendedor,
         nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
         precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
         compra.save()
+
+        for imagen in imagenes:
+            imagen.compra = compra
+            imagen.save()
 
         compras.append(compra)
 

@@ -24,8 +24,9 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
+    path('impresion/comprar/<idImpresion>/', views.comprarImpresion3D, name="comprarImpresion_url"),
+    path('',views.index, name='index'),
     path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
-    path('', views.index, name='index'),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),

@@ -55,7 +55,7 @@ class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null = True)
     vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null = True)
-    imagenes = models.ManyToManyField(Imagen, verbose_name='Imagenes')
+    imagenes = models.ManyToManyField(Imagen)
     nombreImpresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
     descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión', blank= True)
     precioImpresion = models.FloatField(verbose_name='Precio de la impresión', null = True)

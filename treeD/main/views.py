@@ -1,7 +1,9 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Compra,Categoria, Imagen
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
+from datetime import date
 
 # Create your views here.
 
@@ -118,6 +120,40 @@ def editarImpresion(request, idImpresion):
     
 def index(request):
     return render(request, 'index.html',)
+
+
+def usuarioLogueado(request):
+
+    idUser=request.user.id
+    userActual = get_object_or_404(User, pk = idUser)
+    usuarioActual = Perfil.objects.get(usuario = userActual)
+    return usuarioActual
+
+
+def comprarImpresion3D(request, idImpresion):
+    try:
+        impresion = Impresion.objects.get(idImpresion=idImpresion)
+        comprador = usuarioLogueado(request)
+        
+        assert impresion.vendedor != comprador
+
+        compras = list(Compra.objects.all().filter(comprador = comprador))
+        fechaActual = date.today()
+
+        imagenes = Imagen.objects.all().filter(impresion=impresion)
+
+        compra = Compra(comprador= comprador, vendedor= impresion.vendedor,
+        nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
+        precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
+        compra.save()
+        compra.imagenes.set(imagenes)
+
+        compras.append(compra)
+
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+        
+    except:
+        return redirect('error_url')
 
 def buscador_impresiones_3d(request):
     """

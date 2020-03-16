@@ -46,10 +46,13 @@ def mostrarImpresion(request, idImpresion):
     
     try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
+        comprar = True
+        if impresion.vendedor == usuarioLogueado(request):
+            comprar = False
         imagenesTotales= Imagen.objects.all()
         categorias = impresion.categorias.all()
         imagenesImpresion = imagenesTotales.filter(impresion = impresion)
-        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
+        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias, 'comprar':comprar})
     
     except:
         return redirect('error_url')
@@ -143,11 +146,6 @@ def comprarImpresion3D(request, idImpresion):
         comprador = usuarioLogueado(request)
         
         assert impresion.vendedor != comprador
-        comprar = True
-        if impresion.vendedor == usuarioLogueado(request):
-            comprar = False
-
-        print(comprar)
         compras = list(Compra.objects.all().filter(comprador = comprador))
         fechaActual = date.today()
 
@@ -161,7 +159,7 @@ def comprarImpresion3D(request, idImpresion):
 
         compras.append(compra)
 
-        return render(request, 'impresiones/listarCompras.html', {'compras':compras, 'comprar':comprar})
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
         
     except:
         return redirect('error_url')

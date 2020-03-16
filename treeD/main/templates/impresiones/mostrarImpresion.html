@@ -63,7 +63,7 @@
           <p class="text-center">{{i.categoria}}<p>
         {%endfor%} <br> <br> <br>
 
-        {% if user.is_authenticated or comprar%}
+        {% if user.is_authenticated and comprar == True %}
           <a href="{% url 'comprarImpresion_url' impresion.idImpresion %}" class="btn btn-dark m-auto">Comprar</a> <br> <br>
         {%endif%}
       </div>    

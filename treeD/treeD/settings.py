@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'treeD.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'treeD',
         'USER': 'usuario',
         'PASSWORD': 'usuario',
-        'HOST': 'localhost',   
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

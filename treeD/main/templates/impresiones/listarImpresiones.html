@@ -53,7 +53,7 @@
     <h5 class="card-title text-center">{{impresion.nombre}}</h5>
     <p class="card-text text-center">{{impresion.precio}}€</p>
     <div class="col text-center">
-    <a href="#" class="btn btn-dark m-auto">Ver</a>
+    <a href="{% url 'mostrarImpresion_url' impresion.idImpresion %}" class="btn btn-dark m-auto">Ver</a>
   </div>
   </div>
 </div>

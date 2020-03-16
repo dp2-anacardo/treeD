@@ -6,7 +6,7 @@
     <h1 class="text-center"> Mis Impresiones</h1> <br> 
     <div class="text-center">
         <h4 class="text-center d-inline">Nueva Publicación: </h4>
-        <a href="#" class="btn btn-dark m-auto d-inline">Crear</a><br> <br><br>
+        <a href="{% url 'crearImpresion_url'%}" class="btn btn-dark m-auto d-inline">Crear</a><br> <br><br>
     </div>
 {% for i in query %}
     <div class="container">
@@ -20,9 +20,9 @@
                     <h5 class="text-center">Precio:</h5><p class="text-center">{{i.precio}}</p> 
                 </div>
                 <div class="col-lg-4 my-auto text-center">
-                        <a href="#" class="btn btn-dark m-auto">Ver</a> <br> <br>
-                        <a href="#" class="btn btn-dark m-auto">Editar</a><br> <br>
-                        <a href="#" class="btn btn-dark m-auto">Eliminar</a><br> <br>
+                        <a href="{% url 'mostrarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
+                        <a href="{% url 'editarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
+                        <a href="{% url 'eliminarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
                 </div>
             </div><br>
     </div>

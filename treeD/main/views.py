@@ -1,11 +1,28 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from main.models import Impresion, Categoria, Imagen, Perfil, Compra
+from main.models import Impresion, Perfil, Compra,Categoria, Imagen
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
+
+# Create your views here.
+
+def usuarioLogueado(request):
+
+    idUser=request.user.id
+    userActual = get_object_or_404(User, pk = idUser)
+    usuarioActual = Perfil.objects.get(usuario = userActual)
+    return usuarioActual
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
+
+def listarComprasImpresiones(request):
+
+    try:
+        usuario = usuarioLogueado(request)
+        compras = list(Compra.objects.all().filter(comprador = usuario))
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+    except:
+        return redirect('error_url')
 
 def listarImpresiones(request):
 
@@ -145,6 +162,6 @@ def listar_ventas_realizadas(request):
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
-        return render(request, "list2.html", {"query": query})
+        return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')

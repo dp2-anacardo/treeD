@@ -119,7 +119,7 @@
     <object pk="22" model="main.imagen">
         <field type="ImageField" name="imagen">image3.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">19</field>
-        <field to="main.compra" name="compra" rel="ManyToOneRel">25</field>
+        <field to="main.compra" name="compra" rel="ManyToOneRel">26</field>
     </object>
     <object pk="23" model="main.imagen">
         <field type="ImageField" name="imagen">image4.jpg</field>

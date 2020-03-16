@@ -33,7 +33,7 @@ class Impresion(models.Model):
     categorias = models.ManyToManyField('Categoria')
     
     def __str__(self):
-        return self.nombre
+        return str(self.idImpresion)
     
     class Meta:
         ordering = ('idImpresion', )

@@ -24,7 +24,7 @@ from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
-    path('list2/', views.listar_ventas_realizadas),
+    path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
     path('', views.index, name='index'),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
@@ -34,5 +34,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
-    path('list/', views.buscador_impresiones_3d)
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('impresion/listarCompras/', views.listarComprasImpresiones, name="listarComprasRealizas_url"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+  
+

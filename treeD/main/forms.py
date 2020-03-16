@@ -2,9 +2,10 @@
 """
 
 from django import forms
-from django.core.exceptions import ValidationError
 from main.models import Categoria
 from django import forms
+from main.models import Impresion, Imagen
+from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
 
@@ -27,9 +28,45 @@ class BuscadorForm(forms.Form):
         cleaned_data = self.cleaned_data
         precio_min = cleaned_data.get("precio_min")
         precio_max = cleaned_data.get("precio_max")
-
         if precio_min is not None and precio_max is not None:
             if precio_min >= precio_max:
                 msg = "El precio minimo no puede ser mayor que el precio maximo"
                 raise ValidationError({'precio_min': [msg,]})
+
+class ImpresionForm(forms.ModelForm):
+    class Meta:
+        model = Impresion
+        fields = {
+            'nombre',
+            'descripcion',
+            'precio',
+            'categorias',
+        }
+        widgets = {
+            'nombre':forms.TextInput(attrs={'class': 'form-control','placeholder':'Titulo'}),
+            'descripcion':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripcion','rows':4}),
+            'precio':forms.NumberInput(attrs={'class':'form-control','placeholder':'Precio'}),
+            'categorias':forms.CheckboxSelectMultiple(),
+
+        }
+    def clean(self):
+        """Valida si el precio es positivo
+        """
+        cleaned_data = self.cleaned_data
+        precio = cleaned_data.get("precio")
+
+        if precio <= 0:
+            msg = "Precio no valido"
+            raise ValidationError({'precio': [msg,]})
+
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
+        self.fields['categorias'].required = False
+
+class CargarImagenForm(forms.ModelForm):
+    imagen=forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple':True,'class':'form-control-file'}))    
+    class Meta:
+        model = Imagen
+        fields = ('imagen',)
+        
 

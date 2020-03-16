@@ -27,7 +27,7 @@ class Categoria(models.Model):
 class Impresion(models.Model):
     idImpresion = models.AutoField(primary_key=True)
     nombre = models.TextField(verbose_name='Nombre')
-    descripcion = models.TextField(verbose_name='Descripción') 
+    descripcion = models.TextField(verbose_name='Descripción')
     precio = models.FloatField(verbose_name='Precio')
     vendedor = models.ForeignKey('Perfil', on_delete=models.CASCADE, null = True)
     categorias = models.ManyToManyField('Categoria')
@@ -49,8 +49,8 @@ class Perfil(models.Model):
         return self.usuario.username
     
     class Meta:
-        ordering = ('idPerfil', )
-        
+        ordering = ('idPerfil',)        
+
 
 class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
@@ -66,6 +66,3 @@ class Compra(models.Model):
 
     class Meta:
         ordering = ('idCompra', 'fechaDeCompra', )
-
-
-

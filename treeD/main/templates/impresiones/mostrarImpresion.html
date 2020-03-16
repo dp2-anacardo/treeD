@@ -55,7 +55,7 @@
 
         <br>
         <h5 class="text-center">Vendedor:</h5>
-        <p class="text-center">{{impresion.publicador}}</p>
+        <p class="text-center">{{impresion.vendedor}}</p>
 
         <br>
         <h5 class="text-center">Categorias:</h5>
@@ -63,8 +63,8 @@
           <p class="text-center">{{i.categoria}}<p>
         {%endfor%} <br> <br> <br>
 
-        {% if user.is_authenticated %}
-        <a href="#" class="btn btn-dark m-auto d-inline">Comprar</a>
+        {% if user.is_authenticated and comprar == True %}
+          <a href="{% url 'comprarImpresion_url' impresion.idImpresion %}" class="btn btn-dark m-auto">Comprar</a> <br> <br>
         {%endif%}
       </div>    
       </div>

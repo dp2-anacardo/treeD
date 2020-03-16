@@ -7,6 +7,7 @@ from main.models import Impresion, Perfil, Compra,Categoria, Imagen
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
 
+
 # Create your views here.
 
 def usuarioLogueado(request):
@@ -46,10 +47,18 @@ def mostrarImpresion(request, idImpresion):
     
     try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
+        comprar = True
+        user = None
+        try:
+            user = usuarioLogueado(request)
+        except Exception:
+            pass
+        if user != None and user==impresion.vendedor:
+            comprar = False
         imagenesTotales= Imagen.objects.all()
         categorias = impresion.categorias.all()
         imagenesImpresion = imagenesTotales.filter(impresion = impresion)
-        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
+        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias, 'comprar':comprar})
     
     except:
         return redirect('error_url')
@@ -144,7 +153,6 @@ def comprarImpresion3D(request, idImpresion):
         comprador = usuarioLogueado(request)
         
         assert impresion.vendedor != comprador
-
         compras = list(Compra.objects.all().filter(comprador = comprador))
         fechaActual = date.today()
 

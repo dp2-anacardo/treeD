@@ -1,8 +1,9 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Compra
+from main.models import Impresion,Categoria,Imagen, Perfil, Compra
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
-from main.forms import BuscadorForm
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
@@ -19,10 +20,89 @@ def listarImpresiones(request):
         return redirect('error_url')
 
 
+def home(request):
+    return render(request, 'impresiones/index.html')
+
+def mostrarImpresion(request, idImpresion):
+    
+    try:
+        impresion = Impresion.objects.get(idImpresion=idImpresion)
+        imagenesTotales= Imagen.objects.all()
+        categorias = impresion.categorias.all()
+        imagenesImpresion = imagenesTotales.filter(impresion = impresion)
+        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias})
+    
+    except:
+        return redirect('error_url')
+    
+
+def crearImpresion(request):
+
+    try:
+        numeroImagenes = 4
+        if request.method == "POST":
+            formImpresion = ImpresionForm(request.POST)
+            formImagen= CargarImagenForm(request.POST, request.FILES)
+            files = request.FILES.getlist('imagen')
+            if formImpresion.is_valid() and formImagen.is_valid():
+                categorias = formImpresion.cleaned_data.get("categorias")
+                print(categorias)
+                if not categorias:
+                    categorias = Categoria.objects.filter(categoria = 'OTRAS COSAS')
+                impresion = formImpresion.save(commit=False)
+                impresion.vendedor = usuarioLogueado(request)
+                impresion.save()
+                impresion.categorias.set(categorias)
+                contador = 1
+                for i in files:
+                    if contador <= numeroImagenes:
+                        imagen = Imagen(imagen=i, impresion=impresion)
+                        imagen.save()
+                    contador = contador + 1
+                return redirect('index')
+        else:
+            formImpresion = ImpresionForm()
+            formImagen=CargarImagenForm(request.FILES)
+        return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formularioImagen':formImagen})
+    except:
+        return redirect('error_url')
+
+def eliminarImpresion(request, idImpresion):
+
+    try:
+        impresion= Impresion.objects.get(idImpresion = idImpresion)
+        vendedorImpresion= impresion.vendedor
+        usuario = usuarioLogueado(request)
+        if vendedorImpresion != usuario:
+            return redirect('error_url') 
+        imagenesImpresion=Imagen.objects.all().filter(impresion=impresion)
+        imagenesImpresion.delete()
+        impresion.delete()
+        return redirect('index')
+    except:
+        return redirect('error_url')
+
+def editarImpresion(request, idImpresion):
+
+    try:
+        impresion= Impresion.objects.get(idImpresion = idImpresion)
+        vendedorImpresion = impresion.vendedor
+        imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
+        usuario = usuarioLogueado(request)
+        if vendedorImpresion != usuario:
+            return redirect('error_url')
+        if request.method == 'GET':
+            formImpresion= ImpresionForm(instance= impresion)
+            return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion, 'imagenes':imagenesImpresion, 'id':idImpresion})
+        else:
+            formImpresion = ImpresionForm(request.POST, instance=impresion)
+            if formImpresion.is_valid():
+                formImpresion.save()
+                return redirect('index')
+    except:
+        return redirect('error_url')
+    
 def index(request):
-    """
-    Funcion que carga la pagina principal
-    """
     return render(request, 'index.html',)
 
 

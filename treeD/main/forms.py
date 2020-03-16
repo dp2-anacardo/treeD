@@ -1,15 +1,14 @@
-""" Aqui se encuentran los formularios usados por los templates y por views.py
+""" Aqui se encuentran los formularios usados por los templates y por views.py.
 """
 
 from django import forms
 from main.models import Categoria
-from django import forms
 from main.models import Impresion, Imagen
 from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
 
-    """ Formulario del buscador. Campos:
+    """ Formulario del buscador. Campos.
     - nombre: el buscador busca impresiones que contenga la palabra/s contenidas en 'Nombre'
     - categorias: el buscador busca impresiones que contengan las categorias seleccionadas
     - precio_min: el buscador busca impresiones cuyo precio sea mayor que precio_min
@@ -23,7 +22,7 @@ class BuscadorForm(forms.Form):
     precio_max = forms.FloatField(label='Precio Maximo', required=False,widget=forms.NumberInput(attrs={'class': 'form-control w-100 ','placeholder': 'Precio Maximo'}))
 
     def clean(self):
-        """Valida si esta bien el rango de precio
+        """Valida si esta bien el rango de precio.
         """
         cleaned_data = self.cleaned_data
         precio_min = cleaned_data.get("precio_min")
@@ -50,7 +49,7 @@ class ImpresionForm(forms.ModelForm):
 
         }
     def clean(self):
-        """Valida si el precio es positivo
+        """Valida si el precio es positivo.
         """
         cleaned_data = self.cleaned_data
         precio = cleaned_data.get("precio")
@@ -64,9 +63,7 @@ class ImpresionForm(forms.ModelForm):
         self.fields['categorias'].required = False
 
 class CargarImagenForm(forms.ModelForm):
-    imagen=forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple':True,'class':'form-control-file'}))    
+    imagen=forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple':True,'class':'form-control-file'}))
     class Meta:
         model = Imagen
         fields = ('imagen',)
-        
-

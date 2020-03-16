@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 class Imagen(models.Model):
     idImagen = models.AutoField(primary_key=True)
     imagen = models.ImageField(upload_to='imagenes',verbose_name='Imagen')
-    impresion = models.ForeignKey('Impresion', on_delete=models.CASCADE)
-    compra = models.ForeignKey('Compra', on_delete=models.SET_NULL, null= True)
+    impresion = models.ForeignKey('Impresion', on_delete=models.SET_NULL, null= True)
 
     def __str__(self):
         return str(self.idImagen)
@@ -27,7 +26,7 @@ class Categoria(models.Model):
 class Impresion(models.Model):
     idImpresion = models.AutoField(primary_key=True)
     nombre = models.TextField(verbose_name='Nombre')
-    descripcion = models.TextField(verbose_name='Descripción') 
+    descripcion = models.TextField(verbose_name='Descripción')
     precio = models.FloatField(verbose_name='Precio')
     vendedor = models.ForeignKey('Perfil', on_delete=models.CASCADE, null = True)
     categorias = models.ManyToManyField('Categoria')
@@ -49,13 +48,14 @@ class Perfil(models.Model):
         return self.usuario.username
     
     class Meta:
-        ordering = ('idPerfil', )
-        
+        ordering = ('idPerfil',)        
+
 
 class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null = True)
     vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null = True)
+    imagenes = models.ManyToManyField(Imagen)
     nombreImpresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
     descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión', blank= True)
     precioImpresion = models.FloatField(verbose_name='Precio de la impresión', null = True)
@@ -66,6 +66,3 @@ class Compra(models.Model):
 
     class Meta:
         ordering = ('idCompra', 'fechaDeCompra', )
-
-
-

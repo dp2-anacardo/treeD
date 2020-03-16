@@ -7,6 +7,7 @@ from main.models import Impresion, Perfil, Compra,Categoria, Imagen
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
 
+
 # Create your views here.
 
 def usuarioLogueado(request):
@@ -47,7 +48,12 @@ def mostrarImpresion(request, idImpresion):
     try:
         impresion = Impresion.objects.get(idImpresion=idImpresion)
         comprar = True
-        if impresion.vendedor == usuarioLogueado(request):
+        user = None
+        try:
+            user = usuarioLogueado(request)
+        except Exception:
+            pass
+        if user != None and user==impresion.vendedor:
             comprar = False
         imagenesTotales= Imagen.objects.all()
         categorias = impresion.categorias.all()

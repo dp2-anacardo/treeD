@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 class Imagen(models.Model):
     idImagen = models.AutoField(primary_key=True)
     imagen = models.ImageField(upload_to='imagenes',verbose_name='Imagen')
-    impresion = models.ForeignKey('Impresion', on_delete=models.CASCADE)
-    compra = models.ForeignKey('Compra', on_delete=models.SET_NULL, null= True)
+    impresion = models.ForeignKey('Impresion', on_delete=models.SET_NULL, null= True)
 
     def __str__(self):
         return str(self.idImagen)
@@ -56,6 +55,7 @@ class Compra(models.Model):
     idCompra = models.AutoField(primary_key=True)
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null = True)
     vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null = True)
+    imagenes = models.ManyToManyField(Imagen, verbose_name='Imagenes')
     nombreImpresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
     descripcionImpresion = models.TextField(verbose_name='Descripción de la impresión', blank= True)
     precioImpresion = models.FloatField(verbose_name='Precio de la impresión', null = True)

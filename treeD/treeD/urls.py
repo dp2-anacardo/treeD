@@ -37,5 +37,3 @@ urlpatterns = [
     path('impresion/listarCompras/', views.listarComprasImpresiones, name="listarComprasRealizas_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-  
-

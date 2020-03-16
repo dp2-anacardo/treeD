@@ -34,13 +34,6 @@ def listarImpresiones(request):
     except:
         return redirect('error_url')
 
-def usuarioLogueado(request):
-
-    idUser=request.user.id
-    userActual = get_object_or_404(User, pk = idUser)
-    usuarioActual = Perfil.objects.get(usuario = userActual)
-    return usuarioActual
-
 def home(request):
     return render(request, 'impresiones/index.html')
 

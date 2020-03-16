@@ -4,7 +4,7 @@ from main.models import Impresion, Compra
 """ Tests del sistema
 """
 class BuscadorFormTest(TestCase):
-    """ Test referentes al buscador de impresiones 3D
+    """ Test referentes al buscador de impresiones 3D.
     """
     fixtures = ["initialize.xml"]
 
@@ -87,7 +87,7 @@ class listarImpresionesTest(TestCase):
         self.assertQuerysetEqual(response.context['impresiones'],result, transform=lambda x: x)
 
 class ListarVentasRealizadas(TestCase):
-    """ Test referentes al listar de impresiones vendidas por un vendedor
+    """ Test referentes al listar de impresiones vendidas por un vendedor.
     """
     fixtures = ["initialize.xml"]
 

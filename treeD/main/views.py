@@ -143,7 +143,11 @@ def comprarImpresion3D(request, idImpresion):
         comprador = usuarioLogueado(request)
         
         assert impresion.vendedor != comprador
+        comprar = True
+        if impresion.vendedor == usuarioLogueado(request):
+            comprar = False
 
+        print(comprar)
         compras = list(Compra.objects.all().filter(comprador = comprador))
         fechaActual = date.today()
 
@@ -157,7 +161,7 @@ def comprarImpresion3D(request, idImpresion):
 
         compras.append(compra)
 
-        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras, 'comprar':comprar})
         
     except:
         return redirect('error_url')

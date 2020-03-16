@@ -15,11 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf import settings
 from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.auth.views import LoginView, LogoutView
 from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.index),
+    path('list/', views.buscador_impresiones_3d),
+    path('impresion/comprar/<idImpresion>/', views.comprarImpresion3D, name="comprarImpresion_url"),
+    path('',views.index, name='index'),
+    path('misPublicaciones/', views.listar_impresiones_publicadas),
+    path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
+    path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
+    path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),
+    path('impresion/eliminarImpresion/<idImpresion>/', views.eliminarImpresion, name="eliminarImpresion_url"),
+    path('impresion/editarImpresion/<idImpresion>/', views.editarImpresion, name="editarImpresion_url"),
+    path('paginaError/', views.error, name="error_url"),
+    path('login/', LoginView.as_view(), name="login_url"),
+    path('logout/', LogoutView.as_view(), name="logout_url"),
+    path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
+    path('impresion/listarCompras/', views.listarComprasImpresiones, name="listarComprasRealizas_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

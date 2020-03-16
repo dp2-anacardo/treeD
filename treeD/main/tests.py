@@ -22,6 +22,28 @@ class BuscadorFormTest(TestCase):
         })
         self.assertQuerysetEqual(response.context['impresiones'], result,transform=lambda x: x)
 
+class ListarImpresionesPublicadasTest(TestCase):
+    """ Test referentes a listar impresiones publicadas
+        por un vendedor
+    """
+    fixtures = ["initialize.xml"]
+
+    def test_listar_impresiones_publicadas_no_logeado(self):
+        """ Testea que si no hay usuario logeado retorna al
+            index.html
+        """
+        response = self.client.get('/misPublicaciones/')
+        self.assertTemplateUsed(response, 'index.html')
+
+    def test_listar_impresiones_publicadas_usuario(self):
+        """ Testea que devuelve las impresiones publicadas
+            del vendedor
+        """
+        self.client.login(username="usuario1", password="usuario1")
+        response = self.client.get('/misPublicaciones/')
+        result = Impresion.objects.filter(vendedor=3)
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        
 class listarComprasDeImpresionesTest(TestCase):
     """ Test referentes al listar las compras de las impresiones 3D.
     """

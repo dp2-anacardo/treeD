@@ -20,12 +20,12 @@ from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
 from main import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
     path('impresion/comprar/<idImpresion>/', views.comprarImpresion3D, name="comprarImpresion_url"),
     path('',views.index, name='index'),
+    path('misPublicaciones/', views.listar_impresiones_publicadas),
     path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
     path('impresion/mostrarImpresion/<idImpresion>/', views.mostrarImpresion, name="mostrarImpresion_url"),
     path('impresion/crearImpresion/', views.crearImpresion, name="crearImpresion_url"),

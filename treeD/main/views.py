@@ -1,4 +1,6 @@
-
+""" Vistas del sistema
+"""
+from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Compra,Categoria, Imagen
@@ -13,6 +15,7 @@ def usuarioLogueado(request):
     userActual = get_object_or_404(User, pk = idUser)
     usuarioActual = Perfil.objects.get(usuario = userActual)
     return usuarioActual
+
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
@@ -75,7 +78,7 @@ def crearImpresion(request):
                         imagen = Imagen(imagen=i, impresion=impresion)
                         imagen.save()
                     contador = contador + 1
-                return redirect('index')
+                return redirect('/misPublicaciones')
         else:
             formImpresion = ImpresionForm()
             formImagen=CargarImagenForm(request.FILES)
@@ -94,7 +97,7 @@ def eliminarImpresion(request, idImpresion):
         imagenesImpresion=Imagen.objects.all().filter(impresion=impresion)
         imagenesImpresion.delete()
         impresion.delete()
-        return redirect('index')
+        return redirect('/misPublicaciones')
     except:
         return redirect('error_url')
 
@@ -114,20 +117,24 @@ def editarImpresion(request, idImpresion):
             formImpresion = ImpresionForm(request.POST, instance=impresion)
             if formImpresion.is_valid():
                 formImpresion.save()
-                return redirect('index')
+                return redirect('/misPublicaciones')
     except:
         return redirect('error_url')
     
 def index(request):
     return render(request, 'index.html',)
 
+def listar_impresiones_publicadas(request):
+    """
+    Funcion que lista las impresiones publicadas por un vendedor
+    """
+    if request.user.is_authenticated:
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Impresion.objects.filter(vendedor=perfil_user)
+        return render(request, "misPublicaciones.html", {"query": query})
 
-def usuarioLogueado(request):
+    return render(request, 'index.html')
 
-    idUser=request.user.id
-    userActual = get_object_or_404(User, pk = idUser)
-    usuarioActual = Perfil.objects.get(usuario = userActual)
-    return usuarioActual
 
 
 def comprarImpresion3D(request, idImpresion):
@@ -154,6 +161,7 @@ def comprarImpresion3D(request, idImpresion):
         
     except:
         return redirect('error_url')
+
 
 def buscador_impresiones_3d(request):
     """

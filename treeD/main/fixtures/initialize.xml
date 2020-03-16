@@ -121,6 +121,10 @@
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">19</field>
         <field to="main.compra" name="compra" rel="ManyToOneRel">26</field>
     </object>
+    <object pk="23" model="main.imagen">
+        <field type="ImageField" name="imagen">image4.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
+    </object>
     <!--COMPRAS-->
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>

@@ -1,6 +1,8 @@
-from django.test import TestCase, Client
+from django.test import TestCase,Client
 from main.models import Impresion
 
+""" Tests del sistema
+"""
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D
     """
@@ -32,6 +34,42 @@ class listarComprasDeImpresionesTest(TestCase):
         c.login(username='usuario2', password='usuario2')
         response = c.get('/impresion/listarCompras/')
         self.assertEqual(response.status_code,200)
+        c.logout()
+
+class crudImpresiones3D(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_mostrar_impresion_3d(self):
+        
+        result = Impresion.objects.filter(pk=17)
+        response = self.client.get('/impresion/mostrarImpresion/17/')
+        self.assertEqual(response.context['impresion'],result.first())
+
+    def test_crear_impresion_3d(self):
+        
+        c=Client()
+        c.login(username='usuario1', password='usuario1')
+        response = c.get('/impresion/crearImpresion/')
+        self.assertEqual(response.status_code,200)
+        c.logout()
+
+    def test_modificar_impresion_3d(self):
+        
+        c=Client()
+        c.login(username='usuario1', password='usuario1')
+        response = c.get('/impresion/editarImpresion/17/')
+        self.assertEqual(response.status_code,200)
+        c.logout()
+    
+    def test_eliminar_impresion_3d(self):
+        
+        c=Client()
+        c.login(username='usuario1', password='usuario1')
+        tamañoA=len(Impresion.objects.all())
+        c.get('/impresion/eliminarImpresion/18/')
+        tamañoD=len(Impresion.objects.all())
+        self.assertNotEquals(tamañoA,tamañoD)
         c.logout()
 
 class listarImpresionesTest(TestCase):

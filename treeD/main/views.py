@@ -125,7 +125,8 @@ def editarImpresion(request, idImpresion):
         return redirect('error_url')
     
 def index(request):
-    return render(request, 'index.html',)
+    form = BuscadorForm(request.POST)
+    return render(request, 'index.html',{'form':form})
 
 def listar_impresiones_publicadas(request):
     """

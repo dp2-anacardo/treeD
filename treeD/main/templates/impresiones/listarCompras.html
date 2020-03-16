@@ -1,28 +1,27 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Mis impresiones</title>
-  </head>
-  <body>
-    <table>
-        <thread>
-            <tr>
-              <td>Fecha de compra</td>
-              <td>Impresion</td>
-              <td>Precio</td>
-              <td>Vendedor</td>
-            </tr>
-        </thread>
-        <tbody>
-            {% for c in compras %}
-                    <tr>
-                      <td>{{c.fechaDeCompra}}</td>
-                      <td>{{c.nombreImpresion}}</td>
-                      <td>{{c.precioImpresion}}</td>
-                      <td>{{c.vendedor}}</td>
-                    </tr>
-            {% endfor %}
-          </tbody>
-    </table>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Mis Compras</h1>
+<div class="bottom-footer">
+  {% for c in compras %}
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-lg-4 my-auto text-center">
+        <img src={{c.imagen_set.all.0.imagen.url}} height="190" width="286" >
+      </div>
+      <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Nombre de la impresión:</h5><p class="text-center">{{c.nombreImpresion}}</p>
+       <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{c.fechaDeCompra}}</p>
+      </div>
+       <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precioImpresion}}€</p>
+       <h5 class="text-center">Vendedor:</h5><p class="text-center">{{c.vendedor}}</p>
+      </div>
+    </div>
+    <br>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

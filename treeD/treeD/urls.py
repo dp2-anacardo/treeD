@@ -34,7 +34,9 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listarImpresiones, name="listarImpresiones_url"),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('impresion/listarCompras/', views.listarComprasImpresiones, name="listarComprasRealizas_url"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
   
 

@@ -1,13 +1,30 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion,Categoria,Imagen, Perfil, Compra
+from main.models import Impresion, Perfil, Compra,Categoria, Imagen
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
+
+# Create your views here.
+
+def usuarioLogueado(request):
+
+    idUser=request.user.id
+    userActual = get_object_or_404(User, pk = idUser)
+    usuarioActual = Perfil.objects.get(usuario = userActual)
+    return usuarioActual
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
 
+def listarComprasImpresiones(request):
+
+    try:
+        usuario = usuarioLogueado(request)
+        compras = list(Compra.objects.all().filter(comprador = usuario))
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+    except:
+        return redirect('error_url')
 
 def listarImpresiones(request):
 
@@ -131,7 +148,7 @@ def comprarImpresion3D(request, idImpresion):
 
         compras.append(compra)
 
-        return render(request, 'impresiones/misCompras.html', {'compras':compras})
+        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
         
     except:
         return redirect('error_url')

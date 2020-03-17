@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Esto es un populate de la Base de Datos de TreeD. Para usar, escribir 'py manage.py loaddata initialize.xml'-->
+<django-objects version="1.0">
+    <!--DJANGO ADMINISTRATOR-->
+    <object pk="1" model="auth.user">
+        <!--administrator/administrator-->
+        <field type="CharField" name="username">administrator</field>
+        <field type="CharField" name="password">pbkdf2_sha256$180000$5VtxiAElwSlz$ScRvksU3ov6DSVX7Yp82mkv3jPeJurcWVW10PR3vECk=</field>
+        <field type="IntegerField" name="is_active">1</field>
+        <field type="IntegerField" name="is_superuser">1</field>
+        <field type="IntegerField" name="is_staff">1</field>
+    </object>
+    <!--DJANGO USER-->
+    <object pk="2" model="auth.user">
+        <!--usuario1/usuario1-->
+        <field type="CharField" name="username">usuario1</field>
+        <field type="CharField" name="password">pbkdf2_sha256$180000$jX2pYYlilCSk$sdiMAQ0W/FkQ+2clKFRIZNeiZWxqN+hAMb0V63O1K0M=</field>
+        <field type="IntegerField" name="is_active">1</field>
+        <field type="IntegerField" name="is_superuser">0</field>
+        <field type="IntegerField" name="is_staff">0</field>
+    </object>
+    <object pk="23" model="auth.user">
+        <!--usuario2/usuario2-->
+        <field type="CharField" name="username">usuario2</field>
+        <field type="CharField" name="password">pbkdf2_sha256$180000$NSOYfrTWfRLx$yT+viBcn3Mh4jSDGLdXifQXAkH0uudfqtviQAQuoZqk=</field>
+        <field type="IntegerField" name="is_active">1</field>
+        <field type="IntegerField" name="is_superuser">0</field>
+        <field type="IntegerField" name="is_staff">0</field>
+    </object>
+    <!--PERFILES-->
+    <object pk="3" model="main.perfil">
+        <field to="auth.user" name="usuario" rel="OneToOneRel">2</field>
+    </object>
+    <object pk="24" model="main.perfil">
+        <field to="auth.user" name="usuario" rel="OneToOneRel">23</field>
+    </object>
+    <!--CATEGORIAS-->
+    <object pk="4" model="main.categoria">
+        <field type="CharField" name="categoria">ARQUITECTURA</field>
+    </object>
+    <object pk="5" model="main.categoria">
+        <field type="CharField" name="categoria">VEHICULOS</field>
+    </object>
+    <object pk="6" model="main.categoria">
+        <field type="CharField" name="categoria">ANIMALES</field>
+    </object>
+    <object pk="7" model="main.categoria">
+        <field type="CharField" name="categoria">ARMAS</field>
+    </object>
+    <object pk="8" model="main.categoria">
+        <field type="CharField" name="categoria">DEPORTES</field>
+    </object>
+    <object pk="9" model="main.categoria">
+        <field type="CharField" name="categoria">ANATOMIA</field>
+    </object>
+    <object pk="10" model="main.categoria">
+        <field type="CharField" name="categoria">OFICINA</field>
+    </object>
+    <object pk="11" model="main.categoria">
+        <field type="CharField" name="categoria">ARTE</field>
+    </object>
+    <object pk="12" model="main.categoria">
+        <field type="CharField" name="categoria">CIENCIA</field>
+    </object>
+    <object pk="13" model="main.categoria">
+        <field type="CharField" name="categoria">OTRAS COSAS</field>
+    </object>
+    <object pk="14" model="main.categoria">
+        <field type="CharField" name="categoria">HERRAMIENTAS</field>
+    </object>
+    <object pk="15" model="main.categoria">
+        <field type="CharField" name="categoria">JUEGOS</field>
+    </object>
+    <object pk="16" model="main.categoria">
+        <field type="CharField" name="categoria">FIGURAS</field>
+    </object>
+    <!--IMPRESIONES-->
+    <object pk="17" model="main.impresion">
+        <field type="CharField" name="nombre">Impresion 1</field>
+        <field type="CharField" name="descripcion">Esto es la impresion 1</field>
+        <field type="FloatField" name="precio">15.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="4"></object>
+            <object pk="6"></object>
+        </field>
+    </object>
+    <object pk="18" model="main.impresion">
+        <field type="CharField" name="nombre">Impresion 2</field>
+        <field type="CharField" name="descripcion">Esto es la impresion 2</field>
+        <field type="FloatField" name="precio">20.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="9"></object>
+            <object pk="11"></object>
+        </field>
+    </object>
+    <object pk="19" model="main.impresion">
+        <field type="CharField" name="nombre">Varios muñequitos</field>
+        <field type="CharField" name="descripcion">Esto es una impresion con nombre raro para probar el finder</field>
+        <field type="FloatField" name="precio">25.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="9"></object>
+            <object pk="15"></object>
+        </field>
+    </object>
+    <!--IMAGENES-->
+    <object pk="20" model="main.imagen">
+        <field type="ImageField" name="imagen">image1.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
+    </object>
+    <object pk="21" model="main.imagen">
+        <field type="ImageField" name="imagen">image2.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">18</field>
+    </object>
+    <object pk="22" model="main.imagen">
+        <field type="ImageField" name="imagen">image3.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">19</field>
+    </object>
+    <object pk="23" model="main.imagen">
+        <field type="ImageField" name="imagen">image4.jpg</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
+    </object>
+    <!--COMPRAS-->
+    <object pk="25" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.imagen" name="imagenes" rel="ManyToManyRel">
+            <object pk="20"></object>
+            <object pk="21"></object>
+        </field>
+        <field type="CharField" name="nombreImpresion">Impresion 1</field>
+        <field type="CharField" name="descripcionImpresion">Esto es la impresion 1</field>
+        <field type="FloatField" name="precioImpresion">15.0</field>
+        <field type="DateField" name="fechaDeCompra">2020-03-05</field>
+    </object>
+    <object pk="26" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.imagen" name="imagenes" rel="ManyToManyRel">
+            <object pk="22"></object>
+        </field>
+        <field type="CharField" name="nombreImpresion">Impresion 2</field>
+        <field type="CharField" name="descripcionImpresion">Esto es la impresion 2</field>
+        <field type="FloatField" name="precioImpresion">20.0</field>
+        <field type="DateField" name="fechaDeCompra">2020-03-05</field>
+    </object>
+</django-objects>

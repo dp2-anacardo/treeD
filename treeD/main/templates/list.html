@@ -1,0 +1,10 @@
+<form action="/list/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+{% for i in query %}
+<ul>
+    <li>Nombre: {{ i.nombre }}</li>
+</ul>
+{% endfor %}

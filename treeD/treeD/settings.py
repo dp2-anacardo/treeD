@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'treeD.urls'
+
+MEDIA_ROOT = ''
+
+MEDIA_URL = '/images/'
 
 TEMPLATES = [
     {
@@ -75,11 +80,11 @@ WSGI_APPLICATION = 'treeD.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'treeD',
         'USER': 'usuario',
         'PASSWORD': 'usuario',
-        'HOST': 'localhost',   
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -122,3 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL="/"
+LOGOUT_REDIRECT_URL="/"
+MEDIA_ROOT = os.path.join(BASE_DIR,'carga/imagenes')
+MEDIA_URL ='/carga/imagenes/'

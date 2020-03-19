@@ -60,7 +60,7 @@
         <br>
         <h5 class="text-center">Categorias:</h5>
         {%for i in categorias%}
-          <p class="text-center">{{i.categoria}}<p>
+          <p class="text-center">{{i.nombre}}<p>
         {%endfor%} <br> <br> <br>
 
         {% if user.is_authenticated and comprar == True %}

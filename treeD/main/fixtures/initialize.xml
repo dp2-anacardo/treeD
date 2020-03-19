@@ -12,16 +12,16 @@
     </object>
     <!--DJANGO USER-->
     <object pk="2" model="auth.user">
-        <!--usuario1/usuario1-->
-        <field type="CharField" name="username">usuario1</field>
+        <!--Ipatia/usuario1-->
+        <field type="CharField" name="username">Ipatia</field>
         <field type="CharField" name="password">pbkdf2_sha256$180000$jX2pYYlilCSk$sdiMAQ0W/FkQ+2clKFRIZNeiZWxqN+hAMb0V63O1K0M=</field>
         <field type="IntegerField" name="is_active">1</field>
         <field type="IntegerField" name="is_superuser">0</field>
         <field type="IntegerField" name="is_staff">0</field>
     </object>
     <object pk="23" model="auth.user">
-        <!--usuario2/usuario2-->
-        <field type="CharField" name="username">usuario2</field>
+        <!--AAAnuel/usuario2-->
+        <field type="CharField" name="username">AAAnuel</field>
         <field type="CharField" name="password">pbkdf2_sha256$180000$NSOYfrTWfRLx$yT+viBcn3Mh4jSDGLdXifQXAkH0uudfqtviQAQuoZqk=</field>
         <field type="IntegerField" name="is_active">1</field>
         <field type="IntegerField" name="is_superuser">0</field>
@@ -30,9 +30,19 @@
     <!--PERFILES-->
     <object pk="3" model="main.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">2</field>
+        <field type="CharField" name="nombre">Álvaro</field>
+        <field type="CharField" name="apellidos">Díaz</field>
+        <field type="CharField" name="descripcion">Me llamo Álvaro y vendo impresiones 3D</field>
+        <field type="ImageField" name="imagen">perfil1.jpg</field>
+        <field type="BooleanField" name="es_afiliado">False</field>
     </object>
     <object pk="24" model="main.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">23</field>
+        <field type="CharField" name="nombre">Luis</field>
+        <field type="CharField" name="apellidos">Cienfuegos</field>
+        <field type="CharField" name="descripcion">Me llamo Luis y compro impresiones 3D</field>
+        <field type="ImageField" name="imagen">perfil2.jpg</field>
+        <field type="BooleanField" name="es_afiliado">False</field>
     </object>
     <!--CATEGORIAS-->
     <object pk="4" model="main.categoria">
@@ -76,8 +86,8 @@
     </object>
     <!--IMPRESIONES-->
     <object pk="17" model="main.impresion">
-        <field type="CharField" name="nombre">Impresion 1</field>
-        <field type="CharField" name="descripcion">Esto es la impresion 1</field>
+        <field type="CharField" name="nombre">Impresiones varias</field>
+        <field type="CharField" name="descripcion">Vendo varias impresiones de diversas series y pelis.</field>
         <field type="FloatField" name="precio">15.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -86,8 +96,8 @@
         </field>
     </object>
     <object pk="18" model="main.impresion">
-        <field type="CharField" name="nombre">Impresion 2</field>
-        <field type="CharField" name="descripcion">Esto es la impresion 2</field>
+        <field type="CharField" name="nombre">Gato gordo</field>
+        <field type="CharField" name="descripcion">Gato de los que mueven la manita</field>
         <field type="FloatField" name="precio">20.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -96,8 +106,8 @@
         </field>
     </object>
     <object pk="19" model="main.impresion">
-        <field type="CharField" name="nombre">Varios muñequitos</field>
-        <field type="CharField" name="descripcion">Esto es una impresion con nombre raro para probar el finder</field>
+        <field type="CharField" name="nombre">Retrato</field>
+        <field type="CharField" name="descripcion">Retrato de un alien</field>
         <field type="FloatField" name="precio">25.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -126,16 +136,16 @@
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
-        <field type="CharField" name="nombre_impresion">Impresion 1</field>
-        <field type="CharField" name="desc_impresion">Esto es la impresion 1</field>
+        <field type="CharField" name="nombre_impresion">Impresiones varias</field>
+        <field type="CharField" name="desc_impresion">Vendo varias impresiones de diversas series y pelis.</field>
         <field type="FloatField" name="precio_impresion">15.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
     </object>
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
-        <field type="CharField" name="nombre_impresion">Impresion 2</field>
-        <field type="CharField" name="desc_impresion">Esto es la impresion 2</field>
+        <field type="CharField" name="nombre_impresion">Gato gordo</field>
+        <field type="CharField" name="desc_impresion">Gato de los que mueven la manita</field>
         <field type="FloatField" name="precio_impresion">20.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
     </object>

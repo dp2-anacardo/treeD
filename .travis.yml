@@ -1,6 +1,6 @@
 language: python
 services:
-  - mysql
+  - postgresql
 python:
   - "3.6"
 install:
@@ -8,9 +8,9 @@ install:
   - pip install coverage
   - pip install codacy-coverage
 before_script:
-  - mysql -u root -e 'CREATE DATABASE treeD;'
-  - mysql -u root -e "CREATE USER 'usuario'@'localhost' IDENTIFIED BY 'usuario';"
-  - mysql -u root -e "GRANT ALL PRIVILEGES ON * . * TO 'usuario'@'localhost';"
+  - psql -U postgres -c "create user usuario password 'usuario'"
+  - psql -U postgres -c "create database treeD owner usuario"
+  - psql -U postgres -c "ALTER USER usuario CREATEDB"
   - cd treeD
 script:
   - coverage run --source='.' manage.py test

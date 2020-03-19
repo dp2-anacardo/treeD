@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -51,10 +53,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'treeD.urls'
-
-MEDIA_ROOT = ''
-
-MEDIA_URL = '/images/'
 
 TEMPLATES = [
     {
@@ -80,12 +78,12 @@ WSGI_APPLICATION = 'treeD.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'treeD',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'treed',
         'USER': 'usuario',
         'PASSWORD': 'usuario',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 
@@ -126,9 +124,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-
 LOGIN_REDIRECT_URL="/"
 LOGOUT_REDIRECT_URL="/"
+
+if DEBUG == False:
+    MEDIAFILES_LOCATION = 'carga/imagenes'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = 'eu-west-3'
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DATABASES['default'] =  dj_database_url.config()
+
 MEDIA_ROOT = os.path.join(BASE_DIR,'carga/imagenes')
 MEDIA_URL ='/carga/imagenes/'
+STATIC_URL = '/static/'
+
+

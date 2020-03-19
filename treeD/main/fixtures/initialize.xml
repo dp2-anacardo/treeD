@@ -36,43 +36,43 @@
     </object>
     <!--CATEGORIAS-->
     <object pk="4" model="main.categoria">
-        <field type="CharField" name="categoria">ARQUITECTURA</field>
+        <field type="CharField" name="nombre">ARQUITECTURA</field>
     </object>
     <object pk="5" model="main.categoria">
-        <field type="CharField" name="categoria">VEHICULOS</field>
+        <field type="CharField" name="nombre">VEHICULOS</field>
     </object>
     <object pk="6" model="main.categoria">
-        <field type="CharField" name="categoria">ANIMALES</field>
+        <field type="CharField" name="nombre">ANIMALES</field>
     </object>
     <object pk="7" model="main.categoria">
-        <field type="CharField" name="categoria">ARMAS</field>
+        <field type="CharField" name="nombre">ARMAS</field>
     </object>
     <object pk="8" model="main.categoria">
-        <field type="CharField" name="categoria">DEPORTES</field>
+        <field type="CharField" name="nombre">DEPORTES</field>
     </object>
     <object pk="9" model="main.categoria">
-        <field type="CharField" name="categoria">ANATOMIA</field>
+        <field type="CharField" name="nombre">ANATOMIA</field>
     </object>
     <object pk="10" model="main.categoria">
-        <field type="CharField" name="categoria">OFICINA</field>
+        <field type="CharField" name="nombre">OFICINA</field>
     </object>
     <object pk="11" model="main.categoria">
-        <field type="CharField" name="categoria">ARTE</field>
+        <field type="CharField" name="nombre">ARTE</field>
     </object>
     <object pk="12" model="main.categoria">
-        <field type="CharField" name="categoria">CIENCIA</field>
+        <field type="CharField" name="nombre">CIENCIA</field>
     </object>
     <object pk="13" model="main.categoria">
-        <field type="CharField" name="categoria">OTRAS COSAS</field>
+        <field type="CharField" name="nombre">OTRAS COSAS</field>
     </object>
     <object pk="14" model="main.categoria">
-        <field type="CharField" name="categoria">HERRAMIENTAS</field>
+        <field type="CharField" name="nombre">HERRAMIENTAS</field>
     </object>
     <object pk="15" model="main.categoria">
-        <field type="CharField" name="categoria">JUEGOS</field>
+        <field type="CharField" name="nombre">JUEGOS</field>
     </object>
     <object pk="16" model="main.categoria">
-        <field type="CharField" name="categoria">FIGURAS</field>
+        <field type="CharField" name="nombre">FIGURAS</field>
     </object>
     <!--IMPRESIONES-->
     <object pk="17" model="main.impresion">
@@ -105,20 +105,20 @@
             <object pk="15"></object>
         </field>
     </object>
-    <!--IMAGENES-->
-    <object pk="20" model="main.imagen">
+    <!--IMAGENES IMPRESION-->
+    <object pk="20" model="main.imgImpresion">
         <field type="ImageField" name="imagen">image1.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
     </object>
-    <object pk="21" model="main.imagen">
+    <object pk="21" model="main.imgImpresion">
         <field type="ImageField" name="imagen">image2.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">18</field>
     </object>
-    <object pk="22" model="main.imagen">
+    <object pk="22" model="main.imgImpresion">
         <field type="ImageField" name="imagen">image3.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">19</field>
     </object>
-    <object pk="23" model="main.imagen">
+    <object pk="23" model="main.imgImpresion">
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
     </object>
@@ -126,24 +126,30 @@
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
-        <field to="main.imagen" name="imagenes" rel="ManyToManyRel">
-            <object pk="20"></object>
-            <object pk="21"></object>
-        </field>
-        <field type="CharField" name="nombreImpresion">Impresion 1</field>
-        <field type="CharField" name="descripcionImpresion">Esto es la impresion 1</field>
-        <field type="FloatField" name="precioImpresion">15.0</field>
-        <field type="DateField" name="fechaDeCompra">2020-03-05</field>
+        <field type="CharField" name="nombre_impresion">Impresion 1</field>
+        <field type="CharField" name="desc_impresion">Esto es la impresion 1</field>
+        <field type="FloatField" name="precio_impresion">15.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-05</field>
     </object>
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
-        <field to="main.imagen" name="imagenes" rel="ManyToManyRel">
-            <object pk="22"></object>
-        </field>
-        <field type="CharField" name="nombreImpresion">Impresion 2</field>
-        <field type="CharField" name="descripcionImpresion">Esto es la impresion 2</field>
-        <field type="FloatField" name="precioImpresion">20.0</field>
-        <field type="DateField" name="fechaDeCompra">2020-03-05</field>
+        <field type="CharField" name="nombre_impresion">Impresion 2</field>
+        <field type="CharField" name="desc_impresion">Esto es la impresion 2</field>
+        <field type="FloatField" name="precio_impresion">20.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-05</field>
+    </object>
+    <!--IMAGENES COMPRAS-->
+    <object pk="27" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image1.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
+    </object>
+    <object pk="28" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image2.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">26</field>
+    </object>
+    <object pk="29" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image4.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
     </object>
 </django-objects>

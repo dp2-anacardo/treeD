@@ -3,7 +3,7 @@
 
 from django import forms
 from main.models import Categoria
-from main.models import Impresion, Imagen
+from main.models import Impresion, ImgImpresion
 from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
@@ -15,11 +15,32 @@ class BuscadorForm(forms.Form):
     - precio_max: el buscador busca impresiones cuyo precio sea menor que precio_max
     """
 
-    nombre = forms.CharField(label='Nombre de la impresion', required=False,widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2','placeholder': 'Buscar Piezas 3D'}))
+    nombre = forms.CharField(
+        label='Nombre de la impresion',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control w-50 mr-2', 'placeholder': 'Buscar Piezas 3D'}
+        )
+    )
     categorias = forms.ModelMultipleChoiceField(
-        queryset=Categoria.objects, widget=forms.CheckboxSelectMultiple(), required=False)
-    precio_min = forms.FloatField(label='Precio Minimo', required=False,widget=forms.NumberInput(attrs={'class': 'form-control w-100 ','placeholder': 'Precio Minimo'}))
-    precio_max = forms.FloatField(label='Precio Maximo', required=False,widget=forms.NumberInput(attrs={'class': 'form-control w-100 ','placeholder': 'Precio Maximo'}))
+        queryset=Categoria.objects,
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+    precio_min = forms.FloatField(
+        label='Precio Minimo',
+        required=False,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control w-100 ', 'placeholder': 'Precio Minimo'}
+        )
+    )
+    precio_max = forms.FloatField(
+        label='Precio Maximo',
+        required=False,
+        widget=forms.NumberInput(
+            attrs={'class': 'form-control w-100 ', 'placeholder': 'Precio Maximo'}
+        )
+    )
 
     def clean(self):
         """Valida si esta bien el rango de precio.
@@ -42,9 +63,10 @@ class ImpresionForm(forms.ModelForm):
             'categorias',
         }
         widgets = {
-            'nombre':forms.TextInput(attrs={'class': 'form-control','placeholder':'Titulo'}),
-            'descripcion':forms.Textarea(attrs={'class':'form-control','placeholder':'Descripcion','rows':4}),
-            'precio':forms.NumberInput(attrs={'class':'form-control','placeholder':'Precio'}),
+            'nombre':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Titulo'}),
+            'descripcion':forms.Textarea(
+                attrs={'class':'form-control', 'placeholder':'Descripcion', 'rows':4}),
+            'precio':forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Precio'}),
             'categorias':forms.CheckboxSelectMultiple(),
 
         }
@@ -63,7 +85,9 @@ class ImpresionForm(forms.ModelForm):
         self.fields['categorias'].required = False
 
 class CargarImagenForm(forms.ModelForm):
-    imagen=forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple':True,'class':'form-control-file'}))
+    imagen = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': True, 'class': 'form-control-file'})
+    )
     class Meta:
-        model = Imagen
+        model = ImgImpresion
         fields = ('imagen',)

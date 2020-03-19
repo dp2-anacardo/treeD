@@ -48,12 +48,12 @@
 {% for impresion in impresiones %}
 <div class="col-lg-4">
 <div class="card mx-auto" style="width: 18rem;">
-  <img class="card-img-top" src={{impresion.imagen_set.all.0.imagen.url}} height="190" width="286" >
+  <img class="card-img-top" src={{impresion.imgimpresion_set.all.0.imagen.url}} height="190" width="286" >
   <div class="card-body">
     <h5 class="card-title text-center">{{impresion.nombre}}</h5>
     <p class="card-text text-center">{{impresion.precio}}€</p>
     <div class="col text-center">
-    <a href="{% url 'mostrarImpresion_url' impresion.idImpresion %}" class="btn btn-dark m-auto">Ver</a>
+    <a href="{% url 'mostrarImpresion_url' impresion.id %}" class="btn btn-dark m-auto">Ver</a>
   </div>
   </div>
 </div>

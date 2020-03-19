@@ -13,16 +13,16 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-lg-4 my-auto text-center">
-                    <img src={{i.imagen_set.all.0.imagen.url}} height="190" width="286" >
+                    <img src={{i.imgimpresion_set.all.0.imagen.url}} height="190" width="286" >
                 </div>
                 <div class="col-lg-4 my-auto">
                     <h5 class="text-center">Nombre:</h5><p class="text-center">{{i.nombre}}</p>
                     <h5 class="text-center">Precio:</h5><p class="text-center">{{i.precio}}</p> 
                 </div>
                 <div class="col-lg-4 my-auto text-center">
-                        <a href="{% url 'mostrarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
-                        <a href="{% url 'editarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
-                        <a href="{% url 'eliminarImpresion_url' i.idImpresion %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
+                        <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
+                        <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
+                        <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
                 </div>
             </div><br>
     </div>

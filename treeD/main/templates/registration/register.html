@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="bottom-footer">
+
+        <div class="container">
+          <div class="row">
+              <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+                  <h1 class="display-4 py-2 text-truncate">Registro</h1>
+                  {% if form.errors %}
+                  <div class="alert alert-danger" role="alert">
+                    Error
+                  </div>
+                    {% endif %}
+                  <div class="px-2">
+                    
+                    <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
+                        {% csrf_token %}
+                        {{form_usuario.as_p}}
+                        <br>
+                        {{form_perfil.nombre}}
+                        <br>
+                        {{form_perfil.apellidos}}
+                        <br>
+                        {{form_perfil.descripcion}}
+                        <br>
+                        {{form_direccion.direccion}}
+                        <br>
+                        {{form_imagen.imagen}}
+                        <br>
+                        <button type='submit' class="btn btn-primary btn-dark">Registrarse</button>
+                    </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+        </div>
+        </div>
+
+{% endblock %}

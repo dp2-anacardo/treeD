@@ -57,8 +57,8 @@ class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     nombre = models.TextField(verbose_name='Nombre')
     apellidos = models.TextField(verbose_name='Apellidos')
-    descripcion = models.TextField(verbose_name='Descripción', null=True)
-    imagen = models.ImageField(upload_to='', verbose_name='Imagen')
+    descripcion = models.TextField(verbose_name='Descripción', blank=True)
+    imagen = models.ImageField(upload_to='', verbose_name='Imagen', default='default.png')
     es_afiliado = models.BooleanField(verbose_name='Afiliado?')
     
     def __str__(self):

@@ -3,7 +3,7 @@
 
 from django import forms
 from main.models import Categoria
-from main.models import Impresion, ImgImpresion
+from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil
 from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
@@ -91,3 +91,33 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class ImagenForm(forms.Form):
+    imagen = forms.ImageField(required=False,
+        widget=forms.ClearableFileInput(attrs={ 'class': 'form-control-file'})
+    )
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = {
+            'nombre',
+            'apellidos',
+            'descripcion',
+        }
+        widgets = {
+            'nombre':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Nombre'}),
+            'apellidos':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Apellidos'}),
+            'descripcion':forms.Textarea(
+                attrs={'class':'form-control', 'placeholder':'Descripción', 'rows':4}),
+        }
+
+class DirecPerfilForm(forms.ModelForm):
+    class Meta:
+        model = DirecPerfil
+        fields = {
+            'direccion',
+        }
+        widgets = {
+            'direccion':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Dirección'}),
+        }

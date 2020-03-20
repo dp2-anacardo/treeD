@@ -4,7 +4,7 @@ from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
-from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, BuscarUsuariosForm
 from datetime import date
 
 def usuario_logueado(request):
@@ -226,4 +226,23 @@ def listar_ventas_realizadas(request):
         query = Compra.objects.filter(vendedor=perfil_user)
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
+    return render(request, 'index.html')
+
+def buscar_usuarios(request):
+    
+    if request.user.is_authenticated:
+
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
+
+        if request.method == "POST":
+            form = BuscarUsuariosForm(request.POST)
+            if form.is_valid():
+                nombre = form.cleaned_data.get("nombre")
+                query = query.filter(nombre__icontains=nombre)
+                return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+        else:
+            form = BuscarUsuariosForm()
+        return render(request, "registration/listarUsuarios.html", {"form": form})
+    
     return render(request, 'index.html')

@@ -91,3 +91,9 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class BuscarUsuariosForm(forms.Form):
+
+    nombre = forms.CharField(
+        label='Nombre del usuario',
+        required=True)

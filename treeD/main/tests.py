@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from main.models import Impresion, Compra
+from main.models import Impresion, Compra, Perfil
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -140,4 +140,19 @@ class ListarVentasRealizadas(TestCase):
         self.client.login(username="Ipatia", password="usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+
+class AdministracionUsuarios(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_buscar_usuario(self):
+
+        result = Perfil.objects.filter(pk=24)
+        self.client.login(username="Ipatia", password="usuario1")
+        response = self.client.post('/usuario/list/', {
+            'nombre': 'luis' })
+        response2 = self.client.get('/usuario/list/')
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        self.assertEqual(response2.status_code, 200)
+

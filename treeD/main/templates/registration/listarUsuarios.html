@@ -1,0 +1,32 @@
+<!doctype html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Listado de usuarios</title>
+</head>
+
+<body>
+  <h2>Buscar usuarios</h2>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Buscar</button>
+    </form>
+    <br>
+  <table>
+    <tr>
+      <td><strong>Nombre</strong></td>
+      <td><strong>Apellidos</strong></td>
+      <td><strong>Descripcion</strong></td>
+    </tr>
+    {% for u in query %}
+    <tr>
+      <td>{{u.nombre}}</td>
+      <td>{{u.apellidos}}</td>
+      <td>{{u.descripcion}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+
+</body>
+</html>

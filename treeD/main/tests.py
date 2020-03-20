@@ -140,4 +140,14 @@ class ListarVentasRealizadas(TestCase):
         self.client.login(username="Ipatia", password="usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+
+def AdministracionUsuarios(request):
+
+    fixtures = ["initialize.xml"]
+
+    def test_listar_usuarios(self):
+
+        self.client.login(username="Ipatia", password="usuario1") 
+        response = self.client.get('/usuario/listarUsuarios/')
+        self.assertEqual(response.status_code, 200)

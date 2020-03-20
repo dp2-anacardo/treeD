@@ -227,3 +227,13 @@ def listar_ventas_realizadas(request):
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')
+
+def listar_usuarios(request):
+
+    if request.user.is_authenticated:
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
+        return render(request, 'registration/listarUsuarios.html', {'query':query})
+    
+    return render(request, 'index.html')
+

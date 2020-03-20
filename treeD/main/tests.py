@@ -8,12 +8,12 @@ class BuscadorFormTest(TestCase):
 
     def test_buscador_impresiones_3d(self):
         """ Test que comprueba que el resultado que coincide con los params
-            dados es la impresion 2
+            dados es la del gato gordo
         """
         result = Impresion.objects.filter(pk=18)
 
         response = self.client.post('/list/', {
-            'nombre': 'impresion',
+            'nombre': 'gato',
             'categorias': (9, 11),
             'precio_min': 19.0,
             'precio_max': 21.0
@@ -37,7 +37,7 @@ class ListarImpresionesPublicadasTest(TestCase):
         """ Testea que devuelve las impresiones publicadas
             del vendedor
         """
-        self.client.login(username="usuario1", password="usuario1")
+        self.client.login(username="Ipatia", password="usuario1")
         response = self.client.get('/misPublicaciones/')
         result = Impresion.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
@@ -52,7 +52,7 @@ class ListarComprasDeImpresionesTest(TestCase):
             compras de impresiones de la base de datos.
         """
         c = Client()
-        c.login(username='usuario2', password='usuario2')
+        c.login(username='AAAnuel', password='usuario2')
         response = c.get('/impresion/listarCompras/')
         self.assertEqual(response.status_code, 200)
 
@@ -67,19 +67,19 @@ class CRUDImpresiones3D(TestCase):
 
     def test_crear_impresion_3d(self):
         c = Client()
-        c.login(username='usuario1', password='usuario1')
+        c.login(username='Ipatia', password='usuario1')
         response = c.get('/impresion/crearImpresion/')
         self.assertEqual(response.status_code, 200)
 
     def test_modificar_impresion_3d(self):
         c = Client()
-        c.login(username='usuario1', password='usuario1')
+        c.login(username='Ipatia', password='usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code, 200)
     
     def test_eliminar_impresion_3d(self):
         c = Client()
-        c.login(username='usuario1', password='usuario1')
+        c.login(username='Ipatia', password='usuario1')
         tamaño_a = len(Impresion.objects.all())
         c.get('/impresion/eliminarImpresion/18/')
         tamaño_d = len(Impresion.objects.all())
@@ -105,19 +105,19 @@ class ComprarImpresionesTest(TestCase):
 
     def test_comprar_impresion_comprador(self):
         c = Client()
-        c.login(username='usuario2', password='usuario2')
+        c.login(username='AAAnuel', password='usuario2')
         response = c.get('/impresion/comprar/17/')
         self.assertEqual(response.status_code, 200)
 
     def test_comprar_impresion_vendedor(self):
         c = Client()
-        c.login(username='usuario1', password='usuario1')
+        c.login(username='Ipatia', password='usuario1')
         response = c.get('/impresion/comprar/17/')
         self.assertEqual(response.status_code, 302)
 
     def test_comprar_impresion_inexistente(self):
         c = Client()
-        c.login(username='usuario2', password='usuario2')
+        c.login(username='AAAnuel', password='usuario2')
         response = c.get('/impresion/comprar/999/')
         self.assertEqual(response.status_code, 302)
 
@@ -137,7 +137,7 @@ class ListarVentasRealizadas(TestCase):
         """ Testea que devuelve las impresiones vendidas
             del vendedor
         """
-        self.client.login(username="usuario1", password="usuario1")
+        self.client.login(username="Ipatia", password="usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     

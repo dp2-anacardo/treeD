@@ -3,136 +3,146 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Compra,Categoria, Imagen
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
 
+def usuario_logueado(request):
 
-# Create your views here.
-
-def usuarioLogueado(request):
-
-    idUser=request.user.id
-    userActual = get_object_or_404(User, pk = idUser)
-    usuarioActual = Perfil.objects.get(usuario = userActual)
-    return usuarioActual
+    id_user = request.user.id
+    user_actual = get_object_or_404(User, pk=id_user)
+    usuario_actual = Perfil.objects.get(usuario=user_actual)
+    return usuario_actual
 
 
 def error(request):
     return render(request, 'impresiones/paginaError.html')
 
-def listarComprasImpresiones(request):
+def listar_compras_impresiones(request):
 
     try:
-        usuario = usuarioLogueado(request)
-        compras = list(Compra.objects.all().filter(comprador = usuario))
-        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+        usuario = usuario_logueado(request)
+        compras = list(Compra.objects.all().filter(comprador=usuario))
+        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
     except:
         return redirect('error_url')
 
-def listarImpresiones(request):
+def listar_impresiones(request):
 
     try:
         form = BuscadorForm(request.POST)
         impresiones = Impresion.objects.all()
         categorias = Categoria.objects.all()
-        return render(request, 'impresiones/listarImpresiones.html', {'impresiones':impresiones,'categorias':categorias,'form':form})
+        return render(request, 'impresiones/listarImpresiones.html', {
+            'impresiones':impresiones,
+            'categorias':categorias,
+            'form':form
+        })
     except:
         return redirect('error_url')
 
 def home(request):
     return render(request, 'impresiones/index.html')
 
-def mostrarImpresion(request, idImpresion):
+def mostrar_impresion(request, pk):
     
     try:
-        impresion = Impresion.objects.get(idImpresion=idImpresion)
+        impresion = Impresion.objects.get(pk=pk)
         comprar = True
         user = None
         try:
-            user = usuarioLogueado(request)
-        except Exception:
+            user = usuario_logueado(request)
+        except:
             pass
-        if user != None and user==impresion.vendedor:
+        if user is None or user == impresion.vendedor:
             comprar = False
-        imagenesTotales= Imagen.objects.all()
         categorias = impresion.categorias.all()
-        imagenesImpresion = imagenesTotales.filter(impresion = impresion)
-        return render(request, 'impresiones/mostrarImpresion.html', {'impresion':impresion, 'imagenes':imagenesImpresion, 'categorias':categorias, 'comprar':comprar})
-    
+        imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        return render(request, 'impresiones/mostrarImpresion.html', {
+            'impresion': impresion,
+            'imagenes': imagenes_impresion,
+            'categorias': categorias,
+            'comprar': comprar
+        })
     except:
         return redirect('error_url')
-    
 
-def crearImpresion(request):
+def crear_impresion(request):
 
     try:
-        numeroImagenes = 4
+        numero_imagenes = 4
         if request.method == "POST":
-            formImpresion = ImpresionForm(request.POST)
-            formImagen= CargarImagenForm(request.POST, request.FILES)
+            form_impresion = ImpresionForm(request.POST)
+            form_imagen = CargarImagenForm(request.POST, request.FILES)
             files = request.FILES.getlist('imagen')
-            if formImpresion.is_valid() and formImagen.is_valid():
-                categorias = formImpresion.cleaned_data.get("categorias")
+            if form_impresion.is_valid() and form_imagen.is_valid():
+                categorias = form_impresion.cleaned_data.get("categorias")
                 print(categorias)
                 if not categorias:
-                    categorias = Categoria.objects.filter(categoria = 'OTRAS COSAS')
-                impresion = formImpresion.save(commit=False)
-                impresion.vendedor = usuarioLogueado(request)
+                    categorias = Categoria.objects.filter(categoria='OTRAS COSAS')
+                impresion = form_impresion.save(commit=False)
+                impresion.vendedor = usuario_logueado(request)
                 impresion.save()
                 impresion.categorias.set(categorias)
                 contador = 1
                 for i in files:
-                    if contador <= numeroImagenes:
-                        imagen = Imagen(imagen=i, impresion=impresion)
+                    if contador <= numero_imagenes:
+                        imagen = ImgImpresion(imagen=i, impresion=impresion)
                         imagen.save()
                     contador = contador + 1
                 return redirect('/misPublicaciones')
         else:
-            formImpresion = ImpresionForm()
-            formImagen=CargarImagenForm(request.FILES)
-        return render(request, 'impresiones/crearImpresion.html',{'formulario1':formImpresion, 'formularioImagen':formImagen})
+            form_impresion = ImpresionForm()
+            form_imagen = CargarImagenForm(request.FILES)
+        return render(request, 'impresiones/crearImpresion.html', {
+            'formulario1':form_impresion,
+            'formulario_imagen':form_imagen
+        })
     except:
         return redirect('error_url')
 
-def eliminarImpresion(request, idImpresion):
+def eliminar_impresion(request, pk):
 
     try:
-        impresion= Impresion.objects.get(idImpresion = idImpresion)
-        vendedorImpresion= impresion.vendedor
-        usuario = usuarioLogueado(request)
-        if vendedorImpresion != usuario:
-            return redirect('error_url') 
-        imagenesImpresion=Imagen.objects.all().filter(impresion=impresion)
-        imagenesImpresion.delete()
+        impresion = Impresion.objects.get(pk=pk)
+        vendedor_impresion = impresion.vendedor
+        usuario = usuario_logueado(request)
+        if vendedor_impresion != usuario:
+            return redirect('error_url')
+        imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        imagenes_impresion.delete()
         impresion.delete()
         return redirect('/misPublicaciones')
     except:
         return redirect('error_url')
 
-def editarImpresion(request, idImpresion):
+def editar_impresion(request, pk):
 
     try:
-        impresion= Impresion.objects.get(idImpresion = idImpresion)
-        vendedorImpresion = impresion.vendedor
-        imagenesImpresion = Imagen.objects.all().filter(impresion=impresion)
-        usuario = usuarioLogueado(request)
-        if vendedorImpresion != usuario:
+        impresion = Impresion.objects.get(pk=pk)
+        vendedor_impresion = impresion.vendedor
+        imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        usuario = usuario_logueado(request)
+        if vendedor_impresion != usuario:
             return redirect('error_url')
         if request.method == 'GET':
-            formImpresion= ImpresionForm(instance= impresion)
-            return render(request, 'impresiones/editarImpresion.html',{'formulario1':formImpresion, 'imagenes':imagenesImpresion, 'id':idImpresion})
+            form_impresion = ImpresionForm(instance=impresion)
+            return render(request, 'impresiones/editarImpresion.html', {
+                'formulario1': form_impresion,
+                'imagenes': imagenes_impresion,
+                'pk': pk
+            })
         else:
-            formImpresion = ImpresionForm(request.POST, instance=impresion)
-            if formImpresion.is_valid():
-                formImpresion.save()
+            form_impresion = ImpresionForm(request.POST, instance=impresion)
+            if form_impresion.is_valid():
+                form_impresion.save()
                 return redirect('/misPublicaciones')
     except:
         return redirect('error_url')
     
 def index(request):
     form = BuscadorForm(request.POST)
-    return render(request, 'index.html',{'form':form})
+    return render(request, 'index.html', {'form': form})
 
 def listar_impresiones_publicadas(request):
     """
@@ -145,28 +155,34 @@ def listar_impresiones_publicadas(request):
 
     return render(request, 'index.html')
 
-
-
-def comprarImpresion3D(request, idImpresion):
+def comprar_impresion_3d(request, pk):
     try:
-        impresion = Impresion.objects.get(idImpresion=idImpresion)
-        comprador = usuarioLogueado(request)
+        impresion = Impresion.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
         
         assert impresion.vendedor != comprador
-        compras = list(Compra.objects.all().filter(comprador = comprador))
-        fechaActual = date.today()
+        compras = list(Compra.objects.filter(comprador=comprador))
+        fecha_actual = date.today()
 
-        imagenes = Imagen.objects.all().filter(impresion=impresion)
+        imagenes = list(ImgImpresion.objects.filter(impresion=impresion))
 
-        compra = Compra(comprador= comprador, vendedor= impresion.vendedor,
-        nombreImpresion=impresion.nombre, descripcionImpresion=impresion.descripcion, 
-        precioImpresion= impresion.precio, fechaDeCompra=fechaActual)
+        compra = Compra(
+            comprador=comprador,
+            vendedor=impresion.vendedor,
+            nombre_impresion=impresion.nombre,
+            desc_impresion=impresion.descripcion,
+            precio_impresion=impresion.precio,
+            fecha_compra=fecha_actual
+        )
         compra.save()
-        compra.imagenes.set(imagenes)
+
+        for img in imagenes:
+            imagen = ImgCompra(imagen=img.imagen, compra=compra)
+            imagen.save()
 
         compras.append(compra)
 
-        return render(request, 'impresiones/listarCompras.html', {'compras':compras})
+        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
         
     except:
         return redirect('error_url')
@@ -192,9 +208,9 @@ def buscador_impresiones_3d(request):
                 for id_ in categorias:
                     query = query.filter(categorias__in=[id_]).distinct()
             if precio_min is not None:
-                query = query.filter(precio__gt=precio_min)
+                query = query.filter(precio__gte=precio_min)
             if precio_max is not None:
-                query = query.filter(precio__lt=precio_max)
+                query = query.filter(precio__lte=precio_max)
 
     else:
         form = BuscadorForm()

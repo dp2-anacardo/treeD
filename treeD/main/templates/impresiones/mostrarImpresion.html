@@ -60,11 +60,11 @@
         <br>
         <h5 class="text-center">Categorias:</h5>
         {%for i in categorias%}
-          <p class="text-center">{{i.categoria}}<p>
+          <p class="text-center">{{i.nombre}}<p>
         {%endfor%} <br> <br> <br>
 
         {% if user.is_authenticated and comprar == True %}
-          <a href="{% url 'comprarImpresion_url' impresion.idImpresion %}" class="btn btn-dark m-auto">Comprar</a> <br> <br>
+          <a href="{% url 'comprarImpresion_url' impresion.id %}" class="btn btn-dark m-auto">Comprar</a> <br> <br>
         {%endif%}
       </div>    
       </div>

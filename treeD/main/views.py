@@ -7,8 +7,9 @@ from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgC
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
 from django.urls import reverse
-from paypal.standard.forms import PayPalPaymentsForm
+from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 def usuario_logueado(request):
 
@@ -51,7 +52,6 @@ def home(request):
 def mostrar_impresion(request, pk):
     
     try:
-
         impresion = Impresion.objects.get(pk=pk)
         precio = impresion.precio + 1
         idImpresion = str(pk)
@@ -65,7 +65,10 @@ def mostrar_impresion(request, pk):
         "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
         }
 
-        form = PayPalPaymentsForm(initial=paypal_dict)
+        if settings.DEBUG == False:
+            form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+        else:
+            form = PayPalPaymentsForm(initial=paypal_dict)
 
         comprar = True
         user = None

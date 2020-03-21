@@ -148,10 +148,10 @@ class AdministracionUsuarios(TestCase):
 
     def test_buscar_usuario(self):
 
-        result = Perfil.objects.filter(pk=24)
-        self.client.login(username="Ipatia", password="usuario1")
+        result = Perfil.objects.filter(pk=3)
+        self.client.login(username="AAAnuel", password="usuario2")
         response = self.client.post('/usuarios/listar/', {
-            'nombre': 'luis' })
+            'nombre': 'Álvaro' })
         response2 = self.client.get('/usuarios/listar/')
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
         self.assertEqual(response2.status_code, 200)

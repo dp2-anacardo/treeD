@@ -234,20 +234,17 @@ def buscar_usuarios(request):
 
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
-        queryF = []
-        for p in query:
-            if p.impresion_set.all() != None:
-                queryF.append(p)
+        query = query.exclude(impresion__isnull=True)
 
         if request.method == "POST":
             form = BuscarUsuariosForm(request.POST)
             if form.is_valid():
                 nombre = form.cleaned_data.get("nombre")
-                queryF = queryF.filter(nombre__icontains=nombre)
-                return render(request, "registration/listarUsuarios.html", {"form": form, "query": queryF})
+                query = query.filter(nombre__icontains=nombre)
+                return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
         else:
             form = BuscarUsuariosForm()
-            return render(request, "registration/listarUsuarios.html", {"form": form, "query": queryF})
+            return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
     
     return render(request, 'index.html')
 

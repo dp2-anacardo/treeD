@@ -3,8 +3,88 @@
 
 from django import forms
 from main.models import Categoria
-from main.models import Impresion, ImgImpresion
+from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+
+class EditarUsernameForm(forms.ModelForm):
+    username = forms.CharField(label="Username")
+
+    class Meta:
+        model = User
+        fields = ('username', )
+
+class EditarPasswordForm(forms.Form):
+    
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput()
+    )
+    check_pw = forms.CharField(
+        label="Confirmar contraseña",
+        widget=forms.PasswordInput()
+    )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        password = cleaned_data.get("password")
+        check_pw = cleaned_data.get("check_pw")
+        if password != check_pw:
+            msg = "La contraseña no coincide"
+            raise ValidationError({'password': [msg,]})
+
+class EditarPerfilForm(forms.ModelForm):
+    nombre = forms.CharField(label="Nombre")
+    apellidos = forms.CharField(label="Apellidos")
+    descripcion = forms.CharField(label="Descripción", required=False)
+    imagen = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
+    )
+
+    class Meta:
+        model = Perfil
+        fields = (
+            "nombre",
+            "apellidos",
+            "descripcion",
+            "imagen",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(EditarPerfilForm, self).__init__(*args, **kwargs)        
+        self.fields['descripcion'].required = False
+        self.fields['imagen'].required = False
+
+class AñadirDirecPerfilForm(forms.Form):
+    direccion = forms.CharField(label="Direccion principal")
+
+
+"""
+class EditarUsuarioForm(forms.Form):
+    nickname = forms.CharField(label="Nombre de usuario")
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput()
+    )
+    check_pw = forms.CharField(
+        label="Confirmar contraseña",
+        widget=forms.PasswordInput()
+    )
+    nombre = forms.CharField(label="Nombre")
+    apellidos = forms.CharField(label="Apellidos")
+    descripcion = forms.CharField(label="Descripción", required=False)
+    direccion1 = forms.CharField(label="Direccion principal")
+    direccion2 = forms.CharField(label="Direccion opcional", required=False)
+    direccion3 = forms.CharField(label="Direccion opcional", required=False)
+    direccion4 = forms.CharField(label="Direccion opcional", required=False)
+    direccion5 = forms.CharField(label="Direccion opcional", required=False)
+    imagen = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
+    )
+
+    4
+"""
 
 class BuscadorForm(forms.Form):
 

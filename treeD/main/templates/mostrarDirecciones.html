@@ -1,0 +1,17 @@
+{% if direcciones|length == 1 %}
+<ul>
+    <li>Direccion: {{ direcciones.0.direccion }}</li>
+</ul>
+{% else %}
+{% for i in direcciones %}
+<ul>
+    <li>Direccion: {{ i.direccion }}</li>
+    <a href="{% url 'eliminarDireccion_url' i.id %}">Borrar</a>
+</ul>
+{% endfor %}
+{% endif %}
+<form action="/añadirDireccion/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Add">
+</form>

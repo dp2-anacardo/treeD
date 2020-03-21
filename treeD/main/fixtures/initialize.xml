@@ -162,4 +162,13 @@
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
     </object>
+    <!--DIREC PERFIL-->
+    <object pk="30" model="main.direcPerfil">
+        <field type="CharField" name="direccion">C/Anacardo Nº1</field>
+        <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
+    </object>
+    <object pk="31" model="main.direcPerfil">
+        <field type="CharField" name="direccion">C/Anacardo Nº2</field>
+        <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
+    </object>
 </django-objects>

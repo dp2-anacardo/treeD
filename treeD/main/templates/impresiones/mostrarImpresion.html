@@ -64,7 +64,7 @@
         {%endfor%} <br> <br> <br>
 
         {% if user.is_authenticated and comprar == True %}
-          <a href="{% url 'comprarImpresion_url' impresion.id %}" class="btn btn-dark m-auto">Comprar</a> <br> <br>
+          {{ form.render }}
         {%endif%}
       </div>    
       </div>

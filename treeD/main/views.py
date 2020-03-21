@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from django.views.decorators.csrf import csrf_exempt
 
 def usuario_logueado(request):
 
@@ -44,10 +47,26 @@ def listar_impresiones(request):
 def home(request):
     return render(request, 'impresiones/index.html')
 
+@csrf_exempt
 def mostrar_impresion(request, pk):
     
     try:
+
         impresion = Impresion.objects.get(pk=pk)
+        precio = impresion.precio + 1
+        idImpresion = str(pk)
+
+        paypal_dict = {
+        "business": "treeD@business.example.com",
+        "amount": str(precio),
+        "item_name": impresion.nombre,
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion])),
+        "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
+        }
+
+        form = PayPalPaymentsForm(initial=paypal_dict)
+
         comprar = True
         user = None
         try:
@@ -62,7 +81,8 @@ def mostrar_impresion(request, pk):
             'impresion': impresion,
             'imagenes': imagenes_impresion,
             'categorias': categorias,
-            'comprar': comprar
+            'comprar': comprar,
+            'form': form
         })
     except:
         return redirect('error_url')
@@ -155,7 +175,9 @@ def listar_impresiones_publicadas(request):
 
     return render(request, 'index.html')
 
+@csrf_exempt
 def comprar_impresion_3d(request, pk):
+
     try:
         impresion = Impresion.objects.get(pk=pk)
         comprador = usuario_logueado(request)
@@ -189,9 +211,7 @@ def comprar_impresion_3d(request, pk):
 
 
 def buscador_impresiones_3d(request):
-    """
-    Funcion que busca impresiones 3D que cumplen una serie de parametros
-    """
+
     query = Impresion.objects.all()
 
     if request.method == "POST":
@@ -218,12 +238,10 @@ def buscador_impresiones_3d(request):
     return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
 
 def listar_ventas_realizadas(request):
-    """
-    Funcion que lista las impresiones vendidas por un vendedor
-    """
+   
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
-    return render(request, 'index.html')
+    return render(request, 'index.html') 

@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
 from main import views
+from django.conf.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,5 +37,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
+
+    path('paypal/', include('paypal.standard.ipn.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

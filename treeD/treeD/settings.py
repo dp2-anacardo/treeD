@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'storages',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -140,6 +141,7 @@ if DEBUG == False:
     AWS_DEFAULT_ACL = None
     DATABASES['default'] =  dj_database_url.config()
 
+PAYPAL_TEST = True
 MEDIA_ROOT = os.path.join(BASE_DIR,'carga/imagenes')
 MEDIA_URL ='/carga/imagenes/'
 STATIC_URL = '/static/'

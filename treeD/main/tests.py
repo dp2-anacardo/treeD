@@ -143,7 +143,7 @@ class ListarVentasRealizadas(TestCase):
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
 
 class AdministracionUsuarios(TestCase):
-
+    
     fixtures = ["initialize.xml"]
 
     def test_buscar_usuario(self):
@@ -156,3 +156,8 @@ class AdministracionUsuarios(TestCase):
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
         self.assertEqual(response2.status_code, 200)
 
+    def test_listar_usuarios(self):
+
+        self.client.login(username="Ipatia", password="usuario1") 
+        response = self.client.get('/usuarios/listar/')
+        self.assertEqual(response.status_code, 200)

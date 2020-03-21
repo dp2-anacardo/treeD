@@ -1,26 +1,29 @@
-<!doctype html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 
-<head>
-  <meta charset="utf-8">
-  <title>Listado de usuarios</title>
-</head>
-
-<body>
-  
-  <table>
-    <tr>
-      <td><strong>Nombre</strong></td>
-      <td><strong>Apellidos</strong></td>
-      <td><strong>Descripcion</strong></td>
-    </tr>
-    {% for u in query %}
-    <tr>
-      <td>{{u.nombre}}</td>
-      <td>{{u.apellidos}}</td>
-      <td>{{u.descripcion}}</td>
-    </tr>
-    {% endfor %}
-    </table>
-
-</body>
-</html>
+<h1 class="text-center">Usuarios del sistema</h1>
+<div class="bottom-footer">
+  {% for c in query %}
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col my-auto text-center">
+        <img src={{c.imagen.url}} height="190" width="286" >      
+      </div>
+      <div class="col-md-auto my-auto">
+       <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.nombre}}</p>
+       <h5 class="text-center">Descripción:</h5><p class="text-center">{{c.descripcion}}</p>
+      </div>
+       <div class="col my-auto">
+       <h5 class="text-center">Apellidos:</h5><p class="text-center">{{c.apellidos}}</p>
+       <h5 class="text-center">Afiliado:</h5><p class="text-center">{{c.es_afiliado}}</p>
+      </div>
+      <div class="col my-auto text-center">
+        <a href="#" class="btn btn-dark m-auto">Ver perfil</a>
+      </div>
+    </div>
+    <br>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

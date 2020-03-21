@@ -96,4 +96,8 @@ class BuscarUsuariosForm(forms.Form):
 
     nombre = forms.CharField(
         label='Nombre del usuario',
-        required=True)
+        required=True,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control w-50 mr-2', 'placeholder': 'Buscar usuarios'}
+        )
+    )

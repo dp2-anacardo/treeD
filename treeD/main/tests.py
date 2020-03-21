@@ -150,9 +150,9 @@ class AdministracionUsuarios(TestCase):
 
         result = Perfil.objects.filter(pk=24)
         self.client.login(username="Ipatia", password="usuario1")
-        response = self.client.post('/usuario/list/', {
+        response = self.client.post('/usuarios/listar/', {
             'nombre': 'luis' })
-        response2 = self.client.get('/usuario/list/')
+        response2 = self.client.get('/usuarios/listar/')
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
         self.assertEqual(response2.status_code, 200)
 

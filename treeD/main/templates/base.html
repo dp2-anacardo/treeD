@@ -25,6 +25,9 @@
                         <a href="/impresion/listarImpresiones" class="nav-item nav-link">Impresiones 3D</a>
                         <a href="#" class="nav-item nav-link">Modelos 3D</a>
                         <a href="#" class="nav-item nav-link">Vendedores</a>
+                        {% if user.is_authenticated %}
+                        <a href="/usuarios/listar" class="nav-item nav-link">Usuarios</a>
+                        {% endif %}
                     </div>
                     {% if user.is_authenticated %}
                     <div class="navbar-nav ml-auto">

@@ -37,6 +37,6 @@ urlpatterns = [
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
 
-    path('usuario/list/', views.buscar_usuarios, name="listarPerfiles_url"),
+    path('usuarios/listar/', views.buscar_usuarios, name="listarPerfiles_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

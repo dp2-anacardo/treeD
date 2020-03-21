@@ -243,6 +243,6 @@ def buscar_usuarios(request):
                 return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
         else:
             form = BuscarUsuariosForm()
-        return render(request, "registration/listarUsuarios.html", {"form": form})
+        return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
     
     return render(request, 'index.html')

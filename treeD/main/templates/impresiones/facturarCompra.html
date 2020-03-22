@@ -7,11 +7,19 @@
 
   {{ perfil.nombre }}
   <br>
+  {{ impresion.nombre }}
+  <br>
+  {{ direccion }}
   <form action="" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type='submit'>Enviar</button>
   </form>
+  <br>
+  <br>
+  <br>
+    {{ formPago.render }}
+  <br>
   <br>
   
 </body>

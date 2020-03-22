@@ -3,8 +3,8 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
-from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, DireccionForm
 from datetime import date
 from django.urls import reverse
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
@@ -53,22 +53,6 @@ def mostrar_impresion(request, pk):
     
     try:
         impresion = Impresion.objects.get(pk=pk)
-        precio = impresion.precio + 1
-        idImpresion = str(pk)
-
-        paypal_dict = {
-        "business": "treeD@business.example.com",
-        "amount": str(precio),
-        "item_name": impresion.nombre,
-        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-        "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion])),
-        "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
-        }
-
-        if settings.DEBUG == False:
-            form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
-        else:
-            form = PayPalPaymentsForm(initial=paypal_dict)
 
         comprar = True
         user = None
@@ -84,8 +68,7 @@ def mostrar_impresion(request, pk):
             'impresion': impresion,
             'imagenes': imagenes_impresion,
             'categorias': categorias,
-            'comprar': comprar,
-            'form': form
+            'comprar': comprar
         })
     except:
         return redirect('error_url')
@@ -179,11 +162,12 @@ def listar_impresiones_publicadas(request):
     return render(request, 'index.html')
 
 @csrf_exempt
-def comprar_impresion_3d(request, pk):
+def comprar_impresion_3d(request, pk, direccion):
 
     try:
         impresion = Impresion.objects.get(pk=pk)
         comprador = usuario_logueado(request)
+        direc= DirecPerfil.objects.get(id = direccion)
         
         assert impresion.vendedor != comprador
         compras = list(Compra.objects.filter(comprador=comprador))
@@ -197,7 +181,8 @@ def comprar_impresion_3d(request, pk):
             nombre_impresion=impresion.nombre,
             desc_impresion=impresion.descripcion,
             precio_impresion=impresion.precio,
-            fecha_compra=fecha_actual
+            fecha_compra=fecha_actual,
+            direccion = direc
         )
         compra.save()
 
@@ -247,4 +232,53 @@ def listar_ventas_realizadas(request):
         query = Compra.objects.filter(vendedor=perfil_user)
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
-    return render(request, 'index.html') 
+    return render(request, 'index.html')
+
+def detalles_compra(request, pk):
+
+    try:
+        impresion = Impresion.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
+
+        if request.method == "POST":
+            form = DireccionForm(request.POST)
+            if form.is_valid():
+                direccionSeleccionada = form.cleaned_data.get("direccion")
+                direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
+                return factura_compra(request,pk, direccion.id)
+        else:
+            form = DireccionForm()
+            form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
+        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador})
+    except:
+        return redirect('error_url')
+
+def factura_compra(request,pk, direccion):
+
+    try:
+        impresion = Impresion.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
+        direc= DirecPerfil.objects.get(id = direccion)
+        
+
+        precio = impresion.precio + 1
+        idImpresion = str(pk)
+
+        paypal_dict = {
+        "business": "treeD@business.example.com",
+        "amount": str(precio),
+        "item_name": impresion.nombre,
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion, direccion])),
+        "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
+        }
+
+        if settings.DEBUG == False:
+            form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+        else:
+            form = PayPalPaymentsForm(initial=paypal_dict)
+        return render(request, "impresiones/payment.html", {"form": form, "perfil": comprador, 
+                        'impresion':impresion, 'direccion':direc})
+
+    except:
+        return redirect('error_url')

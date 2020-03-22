@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Factura de la compra</title>
+</head>
+<body>
+
+  {{ perfil.nombre }}
+  <br>
+  <form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type='submit'>Enviar</button>
+  </form>
+  <br>
+  
+</body>
+</html>

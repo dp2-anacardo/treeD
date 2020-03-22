@@ -24,7 +24,7 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
-    path('impresion/comprar/<int:pk>/', views.comprar_impresion_3d, name="comprarImpresion_url"),
+    path('impresion/comprar/<int:pk>/<int:direccion>/', views.comprar_impresion_3d, name="comprarImpresion_url"),
     path('', views.index, name='index'),
     path('misPublicaciones/', views.listar_impresiones_publicadas),
     path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
@@ -39,6 +39,8 @@ urlpatterns = [
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
 
     path('paypal/', include('paypal.standard.ipn.urls')),
+    path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
+    path('impresion/facturaCompra/<int:pk>/<int:descripcion>/', views.factura_compra, name="facturaCompra_url"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

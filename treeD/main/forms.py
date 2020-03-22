@@ -2,8 +2,7 @@
 """
 
 from django import forms
-from main.models import Categoria
-from main.models import Impresion, ImgImpresion
+from main.models import Impresion, ImgImpresion, DirecPerfil, Categoria
 from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
@@ -91,3 +90,7 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class DireccionForm(forms.Form):
+
+    direccion = forms.ModelChoiceField(label='Direccion de envio',queryset=DirecPerfil.objects.all())

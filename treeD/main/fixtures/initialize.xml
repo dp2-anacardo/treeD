@@ -33,6 +33,7 @@
         <field type="CharField" name="nombre">Álvaro</field>
         <field type="CharField" name="apellidos">Díaz</field>
         <field type="CharField" name="descripcion">Me llamo Álvaro y vendo impresiones 3D</field>
+        <field type="EmailField" name="email">alvarodiaz@gmail.com</field>
         <field type="ImageField" name="imagen">perfil1.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -41,8 +42,18 @@
         <field type="CharField" name="nombre">Luis</field>
         <field type="CharField" name="apellidos">Cienfuegos</field>
         <field type="CharField" name="descripcion">Me llamo Luis y compro impresiones 3D</field>
+        <field type="EmailField" name="email">luiscienfuegos@gmail.com</field>
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
+    </object>
+    <!--DIREC PERFIL-->
+    <object pk="30" model="main.direcPerfil">
+        <field type="CharField" name="direccion">C/Anacardo Nº1</field>
+        <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
+    </object>
+    <object pk="31" model="main.direcPerfil">
+        <field type="CharField" name="direccion">C/Anacardo Nº2</field>
+        <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
     </object>
     <!--CATEGORIAS-->
     <object pk="4" model="main.categoria">
@@ -136,6 +147,7 @@
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
         <field type="CharField" name="nombre_impresion">Impresiones varias</field>
         <field type="CharField" name="desc_impresion">Vendo varias impresiones de diversas series y pelis.</field>
         <field type="FloatField" name="precio_impresion">15.0</field>
@@ -144,6 +156,7 @@
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
         <field type="CharField" name="nombre_impresion">Gato gordo</field>
         <field type="CharField" name="desc_impresion">Gato de los que mueven la manita</field>
         <field type="FloatField" name="precio_impresion">20.0</field>

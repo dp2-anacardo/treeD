@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from main.models import Impresion, Compra
+from main.models import Impresion, Compra, DirecPerfil
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -106,20 +106,33 @@ class ComprarImpresionesTest(TestCase):
     def test_comprar_impresion_comprador(self):
         c = Client()
         c.login(username='AAAnuel', password='usuario2')
-        response = c.get('/impresion/comprar/17/')
+        response = c.get('/impresion/comprar/17/31/')
         self.assertEqual(response.status_code, 200)
 
     def test_comprar_impresion_vendedor(self):
         c = Client()
         c.login(username='Ipatia', password='usuario1')
-        response = c.get('/impresion/comprar/17/')
+        response = c.get('/impresion/comprar/17/31/')
         self.assertEqual(response.status_code, 302)
 
     def test_comprar_impresion_inexistente(self):
         c = Client()
         c.login(username='AAAnuel', password='usuario2')
-        response = c.get('/impresion/comprar/999/')
+        response = c.get('/impresion/comprar/999/31/')
         self.assertEqual(response.status_code, 302)
+
+    def test_factura_pago_impresion(self):
+        c = Client()
+        c.login(username='AAAnuel', password='usuario2')
+        response1 = c.get('/impresion/detalleCompra/17/')
+        response2 = self.client.post('/impresion/detalleCompra/17/')
+    
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 302)
+
+
+
+
 
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
@@ -140,4 +153,5 @@ class ListarVentasRealizadas(TestCase):
         self.client.login(username="Ipatia", password="usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+

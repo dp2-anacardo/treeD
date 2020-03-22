@@ -42,6 +42,11 @@
         <br>
         <h5 class="text-center">Imagen:</h5>
         <img src={{perfil.imagen.url}} class="d-block w-100 h-100" >
+        
+        <h5 class="text-center">Impresiones:</h5>
+          {% for i in impresiones %}
+          <p class="text-center">{{i.nombre}}</p>
+          {% endfor %}
       </div>    
       </div>
     </div>

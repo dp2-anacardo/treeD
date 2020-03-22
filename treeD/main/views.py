@@ -233,7 +233,10 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
 
-        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones})
+        impresiones = Impresion.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
+         'impresiones':impresiones})
 
     except:
         return redirect('error_url')

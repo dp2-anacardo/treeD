@@ -40,7 +40,6 @@ urlpatterns = [
 
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
-    path('impresion/facturaCompra/<int:pk>/<int:descripcion>/', views.factura_compra, name="facturaCompra_url"),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

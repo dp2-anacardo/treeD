@@ -245,40 +245,32 @@ def detalles_compra(request, pk):
             if form.is_valid():
                 direccionSeleccionada = form.cleaned_data.get("direccion")
                 direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
-                return factura_compra(request,pk, direccion.id)
+
+                precio = impresion.precio + 1
+                idImpresion = str(pk)
+
+                paypal_dict = {
+                    "business": "treeD@business.example.com",
+                    "amount": str(precio),
+                    "item_name": impresion.nombre,
+                    "currency_code": "EUR",
+                    "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                    "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion, direccion.id])),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
+                }
+
+                if settings.DEBUG == False:
+                    formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+                else:
+                    formPago = PayPalPaymentsForm(initial=paypal_dict)
+
+                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
+                        'impresion':impresion, 'direccion':direccion})
         else:
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
+
         return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador})
-    except:
-        return redirect('error_url')
-
-def factura_compra(request,pk, direccion):
-
-    try:
-        impresion = Impresion.objects.get(pk=pk)
-        comprador = usuario_logueado(request)
-        direc= DirecPerfil.objects.get(id = direccion)
-        
-
-        precio = impresion.precio + 1
-        idImpresion = str(pk)
-
-        paypal_dict = {
-        "business": "treeD@business.example.com",
-        "amount": str(precio),
-        "item_name": impresion.nombre,
-        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-        "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion, direccion])),
-        "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
-        }
-
-        if settings.DEBUG == False:
-            form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
-        else:
-            form = PayPalPaymentsForm(initial=paypal_dict)
-        return render(request, "impresiones/payment.html", {"form": form, "perfil": comprador, 
-                        'impresion':impresion, 'direccion':direc})
 
     except:
         return redirect('error_url')

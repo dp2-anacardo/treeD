@@ -141,3 +141,13 @@ class ListarVentasRealizadas(TestCase):
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+
+
+class RegistroTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_registro(self):
+        c = Client()
+        response = c.get('/register/')
+        self.assertEqual(response.status_code, 200)

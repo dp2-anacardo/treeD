@@ -6,7 +6,7 @@
         <div class="container">
           <div class="row">
               <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
-                  <h1 class="display-4 py-2 text-truncate">Registro</h1>
+                  <h1 class="display-4 py-2 text-center">Registro</h1>
                   {% if form.errors %}
                   <div class="alert alert-danger" role="alert">
                     Error
@@ -16,7 +16,11 @@
                     
                     <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
                         {% csrf_token %}
-                        {{form_usuario.as_p}}
+                        {{form_usuario.username}}
+                        <br>
+                        {{form_usuario.password1}}
+                        <br>
+                        {{form_usuario.password2}}
                         <br>
                         {{form_perfil.nombre}}
                         <br>
@@ -26,9 +30,11 @@
                         <br>
                         {{form_direccion.direccion}}
                         <br>
-                        {{form_imagen.imagen}}
+                        <div class="text-center">Imagen de Perfil</div>{{form_imagen.imagen}}
                         <br>
+                        <div class="text-center">
                         <button type='submit' class="btn btn-primary btn-dark">Registrarse</button>
+                      </div>
                     </div>
                     </form>
                   </div>

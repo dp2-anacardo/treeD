@@ -129,14 +129,17 @@ class UserForm(forms.ModelForm):
         'password_mismatch': ("The two password fields didn't match."),
     }
     password1 = forms.CharField(label=("Password"),
-        widget=forms.PasswordInput)
+        widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Contraseña'}))
     password2 = forms.CharField(label=("Password confirmation"),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirme su contraseña'}),
         help_text=("Enter the same password as above, for verification."))
 
     class Meta:
         model = User
         fields = ("username",)
+        widgets = {
+            'username':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Nombre de Usuario'})
+        }
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

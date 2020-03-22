@@ -126,7 +126,8 @@ class DirecPerfilForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
 
     error_messages = {
-        'password_mismatch': ("The two password fields didn't match."),
+        'password_mismatch': ("Las contraseñas no coinciden"),
+        "username_exists": ("Ya existe ese nombre de usuario"),
     }
     password1 = forms.CharField(label=("Password"),
         widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Contraseña'}))
@@ -150,6 +151,19 @@ class UserForm(forms.ModelForm):
                 code='password_mismatch',
             )
         return password2
+    
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        try:
+            User._default_manager.get(username=username)
+            #if the user exists, then let's raise an error message
+
+            raise forms.ValidationError( 
+            self.error_messages['username_exists'],  #my error message
+            code='username_exists',   #set the error message key
+                )
+        except User.DoesNotExist:
+            return username # if user does not exist so we can continue the registration process
 
     def save(self, commit=True):
         user = super(UserForm, self).save(commit=False)

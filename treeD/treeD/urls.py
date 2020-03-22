@@ -34,6 +34,7 @@ urlpatterns = [
     path('paginaError/', views.error, name="error_url"),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
+    path('perfil/<int:pk>/', views.mostrar_perfil, name="mostrarPerfil_url"),
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

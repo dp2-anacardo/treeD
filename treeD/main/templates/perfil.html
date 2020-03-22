@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ 
+<div class="bottom-footer">
+  <div class="container">
+     <div class="col-lg-6 text-center">
+        <br>
+        <h5 class="text-center">Nombre:</h5>
+        <p class="text-center">{{perfil.nombre}}</p>
+        
+        <br>
+        <h5 class="text-center">Apellidos:</h5>
+        <p class="text-center">{{perfil.apellidos}}</p>
+    
+        <br> 
+        <h5 class="text-center">Descripción:</h5>
+        <p class="text-center">{{perfil.descripcion}}</p>
+
+        <br>
+        {% if user.perfil.id == perfil.id %}
+          <h5 class="text-center">Direcciones:</h5>
+          {% for d in direcciones %}
+          <p class="text-center">{{d.direccion}}</p>
+          {% endfor %}
+        {% endif %}
+
+        <br>
+        <h5 class="text-center">Imagen:</h5>
+        <img src={{perfil.imagen.url}} class="d-block w-100 h-100" >
+      </div>    
+      </div>
+    </div>
+
+</div>
+
+{% endblock %}

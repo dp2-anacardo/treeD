@@ -4,10 +4,9 @@ from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
-from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, PerfilForm, ImagenForm, DirecPerfilForm
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, PerfilForm, ImagenForm, DirecPerfilForm, UserForm
 from datetime import date
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
 
 def usuario_logueado(request):
 
@@ -73,7 +72,7 @@ def crear_usuario(request):
 
     try:
         if request.method == "POST":
-            form_usuario = UserCreationForm(request.POST)
+            form_usuario = UserForm(request.POST)
             form_perfil = PerfilForm(request.POST)
             form_imagen = ImagenForm(request.POST, request.FILES)
             form_direccion = DirecPerfilForm(request.POST)
@@ -99,7 +98,7 @@ def crear_usuario(request):
                 return redirect('/')
         
         else:
-            form_usuario = UserCreationForm()
+            form_usuario = UserForm()
             form_perfil = PerfilForm()
             form_direccion = DirecPerfilForm()
             form_imagen = ImagenForm(request.FILES)

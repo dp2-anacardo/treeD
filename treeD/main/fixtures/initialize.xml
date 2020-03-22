@@ -12,7 +12,7 @@
     </object>
     <!--DJANGO USER-->
     <object pk="2" model="auth.user">
-        <!--Ipatia/usuario1-->
+        <!--Ipatia/Usuario1-->
         <field type="CharField" name="username">Ipatia</field>
         <field type="CharField" name="password">pbkdf2_sha256$180000$jX2pYYlilCSk$sdiMAQ0W/FkQ+2clKFRIZNeiZWxqN+hAMb0V63O1K0M=</field>
         <field type="IntegerField" name="is_active">1</field>
@@ -20,7 +20,7 @@
         <field type="IntegerField" name="is_staff">0</field>
     </object>
     <object pk="23" model="auth.user">
-        <!--AAAnuel/usuario2-->
+        <!--AAAnuel/Usuario2-->
         <field type="CharField" name="username">AAAnuel</field>
         <field type="CharField" name="password">pbkdf2_sha256$180000$NSOYfrTWfRLx$yT+viBcn3Mh4jSDGLdXifQXAkH0uudfqtviQAQuoZqk=</field>
         <field type="IntegerField" name="is_active">1</field>
@@ -46,7 +46,7 @@
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
-    <!--DIREC PERFIL-->
+    <!--DIREC PERFIL-->d
     <object pk="30" model="main.direcPerfil">
         <field type="CharField" name="direccion">C/Anacardo Nº1</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>

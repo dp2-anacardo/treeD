@@ -7,12 +7,26 @@ from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
+import re
+
 class EditarUsernameForm(forms.ModelForm):
     username = forms.CharField(label="Username")
 
     class Meta:
         model = User
         fields = ('username', )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        username = cleaned_data.get("username")
+
+        if len(username) < 6:
+            msg = "El nombre de usuario es muy corto"
+            raise ValidationError({'username': [msg,]})
+
+        if not re.match("^[A-Za-z0-9]*$", username):
+            msg = "El nombre de usuario solo puede contener letras y numeros"
+            raise ValidationError({'username': [msg,]})
 
 class EditarPasswordForm(forms.Form):
     
@@ -33,6 +47,18 @@ class EditarPasswordForm(forms.Form):
             msg = "La contraseña no coincide"
             raise ValidationError({'password': [msg,]})
 
+        if len(password) < 8:
+            msg = "La contraseña es muy corta"
+            raise ValidationError({'password': [msg,]})
+
+        if not re.match("^[A-Za-z0-9]*$", password):
+            msg = "La contraseña solo puede contener letras y numeros"
+            raise ValidationError({'password': [msg,]})
+
+        if not any(x.isupper() for x in password):
+            msg = "La contraseña debe contener al menos una mayuscula"
+            raise ValidationError({'password': [msg,]})
+
 class EditarPerfilForm(forms.ModelForm):
     nombre = forms.CharField(label="Nombre")
     apellidos = forms.CharField(label="Apellidos")
@@ -48,6 +74,7 @@ class EditarPerfilForm(forms.ModelForm):
             "apellidos",
             "descripcion",
             "imagen",
+            "email",
         )
 
     def __init__(self, *args, **kwargs):
@@ -57,34 +84,6 @@ class EditarPerfilForm(forms.ModelForm):
 
 class AñadirDirecPerfilForm(forms.Form):
     direccion = forms.CharField(label="Direccion principal")
-
-
-"""
-class EditarUsuarioForm(forms.Form):
-    nickname = forms.CharField(label="Nombre de usuario")
-    password = forms.CharField(
-        label="Contraseña",
-        widget=forms.PasswordInput()
-    )
-    check_pw = forms.CharField(
-        label="Confirmar contraseña",
-        widget=forms.PasswordInput()
-    )
-    nombre = forms.CharField(label="Nombre")
-    apellidos = forms.CharField(label="Apellidos")
-    descripcion = forms.CharField(label="Descripción", required=False)
-    direccion1 = forms.CharField(label="Direccion principal")
-    direccion2 = forms.CharField(label="Direccion opcional", required=False)
-    direccion3 = forms.CharField(label="Direccion opcional", required=False)
-    direccion4 = forms.CharField(label="Direccion opcional", required=False)
-    direccion5 = forms.CharField(label="Direccion opcional", required=False)
-    imagen = forms.ImageField(
-        required=False,
-        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
-    )
-
-    4
-"""
 
 class BuscadorForm(forms.Form):
 

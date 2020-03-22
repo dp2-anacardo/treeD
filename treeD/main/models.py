@@ -67,12 +67,8 @@ class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
     nombre = models.TextField(verbose_name='Nombre')
     apellidos = models.TextField(verbose_name='Apellidos')
-<<<<<<< HEAD
-    descripcion = models.TextField(verbose_name='Descripción', blank=True)
-=======
     descripcion = models.TextField(verbose_name='Descripción', null=True)
     email = models.EmailField(verbose_name='Email')
->>>>>>> 1f67cfb3ce8851b0c3b9611a32349c17dc56ed71
     imagen = models.ImageField(upload_to='', verbose_name='Imagen')
     es_afiliado = models.BooleanField(verbose_name='Afiliado?')
     

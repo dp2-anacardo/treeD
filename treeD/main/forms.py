@@ -104,11 +104,13 @@ class PerfilForm(forms.ModelForm):
         fields = {
             'nombre',
             'apellidos',
+            'email',
             'descripcion',
         }
         widgets = {
             'nombre':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Nombre'}),
             'apellidos':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Apellidos'}),
+            'email':forms.EmailInput(attrs={'class': 'form-control', 'placeholder':'Email'}),
             'descripcion':forms.Textarea(
                 attrs={'class':'form-control', 'placeholder':'Descripción', 'rows':4}),
         }

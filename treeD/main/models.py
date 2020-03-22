@@ -68,6 +68,7 @@ class Perfil(models.Model):
     nombre = models.TextField(verbose_name='Nombre')
     apellidos = models.TextField(verbose_name='Apellidos')
     descripcion = models.TextField(verbose_name='Descripción', blank=True)
+    email = models.EmailField(verbose_name='Email')
     imagen = models.ImageField(upload_to='', verbose_name='Imagen', default='default.png')
     es_afiliado = models.BooleanField(verbose_name='Afiliado?')
     

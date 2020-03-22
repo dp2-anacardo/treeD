@@ -19,6 +19,7 @@ class EditarUsernameForm(forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
         username = cleaned_data.get("username")
+        same_username = User.objects.get(username=username)
 
         if len(username) < 6:
             msg = "El nombre de usuario es muy corto"
@@ -26,6 +27,10 @@ class EditarUsernameForm(forms.ModelForm):
 
         if not re.match("^[A-Za-z0-9]*$", username):
             msg = "El nombre de usuario solo puede contener letras y numeros"
+            raise ValidationError({'username': [msg,]})
+
+        if same_username:
+            msg = "El nombre de usuario ya esta en uso"
             raise ValidationError({'username': [msg,]})
 
 class EditarPasswordForm(forms.Form):

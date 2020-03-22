@@ -32,7 +32,7 @@ urlpatterns = [
     path('impresion/eliminarImpresion/<int:pk>/', views.eliminar_impresion, name="eliminarImpresion_url"),
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),
     path('paginaError/', views.error, name="error_url"),
-    path('editarPerfil/', views.editar_usuario_logueado),
+    path('editarPerfil/', views.editar_usuario_logueado, name="editarPerfil_url"),
     path('editarPassword/', views.editar_pw_usuario_logueado),
     path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado),
     path('añadirDireccion/', views.añadir_direccion_usuario_logueado),

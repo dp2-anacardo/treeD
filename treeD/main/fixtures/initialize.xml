@@ -14,7 +14,7 @@
     <object pk="2" model="auth.user">
         <!--Ipatia/Usuario1-->
         <field type="CharField" name="username">Ipatia</field>
-        <field type="CharField" name="password">pbkdf2_sha256$180000$jX2pYYlilCSk$sdiMAQ0W/FkQ+2clKFRIZNeiZWxqN+hAMb0V63O1K0M=</field>
+        <field type="CharField" name="password">pbkdf2_sha256$180000$8QQJl3e6iJer$nbEfrmzLzZcCXwkj+LmV04eBBR3cV7vAtegm3voRvRY=</field>
         <field type="IntegerField" name="is_active">1</field>
         <field type="IntegerField" name="is_superuser">0</field>
         <field type="IntegerField" name="is_staff">0</field>
@@ -22,7 +22,7 @@
     <object pk="23" model="auth.user">
         <!--AAAnuel/Usuario2-->
         <field type="CharField" name="username">AAAnuel</field>
-        <field type="CharField" name="password">pbkdf2_sha256$180000$NSOYfrTWfRLx$yT+viBcn3Mh4jSDGLdXifQXAkH0uudfqtviQAQuoZqk=</field>
+        <field type="CharField" name="password">pbkdf2_sha256$180000$Hm2w3nb0xMZ1$n/N9Zaf1O7YDWQylSE5EnRX0/6R6PqI7GQxDr8Y9Ss0=</field>
         <field type="IntegerField" name="is_active">1</field>
         <field type="IntegerField" name="is_superuser">0</field>
         <field type="IntegerField" name="is_staff">0</field>

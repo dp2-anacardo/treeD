@@ -264,13 +264,17 @@ def detalles_compra(request, pk):
                 else:
                     formPago = PayPalPaymentsForm(initial=paypal_dict)
 
+                vistaPaypal = True
+
                 return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'impresion':impresion, 'direccion':direccion})
+                        'impresion':impresion, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
         else:
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
+            
+        vistaPaypal = False
 
-        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador})
+        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal})
 
     except:
-        return redirect('error_url')
+       return redirect('error_url')

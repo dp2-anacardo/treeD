@@ -93,4 +93,4 @@ class CargarImagenForm(forms.ModelForm):
 
 class DireccionForm(forms.Form):
 
-    direccion = forms.ModelChoiceField(label='Direccion de envio',queryset=DirecPerfil.objects.all())
+    direccion = forms.ModelChoiceField(label='',queryset=DirecPerfil.objects.all())

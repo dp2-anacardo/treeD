@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from main.models import Impresion, Compra, ImgPrueba, User, Perfil
-from PIL import Image
-from io import BytesIO
+from pathlib import Path
+import os
 
 class ImgPruebaTest(TestCase):
 
@@ -12,7 +12,8 @@ class ImgPruebaTest(TestCase):
             y compruebo que ahora tiene una imagen subida
         """
         self.client.login(username="Ipatia", password="usuario1")
-        with open(".\\carga\\imagenes\\12.png", 'rb') as imagen:
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
             compra = Compra.objects.get(pk=25)
             img_prueba = list(ImgPrueba.objects.filter(compra=compra))
             self.assertTrue(not img_prueba)
@@ -21,6 +22,8 @@ class ImgPruebaTest(TestCase):
             }, follow=True)
             img_prueba = ImgPrueba.objects.get(compra=compra)
             self.assertTrue(img_prueba)
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.

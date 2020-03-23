@@ -175,6 +175,15 @@ class CargarImagenForm(forms.ModelForm):
         model = ImgImpresion
         fields = ('imagen',)
 
+class BuscarUsuariosForm(forms.Form):
+    
+    nombre = forms.CharField(
+        label='Nombre del usuario',
+        required=True,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control w-50 mr-2', 'placeholder': 'Buscar usuarios'}
+        )
+    )
 class DireccionForm(forms.Form):
     
     direccion = forms.ModelChoiceField(label='',queryset=DirecPerfil.objects.all())

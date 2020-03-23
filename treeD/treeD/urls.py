@@ -34,8 +34,8 @@ urlpatterns = [
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),
     path('paginaError/', views.error, name="error_url"),
     path('editarPerfil/', views.editar_usuario_logueado, name="editarPerfil_url"),
-    path('editarPassword/', views.editar_pw_usuario_logueado),
-    path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado),
+    path('editarPassword/', views.editar_pw_usuario_logueado, name="editarPassword_url"),
+    path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado, name="editarDirecciones_url"),
     path('añadirDireccion/', views.añadir_direccion_usuario_logueado),
     path('eliminarDireccion/<int:pk>/', views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
     path('login/', LoginView.as_view(), name="login_url"),
@@ -44,8 +44,8 @@ urlpatterns = [
     path('perfil/<int:pk>/', views.mostrar_perfil, name="mostrarPerfil_url"),
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
-
+    path('usuarios/listar/', views.buscar_usuarios, name="listarPerfiles_url"),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

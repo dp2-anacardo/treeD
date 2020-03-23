@@ -25,7 +25,7 @@ def editar_usuario_logueado(request):
         if form_1.is_valid() and form_2.is_valid():
             form_1.save()
             form_2.save()
-            #TODO: Redirijir a show de perfil cuando este hecho
+            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/")
 
         else:
@@ -52,7 +52,7 @@ def editar_pw_usuario_logueado(request):
             password = form.cleaned_data.get("password")
             usuario.set_password(password)
             usuario.save()
-            #TODO: Redirijir a show de perfil cuando este hecho
+            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/")
 
         else:
@@ -88,7 +88,7 @@ def añadir_direccion_usuario_logueado(request):
             direc = form.cleaned_data.get("direccion")
             dp = DirecPerfil(direccion=direc, perfil=perfil)
             dp.save()
-            #TODO: Redirijir a show de perfil cuando este hecho
+            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/mostrarDirecciones")
 
         else:
@@ -378,6 +378,26 @@ def listar_ventas_realizadas(request):
         query = Compra.objects.filter(vendedor=perfil_user)
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
+    return render(request, 'index.html')
+
+def buscar_usuarios(request):
+    
+    if request.user.is_authenticated:
+
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
+        query = query.exclude(impresion__isnull=True)
+
+        if request.method == "POST":
+            form = BuscarUsuariosForm(request.POST)
+            if form.is_valid():
+                nombre = form.cleaned_data.get("nombre")
+                query = query.filter(nombre__icontains=nombre)
+                return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+        else:
+            form = BuscarUsuariosForm()
+            return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+    
     return render(request, 'index.html')
 
 def detalles_compra(request, pk):

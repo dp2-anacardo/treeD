@@ -240,7 +240,27 @@ class ListarVentasRealizadas(TestCase):
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+
+class AdministracionUsuarios(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_buscar_usuario(self):
+
+        result = Perfil.objects.filter(pk=3)
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/usuarios/listar/', {
+            'nombre': 'Álvaro' })
+        response2 = self.client.get('/usuarios/listar/')
+        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        self.assertEqual(response2.status_code, 200)
+
+    def test_listar_usuarios(self):
+
+        self.client.login(username="Ipatia", password="Usuario1") 
+        response = self.client.get('/usuarios/listar/')
+        self.assertEqual(response.status_code, 200)
 
 
 class RegistroTest(TestCase):
@@ -258,12 +278,12 @@ class VerPerfilTest(TestCase):
 
     def test_ver_perfil(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         response = c.get('/perfil/24/')
         self.assertEqual(response.status_code, 200)
 
     def test_ver_perfil_inexistente(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)

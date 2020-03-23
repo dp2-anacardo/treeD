@@ -13,9 +13,9 @@
           <br>
           <br>
           {% if user.perfil.id == perfil.id %}
-          <a href="#" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
-          <a href="#" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
-          <a href="#" class="btn btn-dark m-auto">Editar Contraseña</a>
+          <a href="{% url 'editarPerfil_url' %}" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
+          <a href="{% url 'editarDirecciones_url' %}" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
+          <a href="{% url 'editarPassword_url' %}" class="btn btn-dark m-auto">Editar Contraseña</a>
           {% endif %}
         </div>
 

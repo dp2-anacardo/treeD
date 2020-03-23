@@ -2,8 +2,7 @@
 """
 
 from django import forms
-from main.models import Categoria
-from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil
+from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 import re
@@ -176,6 +175,9 @@ class CargarImagenForm(forms.ModelForm):
         model = ImgImpresion
         fields = ('imagen',)
 
+class DireccionForm(forms.Form):
+    
+    direccion = forms.ModelChoiceField(label='',queryset=DirecPerfil.objects.all())
 class ImagenForm(forms.Form):
     imagen = forms.ImageField(required=False,
         widget=forms.ClearableFileInput(attrs={ 'class': 'form-control-file'})

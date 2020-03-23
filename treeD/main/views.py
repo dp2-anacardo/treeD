@@ -274,3 +274,17 @@ def listar_ventas_realizadas(request):
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')
+    
+
+def mostrar_perfil(request, pk):
+    try:
+        perfil = Perfil.objects.get(pk=pk)
+        direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
+
+        impresiones = Impresion.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
+         'impresiones':impresiones})
+
+    except:
+        return redirect('error_url')

@@ -151,3 +151,18 @@ class RegistroTest(TestCase):
         c = Client()
         response = c.get('/register/')
         self.assertEqual(response.status_code, 200)
+class VerPerfilTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_perfil(self):
+        c = Client()
+        c.login(username='Ipatia', password='usuario1')
+        response = c.get('/perfil/24/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_ver_perfil_inexistente(self):
+        c = Client()
+        c.login(username='Ipatia', password='usuario1')
+        response = c.get('/perfil/0/')
+        self.assertEqual(response.status_code, 302)

@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 import re
 
 class EditarUsernameForm(forms.ModelForm):
-    username = forms.CharField(label="Username")
+    username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))
 
     class Meta:
         model = User
@@ -37,11 +37,11 @@ class EditarPasswordForm(forms.Form):
     
     password = forms.CharField(
         label="Contraseña",
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Contraseña'})
     )
     check_pw = forms.CharField(
         label="Confirmar contraseña",
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Contraseña'})
     )
 
     def clean(self):
@@ -65,9 +65,9 @@ class EditarPasswordForm(forms.Form):
             raise ValidationError({'password': [msg,]})
 
 class EditarPerfilForm(forms.ModelForm):
-    nombre = forms.CharField(label="Nombre")
-    apellidos = forms.CharField(label="Apellidos")
-    descripcion = forms.CharField(label="Descripción", required=False)
+    nombre = forms.CharField(label="Nombre",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Nombre'}))
+    apellidos = forms.CharField(label="Apellidos",widget = forms.TextInput(attrs={'class': 'form-control','placeholder':'Apellidos'}))
+    descripcion = forms.CharField(label="Descripción", required=False,widget=forms.Textarea(attrs={'class': 'form-control','placeholder':'Descripcion','rows':4}))
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
     )
@@ -88,7 +88,7 @@ class EditarPerfilForm(forms.ModelForm):
         self.fields['imagen'].required = False
 
 class AñadirDirecPerfilForm(forms.Form):
-    direccion = forms.CharField(label="Direccion principal")
+    direccion = forms.CharField(label="Direccion principal",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Ciudad, Calle Nº, CP'}))
 
 class BuscadorForm(forms.Form):
 

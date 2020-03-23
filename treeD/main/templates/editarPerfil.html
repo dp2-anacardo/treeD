@@ -1,6 +1,47 @@
-<form enctype="multipart/form-data" action="/editarPerfil/" method="post" id="upload-image-form">
-    {% csrf_token %}
-    {{ form_1 }}
-    {{ form_2 }}
-    <input type="submit" value="Submit">
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+  
+    <div class="container">
+      <div class="row">
+          <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+              <h1 class="display-4 py-2 text-truncate text-center">Editar Mis Datos</h1>
+              {% if form_1.errors %}
+                  {% for field in form_1 %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
+              <div class="px-2">
+                
+                <form  role="form"  enctype="multipart/form-data" action="/editarPerfil/" method="POST"> 
+                    {% csrf_token %}
+                    <div class="text-center">Nombre de Usuario</div>
+                    {{ form_1.username }}
+                    <br>
+                    <div class="text-center">Nombre</div>
+                    {{ form_2.nombre }}
+                    <br>
+                    <div class="text-center">Apellidos</div>
+                    {{ form_2.apellidos }}
+                    <br>
+                    <div class="text-center">Descripción</div>
+                    {{ form_2.descripcion }}
+                    <br>
+                    <div class="text-center">
+                    {{ form_2.imagen }}</div>
+                    <div class="text-center">
+                    <button type='submit' class="btn btn-primary btn-dark">Editar</button>
+                </div>
+                </form>
+
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+{% endblock %}

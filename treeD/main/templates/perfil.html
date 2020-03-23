@@ -4,53 +4,67 @@
  
 <div class="bottom-footer">
   <div class="container">
-     <div class="col-lg-6 text-center">
+    <div class="row">
+      <div class="col-lg-6 text-center">
         <br>
-        <h5 class="text-center">Apodo:</h5>
-        <p class="text-center">{{perfil.usuario.username}}</p>
+
+        <img src={{perfil.imagen.url}} class="img-fluid" alt="Responsive image" >
+        <br>
+        <br>
+        {% if user.perfil.id == perfil.id %}
+          <a href="#" class="btn btn-dark m-auto">Editar Perfil</a>
+        {% endif %}
+      </div>
+        
+      <div class="col-lg-6 ">
+        <br>
+        <h5 >Apodo:</h5>
+        <p>{{perfil.usuario.username}}</p>
         
         {% if user.perfil.id == perfil.id %}
           <br>
-          <h5 class="text-center">Nombre:</h5>
-          <p class="text-center">{{perfil.nombre}}</p>
+          <h5>Nombre:</h5>
+          <p>{{perfil.nombre}}</p>
         {% endif %}
 
         {% if user.perfil.id == perfil.id %}
-        <br>
-        <h5 class="text-center">Apellidos:</h5>
-        <p class="text-center">{{perfil.apellidos}}</p>
+          <br>
+          <h5>Apellidos:</h5>
+          <p>{{perfil.apellidos}}</p>
         {% endif %}
 
         {% if user.perfil.id == perfil.id %}
-        <br>
-        <h5 class="text-center">Email:</h5>
-        <p class="text-center">{{perfil.email}}</p>
+          <br>
+          <h5>Email:</h5>
+          <p>{{perfil.email}}</p>
         {% endif %}
     
         <br> 
-        <h5 class="text-center">Descripción:</h5>
-        <p class="text-center">{{perfil.descripcion}}</p>
+        <h5>Descripción:</h5>
+        <p>{{perfil.descripcion}}</p>
 
         <br>
         {% if user.perfil.id == perfil.id %}
-          <h5 class="text-center">Direcciones:</h5>
+          <h5>Direcciones:</h5>
           {% for d in direcciones %}
-          <p class="text-center">{{d.direccion}}</p>
+            <p>{{d.direccion}}</p>
           {% endfor %}
         {% endif %}
 
         <br>
-        <h5 class="text-center">Imagen:</h5>
-        <img src={{perfil.imagen.url}} class="d-block w-100 h-100" >
         
+      </div>    
+    </div>
+    <div class="jumbotron">
+      <div class="row">
         <h5 class="text-center">Impresiones:</h5>
           {% for i in impresiones %}
-          <p class="text-center">{{i.nombre}}</p>
+            <p class="text-center">{{i.nombre}}</p>
           {% endfor %}
-      </div>    
       </div>
     </div>
-
+  </div>
 </div>
+
 
 {% endblock %}

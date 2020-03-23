@@ -3,8 +3,9 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
-from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
+from django.contrib.auth.decorators import login_required
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, ImgPrueba
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, ImagenesPruebaForm
 from datetime import date
 
 def usuario_logueado(request):
@@ -66,6 +67,31 @@ def mostrar_impresion(request, pk):
         })
     except:
         return redirect('error_url')
+
+@login_required(login_url="/login/")
+def subir_imagenes_prueba_compra(request, pk):
+
+    try:
+        user = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=user)
+        compra = Compra.objects.get(pk=pk)
+        assert perfil == compra.vendedor
+        assert len(list(ImgPrueba.objects.filter(compra=compra))) == 0
+
+        if request.method == "POST":
+            form = ImagenesPruebaForm(request.POST, request.FILES)
+            files = request.FILES.getlist('imagen')
+            if form.is_valid():
+                for i in files:
+                    img_prueba = ImgPrueba(imagen=i, compra=compra)
+                    img_prueba.save()
+                return redirect('/impresion/listarVentas')
+        else:
+            form = ImagenesPruebaForm()
+            return render(request, 'subirImagenesPrueba.html', {'form': form})
+    except:
+        return redirect('error_url')
+
 
 def crear_impresion(request):
 

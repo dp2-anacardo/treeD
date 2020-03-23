@@ -1,5 +1,26 @@
 from django.test import TestCase, Client
-from main.models import Impresion, Compra
+from main.models import Impresion, Compra, ImgPrueba, User, Perfil
+from PIL import Image
+from io import BytesIO
+
+class ImgPruebaTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subir_img_prueba_compra(self):
+        """ Miro si esa compra tiene prueba de envio subidas, hago la peticion
+            y compruebo que ahora tiene una imagen subida
+        """
+        self.client.login(username="Ipatia", password="usuario1")
+        with open(".\\carga\\imagenes\\12.png", 'rb') as imagen:
+            compra = Compra.objects.get(pk=25)
+            img_prueba = list(ImgPrueba.objects.filter(compra=compra))
+            self.assertTrue(not img_prueba)
+            self.client.post("/compra/subirImagenes/25/", {
+                "imagen": imagen
+            }, follow=True)
+            img_prueba = ImgPrueba.objects.get(compra=compra)
+            self.assertTrue(img_prueba)
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.

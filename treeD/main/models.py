@@ -6,7 +6,7 @@ class ImgPrueba(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + self.compra.fecha_compra
+        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)
@@ -16,7 +16,7 @@ class ImgCompra(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + self.compra.fecha_compra
+        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)
@@ -88,7 +88,7 @@ class Compra(models.Model):
     fecha_compra = models.DateField(verbose_name="Fecha de compra")
 
     def __str__(self):
-        return self.nombre_impresion + self.fecha_compra
+        return self.nombre_impresion + str(self.fecha_compra)
 
     class Meta:
         ordering = ('pk', 'fecha_compra', )

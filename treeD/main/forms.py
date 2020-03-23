@@ -3,7 +3,7 @@
 
 from django import forms
 from main.models import Categoria
-from main.models import Impresion, ImgImpresion
+from main.models import Impresion, ImgImpresion, ImgPrueba
 from django.core.exceptions import ValidationError
 
 class BuscadorForm(forms.Form):
@@ -91,3 +91,8 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class ImagenesPruebaForm(forms.Form):
+    imagen = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
+    )

@@ -31,6 +31,7 @@ urlpatterns = [
     path('impresion/crearImpresion/', views.crear_impresion, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<int:pk>/', views.eliminar_impresion, name="eliminarImpresion_url"),
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),
+    path('compra/subirImagenes/<int:pk>/', views.subir_imagenes_prueba_compra, name="subirImagenesPrueba_url"),
     path('paginaError/', views.error, name="error_url"),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),

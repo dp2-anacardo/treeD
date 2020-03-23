@@ -143,6 +143,14 @@ class ListarVentasRealizadas(TestCase):
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
 
 
+class RegistroTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_registro(self):
+        c = Client()
+        response = c.get('/register/')
+        self.assertEqual(response.status_code, 200)
 class VerPerfilTest(TestCase):
 
     fixtures = ["initialize.xml"]

@@ -3,10 +3,110 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.forms import *
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, PerfilForm, ImagenForm, DirecPerfilForm, UserForm
 from datetime import date
 from django.contrib.auth import login, authenticate
+
+@login_required(login_url="/login/")
+def editar_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    if request.method == "POST":
+        form_1 = EditarUsernameForm(data=request.POST, instance=usuario)
+        form_2 = EditarPerfilForm(data=request.POST, files=request.FILES, instance=perfil)
+        if form_1.is_valid() and form_2.is_valid():
+            form_1.save()
+            form_2.save()
+            #TODO: Redirijir a show de perfil cuando este hecho
+            return redirect("/")
+
+        else:
+            return render(request, "editarPerfil.html", {
+                "form_1": form_1,
+                "form_2": form_2,
+            })
+
+    else:
+        form_1 = EditarUsernameForm(instance=usuario)
+        form_2 = EditarPerfilForm(instance=perfil)
+        return render(request, "editarPerfil.html", {
+            "form_1": form_1,
+            "form_2": form_2
+        })
+
+@login_required(login_url="/login/")
+def editar_pw_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+
+    if request.method == "POST":
+        form = EditarPasswordForm(data=request.POST)
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            usuario.set_password(password)
+            usuario.save()
+            #TODO: Redirijir a show de perfil cuando este hecho
+            return redirect("/")
+
+        else:
+            return render(request, "editarPassword.html", {
+                "form": form
+            })
+
+    else:
+        form = EditarPasswordForm()
+        return render(request, "editarPassword.html", {
+            "form": form
+        })
+
+@login_required(login_url="/login/")
+def mostrar_direcciones_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+    direcciones = DirecPerfil.objects.filter(perfil=perfil)
+    form = AñadirDirecPerfilForm()
+    return render(request, "mostrarDirecciones.html", {
+        "direcciones": direcciones,
+        "form": form
+    })
+
+@login_required(login_url="/login/")
+def añadir_direccion_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    if request.method == "POST":
+        form = AñadirDirecPerfilForm(request.POST)
+        if form.is_valid():
+            direc = form.cleaned_data.get("direccion")
+            dp = DirecPerfil(direccion=direc, perfil=perfil)
+            dp.save()
+            #TODO: Redirijir a show de perfil cuando este hecho
+            return redirect("/mostrarDirecciones")
+
+        else:
+            return redirect("/mostrarDirecciones")
+
+    else:
+        return redirect("/mostrarDirecciones")
+
+@login_required(login_url="/login/")
+def eliminar_direccion_usuario_logueado(request, pk):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    try:
+        direc = DirecPerfil.objects.get(pk=pk)
+        if direc.perfil != perfil:
+            return redirect('error_url')
+        direc.delete()
+        return redirect('/mostrarDirecciones')
+    except:
+        return redirect('error_url')
 
 def usuario_logueado(request):
 

@@ -32,6 +32,11 @@ urlpatterns = [
     path('impresion/eliminarImpresion/<int:pk>/', views.eliminar_impresion, name="eliminarImpresion_url"),
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),
     path('paginaError/', views.error, name="error_url"),
+    path('editarPerfil/', views.editar_usuario_logueado, name="editarPerfil_url"),
+    path('editarPassword/', views.editar_pw_usuario_logueado),
+    path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado),
+    path('añadirDireccion/', views.añadir_direccion_usuario_logueado),
+    path('eliminarDireccion/<int:pk>/', views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('register/', views.crear_usuario, name="crear_usuario_url"),
@@ -39,4 +44,3 @@ urlpatterns = [
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-

@@ -1,5 +1,7 @@
 from django.test import TestCase, Client
-from main.models import Impresion, Compra
+from django.urls import reverse
+from django.contrib.auth.models import User
+from main.models import Impresion, Compra, Perfil, DirecPerfil
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -20,6 +22,91 @@ class BuscadorFormTest(TestCase):
         })
         self.assertQuerysetEqual(response.context['impresiones'], result, transform=lambda x: x)
 
+class EditarPerfilTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_editar_perfil_valido(self):
+        """ Los campos son validos, redirige al index y ahora esta el user editado """
+
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.post('/editarPerfil/', {
+            'username': 'ManuErCaximba',
+            "nombre": 'Manuel',
+            "apellidos": "Roldan",
+            "descripcion": "Hola soy ManuErCaximba",
+            "email": "caximba@gmail.com"
+        }, follow=True)
+        perfil_actualizado = Perfil.objects.get(nombre="Manuel")
+        self.assertTemplateUsed(response, 'index.html')
+        self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
+
+    def test_editar_perfil_no_valido(self):
+        """ Los campos no son validos, vuelve al formulario """
+
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.post('/editarPerfil/', {
+            'username': '<<<<<<',
+            "nombre": 'Manuel',
+            "apellidos": "Roldan",
+            "descripcion": "Hola soy ManuErCaximba",
+            "email": "caximba@gmail.com"
+        }, follow=True)
+        self.assertTemplateUsed(response, 'editarPerfil.html')
+
+    def test_editar_password_no_valido(self):
+        """ La contraseña no es valida, vuelve al formulario """
+        
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.post('/editarPassword/', {
+            'password': 'Usuario2',
+            "check_pw": 'gggggggg',
+        }, follow=True)
+        self.assertTemplateUsed(response, 'editarPassword.html')
+
+    def test_editar_password_valido(self):
+        """ La contraseña es valida, retorna al index y ahora la pass es otra """
+        
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.post('/editarPassword/', {
+            'password': 'Usuario2',
+            "check_pw": 'Usuario2',
+        }, follow=True)
+        self.assertTemplateUsed(response, 'index.html')
+        self.client.logout()
+        self.client.login(username="Ipatia", password="Usuario2")
+        user = User.objects.get(username="Ipatia")
+        self.assertTrue(user.is_authenticated)
+
+    def test_mostrar_direcciones(self):
+        
+        self.client.login(username="Ipatia", password="Usuario1")
+        user = User.objects.get(username="Ipatia")
+        perfil = Perfil.objects.get(usuario=user)
+        response = self.client.get('/mostrarDirecciones/')
+        direcciones = DirecPerfil.objects.filter(perfil=perfil)
+        self.assertQuerysetEqual(response.context['direcciones'], direcciones, transform=lambda x: x)
+
+    def test_añadir_eliminar_direccion(self):
+        """ Creamos una direccion, testeamos que se ha creado, la borramos y comprobamos que se ha borrado """
+        
+        """ Añadir direccion """
+        self.client.login(username="Ipatia", password="Usuario1")
+        user = User.objects.get(username="Ipatia")
+        perfil = Perfil.objects.get(usuario=user)
+        response = self.client.post('/añadirDireccion/', {
+            'direccion': 'C/Anacardo, Segundo piso de pistacho, Nº234',
+        }, follow=True)
+        direccion_added = DirecPerfil.objects.get(direccion='C/Anacardo, Segundo piso de pistacho, Nº234')
+        self.assertTemplateUsed(response, 'mostrarDirecciones.html')
+        self.assertEquals(direccion_added.direccion, 'C/Anacardo, Segundo piso de pistacho, Nº234')
+        self.assertEquals(direccion_added.perfil, perfil)
+
+        """ Eliminar direccion """
+        response = self.client.get('/eliminarDireccion/' + str(direccion_added.id) + '/')
+        direccion = list(DirecPerfil.objects.filter(direccion='C/Anacardo, Segundo piso de pistacho, Nº234'))
+        self.assertTrue(not direccion)
+
 class ListarImpresionesPublicadasTest(TestCase):
     """ Test referentes a listar impresiones publicadas
         por un vendedor
@@ -37,7 +124,7 @@ class ListarImpresionesPublicadasTest(TestCase):
         """ Testea que devuelve las impresiones publicadas
             del vendedor
         """
-        self.client.login(username="Ipatia", password="usuario1")
+        self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/misPublicaciones/')
         result = Impresion.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
@@ -52,7 +139,7 @@ class ListarComprasDeImpresionesTest(TestCase):
             compras de impresiones de la base de datos.
         """
         c = Client()
-        c.login(username='AAAnuel', password='usuario2')
+        c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/listarCompras/')
         self.assertEqual(response.status_code, 200)
 
@@ -67,19 +154,19 @@ class CRUDImpresiones3D(TestCase):
 
     def test_crear_impresion_3d(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/crearImpresion/')
         self.assertEqual(response.status_code, 200)
 
     def test_modificar_impresion_3d(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code, 200)
     
     def test_eliminar_impresion_3d(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         tamaño_a = len(Impresion.objects.all())
         c.get('/impresion/eliminarImpresion/18/')
         tamaño_d = len(Impresion.objects.all())
@@ -105,19 +192,19 @@ class ComprarImpresionesTest(TestCase):
 
     def test_comprar_impresion_comprador(self):
         c = Client()
-        c.login(username='AAAnuel', password='usuario2')
+        c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/comprar/17/')
         self.assertEqual(response.status_code, 200)
 
     def test_comprar_impresion_vendedor(self):
         c = Client()
-        c.login(username='Ipatia', password='usuario1')
+        c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/comprar/17/')
         self.assertEqual(response.status_code, 302)
 
     def test_comprar_impresion_inexistente(self):
         c = Client()
-        c.login(username='AAAnuel', password='usuario2')
+        c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/comprar/999/')
         self.assertEqual(response.status_code, 302)
 
@@ -137,7 +224,7 @@ class ListarVentasRealizadas(TestCase):
         """ Testea que devuelve las impresiones vendidas
             del vendedor
         """
-        self.client.login(username="Ipatia", password="usuario1")
+        self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     

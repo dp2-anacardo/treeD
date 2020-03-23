@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!--
+{% if direcciones|length == 1 %}
+<ul>
+    <li>Direccion: {{ direcciones.0.direccion }}</li>
+</ul>
+{% else %}
+{% for i in direcciones %}
+<ul>
+    <li>Direccion: {{ i.direccion }}</li>
+    <a href="{% url 'eliminarDireccion_url' i.id %}">Borrar</a>
+</ul>
+{% endfor %}
+{% endif %}
+<form action="/añadirDireccion/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Add">
+</form>
+-->
+
+<div class="bottom-footer">
+    <div class="container">
+      <div class="row">
+          <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+              <h1 class="display-4 py-2 text-truncate text-center">Direcciones</h1>
+              {% if form.errors %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
+              <div class="px-2">
+                <div class="card card-body ">
+                    
+                        {% if direcciones|length == 1 %}
+                            <h6 class="text-center">{{ direcciones.0.direccion }}</h6>
+                        {% else %}
+                        {% for i in direcciones %}
+                            <h6 class="text-center ">{{ i.direccion }}</h6>
+                            <div class="text-center">
+                            <a href="{% url 'eliminarDireccion_url' i.id %}" class="btn btn-primary btn-dark">
+                                Eliminar
+                            </a> 
+                        </div>
+                        <br>
+                        {% endfor %}
+                        {% endif %}
+                  
+                </div>
+
+
+                <form action="/añadirDireccion/" method="post">
+                    {% csrf_token %}
+                    <h1 class="display-4 py-2 text-center">Nueva Dirección</h1>
+                    <br>
+                    {{ form.direccion }}
+                    <br>
+                    
+                    <div class="text-center">
+                        <button type='submit' class="btn btn-primary btn-dark">Añadir</button>
+                    </div>
+                </form>
+              </div>
+          </div>
+      </div>
+    </div>
+    </div>
+
+{% endblock %}

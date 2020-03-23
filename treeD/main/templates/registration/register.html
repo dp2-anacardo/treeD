@@ -11,7 +11,7 @@
                   {% for field in form_usuario %}
                   {% for error in field.errors %}
                       <div class="alert alert-danger">
-                          <strong>{{ error}}</strong>
+                        {{ error}}
                       </div>
                   {% endfor %}
                   {% endfor %}
@@ -30,6 +30,7 @@
                         <br>
                         {{form_perfil.apellidos}}
                         <br>
+                        <div class="text-center">Email(En caso de querer vender usa tu email de Paypal para recibir los pagos)</div>
                         {{form_perfil.email}}
                         <br>
                         {{form_perfil.descripcion}}

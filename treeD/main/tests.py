@@ -38,7 +38,7 @@ class EditarPerfilTest(TestCase):
             "email": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'perfil.html')
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
 
     def test_editar_perfil_no_valido(self):

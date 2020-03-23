@@ -26,7 +26,7 @@ def editar_usuario_logueado(request):
             form_1.save()
             form_2.save()
             #TODO: Redirigir a show de perfil cuando este hecho
-            return redirect("/")
+            return redirect("/perfil/"+str(usuario.perfil.id))
 
         else:
             return render(request, "editarPerfil.html", {

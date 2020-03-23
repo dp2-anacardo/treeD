@@ -6,7 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
 from main.forms import *
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, PerfilForm, ImagenForm, DirecPerfilForm, UserForm
 from datetime import date
+from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
 def editar_usuario_logueado(request):
@@ -164,6 +167,52 @@ def mostrar_impresion(request, pk):
         })
     except:
         return redirect('error_url')
+
+def crear_usuario(request):
+
+    try:
+        if request.method == "POST":
+            form_usuario = UserForm(request.POST)
+            form_perfil = PerfilForm(request.POST)
+            form_imagen = ImagenForm(request.POST, request.FILES)
+            form_direccion = DirecPerfilForm(request.POST)
+            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid:
+            
+                usuario = form_usuario.save()
+                perfil = form_perfil.save(commit = False)
+                perfil.usuario = usuario
+                if form_imagen.cleaned_data['imagen'] is not None:
+                    imagen = request.FILES['imagen']
+                    perfil.imagen = imagen
+                perfil.es_afiliado = False
+                perfil.save()
+                
+                direccion = form_direccion.save(commit = False)
+                direccion.perfil = perfil
+                direccion.save()
+
+                username = form_usuario.cleaned_data['username']
+                password = form_usuario.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                return redirect('/')
+        
+        else:
+            form_usuario = UserForm()
+            form_perfil = PerfilForm()
+            form_direccion = DirecPerfilForm()
+            form_imagen = ImagenForm(request.FILES)
+
+        return render(request,'registration/register.html',{
+            'form_usuario':form_usuario, 
+            'form_perfil':form_perfil, 
+            'form_direccion':form_direccion, 
+            'form_imagen':form_imagen
+            })
+    
+    except:
+        return redirect('error_url')
+
 
 def crear_impresion(request):
 
@@ -325,3 +374,17 @@ def listar_ventas_realizadas(request):
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')
+    
+
+def mostrar_perfil(request, pk):
+    try:
+        perfil = Perfil.objects.get(pk=pk)
+        direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
+
+        impresiones = Impresion.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
+         'impresiones':impresiones})
+
+    except:
+        return redirect('error_url')

@@ -13,7 +13,7 @@
       
       <div class="carousel-inner">
         {%for i in imagenes%}
-        {%if forloop.counter0%}
+        {% if forloop.first %}
         <div class="carousel-item active">
           <img src={{i.imagen.url}} class="d-block w-100 h-100" >
         </div>

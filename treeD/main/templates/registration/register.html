@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="bottom-footer">
+
+        <div class="container">
+          <div class="row">
+              <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+                  <h1 class="display-4 py-2 text-center">Registro</h1>
+                  {% if form_usuario.errors %}
+                  {% for field in form_usuario %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
+                  <div class="px-2">
+                    
+                    <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
+                        {% csrf_token %}
+                        <div class="text-center">Nombre de Usuario</div>
+                        {{form_usuario.username}}
+                        <br>
+                        <div class="text-center">Contraseña</div>
+                        {{form_usuario.password1}}
+                        <br>
+                        <div class="text-center">Confirmar Contraseña</div>
+                        {{form_usuario.password2}}
+                        <br>
+                        <div class="text-center">Nombre</div>
+                        {{form_perfil.nombre}}
+                        <br>
+                        <div class="text-center">Apellidos</div>
+                        {{form_perfil.apellidos}}
+                        <br>
+                        <div class="text-center">Email(En caso de querer vender usa tu email de Paypal para recibir los pagos)</div>
+                        {{form_perfil.email}}
+                        <br>
+                        <div class="text-center">Descripción</div>
+                        {{form_perfil.descripcion}}
+                        <br>
+                        <div class="text-center">Dirección</div>
+                        {{form_direccion.direccion}}
+                        <br>
+                        <div class="text-center">Imagen de Perfil</div>{{form_imagen.imagen}}
+                        <br>
+                        <div class="text-center">
+                        <button type='submit' class="btn btn-primary btn-dark">Registrarse</button>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+        </div>
+        </div>
+
+{% endblock %}

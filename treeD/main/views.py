@@ -3,7 +3,7 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
 from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm
 from datetime import date
 
@@ -227,3 +227,16 @@ def listar_ventas_realizadas(request):
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')
+
+def mostrar_perfil(request, pk):
+    try:
+        perfil = Perfil.objects.get(pk=pk)
+        direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
+
+        impresiones = Impresion.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
+         'impresiones':impresiones})
+
+    except:
+        return redirect('error_url')

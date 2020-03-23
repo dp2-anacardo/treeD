@@ -141,3 +141,20 @@ class ListarVentasRealizadas(TestCase):
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)     
+
+
+class VerPerfilTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_perfil(self):
+        c = Client()
+        c.login(username='Ipatia', password='usuario1')
+        response = c.get('/perfil/24/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_ver_perfil_inexistente(self):
+        c = Client()
+        c.login(username='Ipatia', password='usuario1')
+        response = c.get('/perfil/0/')
+        self.assertEqual(response.status_code, 302)

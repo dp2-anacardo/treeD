@@ -123,7 +123,7 @@ class DirecPerfilForm(forms.ModelForm):
             'direccion',
         }
         widgets = {
-            'direccion':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Dirección'}),
+            'direccion':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Ciudad, Calle Nº, CP'}),
         }
 
 class UserForm(forms.ModelForm):

@@ -20,21 +20,28 @@
                     
                     <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
                         {% csrf_token %}
+                        <div class="text-center">Nombre de Usuario</div>
                         {{form_usuario.username}}
                         <br>
+                        <div class="text-center">Contraseña</div>
                         {{form_usuario.password1}}
                         <br>
+                        <div class="text-center">Confirmar Contraseña</div>
                         {{form_usuario.password2}}
                         <br>
+                        <div class="text-center">Nombre</div>
                         {{form_perfil.nombre}}
                         <br>
+                        <div class="text-center">Apellidos</div>
                         {{form_perfil.apellidos}}
                         <br>
                         <div class="text-center">Email(En caso de querer vender usa tu email de Paypal para recibir los pagos)</div>
                         {{form_perfil.email}}
                         <br>
+                        <div class="text-center">Descripción</div>
                         {{form_perfil.descripcion}}
                         <br>
+                        <div class="text-center">Dirección</div>
                         {{form_direccion.direccion}}
                         <br>
                         <div class="text-center">Imagen de Perfil</div>{{form_imagen.imagen}}

@@ -65,6 +65,7 @@ class EditarPasswordForm(forms.Form):
 class EditarPerfilForm(forms.ModelForm):
     nombre = forms.CharField(label="Nombre",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Nombre'}))
     apellidos = forms.CharField(label="Apellidos",widget = forms.TextInput(attrs={'class': 'form-control','placeholder':'Apellidos'}))
+    email = forms.CharField(label="Email",widget = forms.TextInput(attrs={'class': 'form-control','placeholder':'email'}))
     descripcion = forms.CharField(label="Descripción", required=False,widget=forms.Textarea(attrs={'class': 'form-control','placeholder':'Descripcion','rows':4}))
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})

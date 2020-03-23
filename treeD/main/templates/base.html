@@ -34,6 +34,7 @@
                         </a>
                       
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="/editarPerfil">Editar Perfil</a>
                           <a class="dropdown-item" href="/perfil/{{user.perfil.id}}">Mi Perfil</a>
                           <a class="dropdown-item" href="/misPublicaciones/">Mis Publicaciones</a>
                           <a class="dropdown-item" href="/impresion/listarVentas">Mis Ventas</a>
@@ -44,7 +45,7 @@
                   </div>
                     {% else %}
                     <div class="navbar-nav ml-auto">
-                        <a href="#" class="nav-item nav-link">Registro</a>
+                        <a href="/register" class="nav-item nav-link">Registro</a>
                         <a href="/login" class="nav-item nav-link" >Login</a>
                     </div>
                     {% endif %}

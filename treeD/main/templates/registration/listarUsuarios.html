@@ -24,7 +24,7 @@
      <h5 class="text-center">Descripción:</h5><p class="text-center">{{c.descripcion}}</p>
     </div>
     <div class="col my-auto text-center">
-      <a href="#" class="btn btn-dark m-auto">Ver perfil</a>
+      <a href="{% url 'mostrarPerfil_url' c.id %}" class="btn btn-dark m-auto">Ver perfil</a>
     </div>
   </div>
   <br>

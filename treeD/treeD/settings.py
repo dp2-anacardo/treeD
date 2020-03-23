@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'storages',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -139,6 +140,14 @@ if DEBUG == False:
     AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
     DATABASES['default'] =  dj_database_url.config()
+    PAYPAL_PRIVATE_CERT = 'carga/imagenes/paypal_private.pem'
+    PAYPAL_PUBLIC_CERT = 'carga/imagenes/paypal_public.pem'
+    PAYPAL_CERT = 'carga/imagenes/paypal_cert.pem'
+    PAYPAL_CERT_ID = 'HXNKRGEALQ666'
+
+PAYPAL_TEST = True
+
+PAYPAL_BUY_BUTTON_IMAGE = '/carga/imagenes/buy-logo-large-es.png'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'carga/imagenes')
 MEDIA_URL ='/carga/imagenes/'

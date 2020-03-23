@@ -1,69 +1,92 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
- 
+
 <div class="bottom-footer">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-6 text-center">
-        <br>
+    <h1 class="text-center">Mi Perfil</h1>
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-lg-6 text-center">
+          <br>
+          <img src={{perfil.imagen.url}} class="img-fluid">
+          <br>
+          <br>
+          {% if user.perfil.id == perfil.id %}
+          <a href="#" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
+          <a href="#" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
+          <a href="#" class="btn btn-dark m-auto">Editar Contraseña</a>
+          {% endif %}
+        </div>
 
-        <img src={{perfil.imagen.url}} class="img-fluid" alt="Responsive image" >
-        <br>
-        <br>
-        {% if user.perfil.id == perfil.id %}
-          <a href="#" class="btn btn-dark m-auto">Editar Perfil</a>
-        {% endif %}
-      </div>
-        
-      <div class="col-lg-6 ">
-        <br>
-        <h5 >Apodo:</h5>
-        <p>{{perfil.usuario.username}}</p>
-        
-        {% if user.perfil.id == perfil.id %}
+        <div class="col-lg-6 ">
+          <br>
+          <h5>Apodo:</h5>
+          <p>{{perfil.usuario.username}}</p>
+
+          {% if user.perfil.id == perfil.id %}
           <br>
           <h5>Nombre:</h5>
           <p>{{perfil.nombre}}</p>
-        {% endif %}
+          {% endif %}
 
-        {% if user.perfil.id == perfil.id %}
+          {% if user.perfil.id == perfil.id %}
           <br>
           <h5>Apellidos:</h5>
           <p>{{perfil.apellidos}}</p>
-        {% endif %}
+          {% endif %}
 
-        {% if user.perfil.id == perfil.id %}
+          {% if user.perfil.id == perfil.id %}
           <br>
           <h5>Email:</h5>
           <p>{{perfil.email}}</p>
-        {% endif %}
-    
-        <br> 
-        <h5>Descripción:</h5>
-        <p>{{perfil.descripcion}}</p>
+          {% endif %}
 
-        <br>
-        {% if user.perfil.id == perfil.id %}
+          <br>
+          <h5>Descripción:</h5>
+          <p>{{perfil.descripcion}}</p>
+
+          <br>
+          {% if user.perfil.id == perfil.id %}
           <h5>Direcciones:</h5>
           {% for d in direcciones %}
-            <p>{{d.direccion}}</p>
+          <p>{{d.direccion}}</p>
           {% endfor %}
-        {% endif %}
+          {% endif %}
 
-        <br>
-        
-      </div>    
+          <br>
+
+        </div>
+      </div>
     </div>
+
+    <h1 class="text-center">Impresiones</h1>
     <div class="jumbotron">
       <div class="row">
-        <h5 class="text-center">Impresiones:</h5>
-          {% for i in impresiones %}
-            <p class="text-center">{{i.nombre}}</p>
-          {% endfor %}
+        {% for i in impresiones %}
+        <div class="col-lg-4">
+          <div class="card mx-auto" style="width: 18rem;">
+            <img class="card-img-top" src={{i.imgimpresion_set.all.0.imagen.url}} height="190" width="286">
+            <div class="card-body">
+              <h5 class="card-title text-center">{{i.nombre}}</h5>
+              <div class="col text-center">
+                <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a>
+              </div>
+            </div>
+          </div>
+          <br>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}
+      </div>
+      <div class="row">
+        {% endif %}
+        {% empty %}
+        <h3 class="text-center"> No se han encontrado resultados</h3>
+        {% endfor %}
       </div>
     </div>
   </div>
+</div>
 </div>
 
 

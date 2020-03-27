@@ -1,0 +1,20 @@
+<tr>
+    <td>Interesado</td>
+    <td>Vendedor</td>
+    <td>Petición</td>
+    <td>Precio</td>
+    <td>Notas</td>
+    <td>Fecha de entrega</td>
+    <td>Estado</td>
+</tr>
+
+{% for p in presupuestos %}
+    <tr>
+        <td>{{p.interesado}}</td>
+        <td>{{p.vendedor}}</td>
+        <td>{{p.precio}}</td>
+        <td>{{p.notas}}</td>
+        <td>{{p.fecha_entrega}}</td>
+        <td>{{p.resp_vendedor}}</td>
+    </tr>
+{% endfor %}

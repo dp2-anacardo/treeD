@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil, Presupuesto
 from datetime import date
 from django.contrib.auth import login, authenticate
 
@@ -459,5 +459,30 @@ def mostrar_perfil(request, pk):
         return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
          'impresiones':impresiones})
 
+    except:
+        return redirect('error_url')
+
+
+def listar_presupuestos_enviados(request):
+    try:
+        usuario = usuario_logueado(request)
+        perfil = Perfil.objects.get(usuario=usuario)
+
+        presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos_enviados})
+
+    except:
+        return redirect('error_url')
+
+def listar_presupuestos_recibidos(request):
+    try:
+        usuario = usuario_logueado(request)
+        perfil = Perfil.objects.get(usuario=usuario)
+
+        presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos_recibidos})
+    
     except:
         return redirect('error_url')

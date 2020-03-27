@@ -461,3 +461,37 @@ def mostrar_perfil(request, pk):
 
     except:
         return redirect('error_url')
+
+def rechazar_presupuesto_interesado(request, pk):
+    try:
+        usuario = usuario_logueado(request)
+        perfil = Perfil.objects.get(usuario=usuario)
+        presupuesto = Presupuesto.objects.get(pk=pk)
+
+        assert perfil == presupuesto.interesado
+
+        presupuesto.resp_interesado = False
+
+        presupuestos = Perfil.objects.all().filter(interesado=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+    
+    except:
+        return redirect('error_url')
+
+def rechazar_presupuesto_vendedor(request, pk):
+    try:
+        usuario = usuario_logueado(request)
+        perfil = Perfil.objects.get(usuario=usuario)
+        presupuesto = Presupuesto.objects.get(pk=pk)
+
+        assert perfil == presupuesto.vendedor
+
+        presupuesto.resp_interesado = False
+
+        presupuestos = Perfil.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+    
+    except:
+        return redirect('error_url')

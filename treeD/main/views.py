@@ -465,8 +465,7 @@ def mostrar_perfil(request, pk):
 
 def listar_presupuestos_enviados(request):
     try:
-        usuario = usuario_logueado(request)
-        perfil = Perfil.objects.get(usuario=usuario)
+        perfil = usuario_logueado(request)
 
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
 
@@ -477,8 +476,7 @@ def listar_presupuestos_enviados(request):
 
 def listar_presupuestos_recibidos(request):
     try:
-        usuario = usuario_logueado(request)
-        perfil = Perfil.objects.get(usuario=usuario)
+        perfil = usuario_logueado(request)
 
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
 

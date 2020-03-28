@@ -497,3 +497,6 @@ def subscribirse(request):
          'impresiones':impresiones})
     except:
         return redirect('error_url')
+
+def hazte_afiliado(request):
+    return render(request, 'hazteAfiliado.html')

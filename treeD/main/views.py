@@ -13,6 +13,9 @@ from main.forms import *
 from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
 from datetime import date
 from django.contrib.auth import login, authenticate
+# from paypal.standard.ipn.signals import valid_ipn_received
+# from main.signals import ipn_receiver
+# from django.dispatch import receiver
 
 @login_required(login_url="/login/")
 def editar_usuario_logueado(request):
@@ -444,7 +447,7 @@ def detalles_compra(request, pk):
 
     except:
        return redirect('error_url')
-    
+   
 @csrf_exempt
 def mostrar_perfil(request, pk):
     try:
@@ -461,6 +464,8 @@ def mostrar_perfil(request, pk):
                 "src": "1",                        # make payments recur
                 "sra": "1",                        # reattempt payment on payment error
                 "item_name": "Subscripcion en TreeD",
+                'custom': perfil.id,     # custom data, pass something meaningful here
+                "currency_code": "EUR",
                 "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                 "return": request.build_absolute_uri(reverse('subscripcion_url')),
                 "cancel_return": request.build_absolute_uri(reverse('mostrarPerfil_url' , args=[perfil.id])),
@@ -469,7 +474,6 @@ def mostrar_perfil(request, pk):
             formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
         else:
             formPago = PayPalPaymentsForm(initial=paypal_dict)
-
 
         return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
          'impresiones':impresiones,"formAfiliado": formPago})

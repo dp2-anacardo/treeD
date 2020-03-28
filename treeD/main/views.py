@@ -177,8 +177,8 @@ def crear_usuario(request):
 
     try:
         if request.user.is_authenticated == True:
-            return redirect('error_url')
-        
+            return redirect('error_url')  
+            
         if request.method == "POST":
             form_usuario = UserForm(request.POST)
             form_perfil = PerfilForm(request.POST)

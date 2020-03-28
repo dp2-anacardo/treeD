@@ -405,6 +405,7 @@ def detalles_compra(request, pk):
     try:
         impresion = Impresion.objects.get(pk=pk)
         comprador = usuario_logueado(request)
+        assert comprador != impresion.vendedor
 
         if request.method == "POST":
             form = DireccionForm(request.POST)
@@ -494,6 +495,7 @@ def detalles_presupuesto(request, pk):
     try:
         presupuesto = Presupuesto.objects.get(pk=pk)
         comprador = usuario_logueado(request)
+        assert comprador == presupuesto.interesado
 
         if request.method == "POST":
             form = DireccionForm(request.POST)

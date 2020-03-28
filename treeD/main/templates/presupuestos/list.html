@@ -18,3 +18,32 @@
         <td>{{p.resp_vendedor}}</td>
     </tr>
 {% endfor %}
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Mis presupuestos</h1>
+<div class="bottom-footer">
+  {% for p in presupuestos %}
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-lg-4 my-auto">
+        <h5 class="text-center">Interesado:</h5><p class="text-center">{{p.interesado}}</p>
+       <h5 class="text-center">Notas:</h5><p class="text-center">{{p.notas}}</p>
+      </div>
+      <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Vendedor:</h5><p class="text-center">{{p.vendedor}}</p>
+       <h5 class="text-center">Fecha de entrega:</h5><p class="text-center">{{v.fecha_entrega}</p>
+      </div>
+       <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Precio:</h5><p class="text-center">{{p.precio}}€</p>
+       <h5 class="text-center">Estado:</h5><p class="text-center">{{p.resp_vendedor}}</p>
+      </div>
+    </div>
+    <br>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

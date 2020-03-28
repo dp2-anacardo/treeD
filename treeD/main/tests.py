@@ -41,15 +41,77 @@ class PedirPresupuestoTest(TestCase):
         """
         self.client.login(username="AAAnuel", password="Usuario2")
         self.client.post('/pedirPresupuesto/3/', {
-            'peticion': 'Quiero una figura',
+            'peticion': 'Quiero una figura 2',
             "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
         }, follow=True )
-        presupuesto = Presupuesto.objects.get(peticion='Quiero una figura')
+        presupuesto = Presupuesto.objects.get(peticion='Quiero una figura 2')
         self.assertEqual(
             presupuesto.descripcion,
             'Quiero una figura de IQ del Rainbow Six: Siege'
         )
 
+class ResponderPresupuestoTest(TestCase):
+    
+    fixtures = ["initialize.xml"]
+    
+    def setUp(self):
+        vendedor = Perfil.objects.get(pk=3)
+        interesado = Perfil.objects.get(pk=24)
+        Presupuesto.objects.create(
+            pk=4000,
+            interesado=interesado,
+            vendedor=vendedor,
+            peticion='Quiero una figura',
+            descripcion='Quiero una figura de IQ del Rainbow Six: Siege',
+            precio=None,
+            notas=None,
+            fecha_envio=None,
+            resp_interesado=None,
+            resp_vendedor=None
+        )
+
+    def test_responder_presupuesto_no_logueado(self):
+        """ Test donde un user no logueado intenta responder un
+            presupuesto. Enviado a la pagina de login
+        """
+        response = self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        self.assertTemplateUsed(response, "registration/login.html")
+    
+    def test_responder_presupuesto_get(self):
+        """ Test donde se llama al formulario de responder presupuesto
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.get('/responderPresupuesto/4000/', follow=True)
+        self.assertTemplateUsed(response, "responderPresupuesto.html")
+    
+    def test_responder_presupuesto_no_valido(self):
+        """ Test donde un user logueado responde un presupuesto 
+            que no le pertenece. Enviado a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_pedir_presupuesto_valido(self):
+        """ Test donde un user logueado responde un presupuesto. Se
+            crea el presupuesto en BD.
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        presupuesto = Presupuesto.objects.get(pk=4000)
+        self.assertEqual(presupuesto.precio, 12.0)
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.

@@ -46,6 +46,36 @@ def pedir_presupuesto(request, pk):
         return redirect('error_url')
 
 @login_required(login_url="/login/")
+def responder_presupuesto(request, pk):
+    try:
+        vendedor = User.objects.get(pk=request.user.id)
+        p_vendedor = Perfil.objects.get(usuario=vendedor)
+        presupuesto = Presupuesto.objects.get(pk=pk)
+        assert presupuesto.vendedor.id == p_vendedor.id
+        assert presupuesto.resp_vendedor is None
+
+        if request.method == "POST":
+            form = ResponderPresupuestoForm(data=request.POST, instance=presupuesto)
+            if form.is_valid():
+                presupuesto_2 = form.save(commit=False)
+                presupuesto_2.resp_vendedor = True
+                presupuesto_2.save()
+                return redirect("/perfil/"+str(p_vendedor.id))
+            else:
+                return render(request, "responderPresupuesto.html", {
+                    "form": form,
+                    "pk": pk
+                })
+        else:
+            form = ResponderPresupuestoForm(instance=presupuesto)
+            return render(request, "responderPresupuesto.html", {
+                    "form": form,
+                    "pk": pk
+            })
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
 def editar_usuario_logueado(request):
     usuario = User.objects.get(pk=request.user.id)
     perfil = Perfil.objects.get(usuario=usuario)

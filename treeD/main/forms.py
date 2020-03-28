@@ -5,7 +5,11 @@ from django import forms
 from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria, Presupuesto
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from datetime import date
 import re
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class PedirPresupuestoForm(forms.ModelForm):
     class Meta:
@@ -18,6 +22,37 @@ class PedirPresupuestoForm(forms.ModelForm):
             'peticion':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Peticion'}),
             'descripcion':forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Descripcion'}),
         }
+
+class ResponderPresupuestoForm(forms.ModelForm):
+    fecha_envio = forms.DateField(
+        widget=DateInput(attrs={'class': 'form-control', 'placeholder':'Fecha de envio'})
+    )
+
+    class Meta:
+        model = Presupuesto
+        fields = {
+            'precio',
+            'notas',
+            'fecha_envio',
+        }
+        widgets = {
+            'precio':forms.NumberInput(attrs={'class':'form-control', 'placeholder':'Precio'}),
+            'notas':forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Notas'}),
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        precio = cleaned_data.get("precio")
+        fecha_envio = cleaned_data.get("fecha_envio")
+        today = date.today()
+
+        if precio < 0:
+            msg = "El precio debe ser mayor que 0"
+            raise ValidationError({'precio': [msg,]})
+
+        if fecha_envio <= today:
+            msg = "La fecha de envio debe ser posterior a la fecha actual"
+            raise ValidationError({'fecha_envio': [msg,]})
 
 class EditarUsernameForm(forms.ModelForm):
     username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))

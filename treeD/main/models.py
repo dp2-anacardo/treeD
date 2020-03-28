@@ -97,9 +97,10 @@ class Presupuesto(models.Model):
     interesado = models.ForeignKey(Perfil, related_name='Interesado', on_delete=models.SET_NULL, null=True)
     vendedor = models.ForeignKey(Perfil, related_name='Vendedor', on_delete=models.SET_NULL, null=True)
     peticion = models.TextField(verbose_name='Peticion')
+    descripcion = models.TextField(verbose_name='Descripcion')
     precio = models.FloatField(verbose_name='Precio', null=True)
     notas = models.TextField(verbose_name='Notas', null=True)
-    fecha_entrega = models.DateField(verbose_name="Fecha de entrega", null=True)
+    fecha_envio = models.DateField(verbose_name="Fecha de envio", null=True)
     resp_interesado = models.BooleanField(verbose_name='Respuesta del Interesado', null=True)
     resp_vendedor = models.BooleanField(verbose_name='Respuesta del Vendedor', null=True)
 

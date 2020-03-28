@@ -10,9 +10,40 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.models import *
 from datetime import date
 from django.contrib.auth import login, authenticate
+
+@login_required(login_url="/login/")
+def pedir_presupuesto(request, pk):
+    try:
+        interesado = User.objects.get(pk=request.user.id)
+        p_interesado = Perfil.objects.get(usuario=interesado)
+        p_vendedor = Perfil.objects.get(pk=pk)
+        assert p_interesado != p_vendedor
+        
+        if request.method == "POST":
+            form = PedirPresupuestoForm(data=request.POST)
+            if form.is_valid():
+                presupuesto = form.save(commit=False)
+                presupuesto.vendedor = p_vendedor
+                presupuesto.interesado = p_interesado
+                presupuesto.save()
+                #TODO: Redirijir a lista de presupuestos enviados cuando este hecho
+                return redirect("/perfil/"+str(p_interesado.id))
+            else:
+                return render(request, "pedirPresupuesto.html", {
+                    "form": form,
+                    'pk': pk
+                })
+        else:
+            form = PedirPresupuestoForm()
+            return render(request, "pedirPresupuesto.html", {
+                    "form": form,
+                    'pk': pk
+            })
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def editar_usuario_logueado(request):

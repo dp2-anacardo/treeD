@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil
+from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil, Presupuesto
 from datetime import date
 from django.contrib.auth import login, authenticate
 
@@ -464,15 +464,18 @@ def mostrar_perfil(request, pk):
 
 def rechazar_presupuesto_interesado(request, pk):
     try:
-        usuario = usuario_logueado(request)
-        perfil = Perfil.objects.get(usuario=usuario)
+        perfil = usuario_logueado(request)
         presupuesto = Presupuesto.objects.get(pk=pk)
 
+        assert presupuesto.resp_vendedor == True
+        assert not presupuesto.resp_interesado == True
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
+        presupuesto.resp_vendedor = False
+        presupuesto.save()
 
-        presupuestos = Perfil.objects.all().filter(interesado=perfil)
+        presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
 
         return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
     
@@ -481,17 +484,20 @@ def rechazar_presupuesto_interesado(request, pk):
 
 def rechazar_presupuesto_vendedor(request, pk):
     try:
-        usuario = usuario_logueado(request)
-        perfil = Perfil.objects.get(usuario=usuario)
+        perfil = usuario_logueado(request)
         presupuesto = Presupuesto.objects.get(pk=pk)
 
+        assert not presupuesto.resp_vendedor == True
+        assert not presupuesto.resp_vendedor == False
         assert perfil == presupuesto.vendedor
 
+        presupuesto.resp_vendedor = False
         presupuesto.resp_interesado = False
+        presupuesto.save()
 
-        presupuestos = Perfil.objects.all().filter(vendedor=perfil)
+        presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
 
         return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
-    
+
     except:
         return redirect('error_url')

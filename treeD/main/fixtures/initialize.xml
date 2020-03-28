@@ -191,6 +191,7 @@
         <field type="CharField" name="peticion">Figurita de Goku</field>
         <field type="FloatField" name="precio">15.0</field>
         <field type="CharField" name="notas">Super saiyan</field>
+        <field type="BooleanField" name="resp_vendedor">True</field>
     </object>
     <object pk="33" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
@@ -198,5 +199,7 @@
         <field type="CharField" name="peticion">Mascarilla</field>
         <field type="FloatField" name="precio">25.0</field>
         <field type="CharField" name="notas">Contra el coronavirus</field>
+        <field type="BooleanField" name="resp_vendedor">False</field>
+        <field type="BooleanField" name="resp_interesado">False</field>
     </object>
 </django-objects>

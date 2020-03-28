@@ -469,6 +469,7 @@ def rechazar_presupuesto_interesado(request, pk):
 
         assert presupuesto.resp_vendedor == True
         assert not presupuesto.resp_interesado == True
+        assert not presupuesto.resp_interesado == False
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False

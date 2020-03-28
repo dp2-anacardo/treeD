@@ -47,5 +47,10 @@ urlpatterns = [
     path('usuarios/listar/', views.buscar_usuarios, name="listarPerfiles_url"),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
+
+    path('presupuesto/detallePresupuesto/<int:pk>/', views.detalles_presupuesto, name="detallePresupuesto_url"),
+    path('presupuesto/aceptarPresupuestoVendedor/<int:pk>/', views.aceptar_presupuesto_vendedor, name="aceptarPresupuestoVendedor_url"),
+    path('presupuesto/aceptarPresupuestoInteresado/<int:pk>/', views.aceptar_presupuesto_interesado, name="aceptarPresupuestoInteresado_url"),
+    path('presupuesto/comprar/<int:pk>/<int:direccion>/', views.comprar_presupuesto, name="comprarPresupuesto_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

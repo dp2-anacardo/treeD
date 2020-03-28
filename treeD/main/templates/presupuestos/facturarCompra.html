@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-center">Detalles de compra</h1>
+<div class="bottom-footer">
+  <div class="container jumbotron">
+    {% if vistaPaypal == False %}
+    <form role="form" action="" method="POST">
+      <div class="form-row">
+        {% csrf_token %}
+        <div class="col-4">
+          <h5 class="text-center">Nombre:</h5><p class="text-center">{{perfil.nombre}}</p>
+          <br>
+          <h5 class="text-center">Presupuesto:</h5><p class="text-center">{{presupuesto.peticion}}</p>
+        </div>
+        <div class="col-4">
+          <h5 class="text-center">Apellidos:</h5><p class="text-center">{{perfil.apellidos}}</p>
+          <br>
+          <h5 class="text-center">Descripción:</h5><p class="text-center">{{presupuesto.peticion}}</p>
+          <br>
+          <p class="text-center"><button type='submit' class="btn btn-primary btn-dark">Continuar</button></p>
+        </div>
+        <div class="col-4">
+          <h5 class="text-center">Dirección de envío:</h5><p class="text-center">{{form}}</p>
+          <br>
+          <h5 class="text-center">Precio:</h5><p class="text-center">{{presupuesto.precio}} €</p>
+        </div>
+      </div>
+    </form>
+    {% elif vistaPaypal == True %}
+    <div class="row">
+      <div class="col-4">
+        <h5 class="text-center">Nombre:</h5><p class="text-center">{{perfil.nombre}}</p>
+        <br>
+        <h5 class="text-center">Presupuesto:</h5><p class="text-center">{{presupuesto.peticion}}</p>
+      </div>
+      <div class="col-4">
+        <h5 class="text-center">Apellidos:</h5><p class="text-center">{{perfil.apellidos}}</p>
+        <br>
+        <h5 class="text-center">Presupuesto:</h5><p class="text-center">{{presupuesto.peticion}}</p>
+        <br>
+        <div class="text-center">{{formPago.render}}</div>
+      </div>
+      <div class="col-4">
+        <h5 class="text-center">Dirección de envío:</h5><p class="text-center">{{direccion}}</p>
+        <br>
+        <h5 class="text-center">Precio:</h5><p class="text-center">{{presupuesto.precio}} €</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

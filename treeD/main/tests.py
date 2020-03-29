@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
 from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
 
@@ -331,6 +330,20 @@ class VerPerfilTest(TestCase):
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
 
+class VerPresupuestoTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+    def test_ver_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)
 class Subscripciones(TestCase):
 
     fixtures = ["initialize.xml"]

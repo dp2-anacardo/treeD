@@ -94,13 +94,12 @@ class EditarPerfilForm(forms.ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        super(EditarPerfilForm, self).__init__(*args, **kwargs)        
+        super(EditarPerfilForm, self).__init__(*args, **kwargs)
         self.fields['descripcion'].required = False
         self.fields['imagen'].required = False
 
 class AñadirDirecPerfilForm(forms.Form):
     direccion = forms.CharField(label="Direccion principal",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Ciudad, Calle Nº, CP'}))
-import re
 
 class BuscadorForm(forms.Form):
 

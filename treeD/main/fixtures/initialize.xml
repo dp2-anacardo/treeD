@@ -46,7 +46,7 @@
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
-    <!--DIREC PERFIL-->d
+    <!--DIREC PERFIL-->
     <object pk="30" model="main.direcPerfil">
         <field type="CharField" name="direccion">C/Anacardo Nº1</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
@@ -175,28 +175,23 @@
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
     </object>
-    <!--DIREC PERFIL-->
-    <object pk="30" model="main.direcPerfil">
-        <field type="CharField" name="direccion">C/Anacardo Nº1</field>
-        <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
-    </object>
-    <object pk="31" model="main.direcPerfil">
-        <field type="CharField" name="direccion">C/Anacardo Nº2</field>
-        <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
-    </object>
     <!--PRESUPUESTOS-->
     <object pk="32" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field type="CharField" name="peticion">Figurita de Goku</field>
+        <field type="CharField" name="descripcion">Quiero una figura de Goku</field>
         <field type="FloatField" name="precio">15.0</field>
         <field type="CharField" name="notas">Super saiyan</field>
+        <field type="DateField" name="fecha_envio">2020-05-09</field>
     </object>
     <object pk="33" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field type="CharField" name="peticion">Mascarilla</field>
+        <field type="CharField" name="descripcion">Quiero una mascarilla</field>
         <field type="FloatField" name="precio">25.0</field>
         <field type="CharField" name="notas">Contra el coronavirus</field>
+        <field type="DateField" name="fecha_envio">2020-09-09</field>
     </object>
 </django-objects>

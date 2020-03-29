@@ -2,7 +2,7 @@
 """
 
 from django import forms
-from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria, Presupuesto
+from main.models import *
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 import re
@@ -20,7 +20,7 @@ class PedirPresupuestoForm(forms.ModelForm):
         }
 
 class EditarUsernameForm(forms.ModelForm):
-    username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Username'}))
 
     class Meta:
         model = User
@@ -94,12 +94,13 @@ class EditarPerfilForm(forms.ModelForm):
         )
 
     def __init__(self, *args, **kwargs):
-        super(EditarPerfilForm, self).__init__(*args, **kwargs)
+        super(EditarPerfilForm, self).__init__(*args, **kwargs)        
         self.fields['descripcion'].required = False
         self.fields['imagen'].required = False
 
 class AñadirDirecPerfilForm(forms.Form):
     direccion = forms.CharField(label="Direccion principal",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Ciudad, Calle Nº, CP'}))
+import re
 
 class BuscadorForm(forms.Form):
 
@@ -186,6 +187,11 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class ImagenesPruebaForm(forms.Form):
+    imagen = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
+    )
 
 class BuscarUsuariosForm(forms.Form):
     

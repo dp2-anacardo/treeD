@@ -59,5 +59,6 @@ urlpatterns = [
     path('responderPresupuesto/<int:pk>/', views.responder_presupuesto, name="responderPresupuesto_url"),
     path('hazteAfiliado/', views.hazte_afiliado, name="hazteAfiliado_url"),
     path('usuarios/afiliarse/', views.subscribirse, name="subscripcion_url"),
+    path('presupuesto/mostrarRespuesta/<int:pk>/', views.ver_respuesta_presupuesto, name="mostrarRespuesta_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -764,3 +764,13 @@ def hazte_afiliado(request):
             return render(request, 'hazteAfiliado.html')
     except:
         return redirect('error_url')
+
+
+def ver_respuesta_presupuesto(request, pk):
+    try:
+        presupuesto = Presupuesto.objects.get(id=pk)
+        usuario = usuario_logueado(request)
+        assert presupuesto.interesado == usuario or presupuesto.vendedor == usuario
+        return render (request, 'presupuestos/mostrarRespuesta.html', {'presupuesto':presupuesto})
+    except:
+        return redirect('error_url')

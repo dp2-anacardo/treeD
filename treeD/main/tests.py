@@ -287,3 +287,18 @@ class VerPerfilTest(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
+
+class VerPresupuestoTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+    def test_ver_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)

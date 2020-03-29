@@ -486,5 +486,5 @@ def mostrarPresupuesto(request, pk):
 
         return render (request, 'presupuestos/mostrarPresupuesto.html', {'presupuesto':presupuesto, 'respuestaInteresado':respuestaInteresado, 
                     'respuestaVendedor':respuestaVendedor})
-     except:
-         return redirect('error_url')
+    except:
+        return redirect('error_url')

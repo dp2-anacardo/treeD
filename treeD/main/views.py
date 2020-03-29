@@ -552,7 +552,7 @@ def listar_presupuestos_enviados(request):
 
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos_enviados})
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos_enviados})
 
     except:
         return redirect('error_url')
@@ -563,10 +563,11 @@ def listar_presupuestos_recibidos(request):
 
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos_recibidos})
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos_recibidos})
     
     except:
         return redirect('error_url')
+        
 def rechazar_presupuesto_interesado(request, pk):
     try:
         perfil = usuario_logueado(request)
@@ -582,7 +583,7 @@ def rechazar_presupuesto_interesado(request, pk):
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos})
     
     except:
         return redirect('error_url')
@@ -602,7 +603,7 @@ def rechazar_presupuesto_vendedor(request, pk):
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos})
 
     except:
         return redirect('error_url')

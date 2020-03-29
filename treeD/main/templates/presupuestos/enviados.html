@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <h2 class="text-left" style="float: left;">Enviados</h2>
+  <h2 class="text-right" stlye="float: right"><a href="recibidos">Recibidos</a></h2>
+</div>
+<div class="bottom-footer">
+  {% for p in presupuestos %}
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col my-auto">
+        <h5 class="text-center">Petición:</h5>
+        <p class="text-center">{{p.peticion}}</p>
+      </div>
+      <div class="col my-auto">
+        <h5 class="text-center">Vendedor:</h5>
+        <p class="text-center">{{p.vendedor}}</p>
+      </div>
+      <div class="col my-auto">
+        <h5 class="text-center">Respuesta del vendedor:</h5>
+        {% if p.resp_vendedor == True %}
+        <p class="text-center">ACEPTADO</p>
+        {% endif %}
+        {% if p.resp_vendedor == False %}
+        <p class="text-center">RECHAZADO</p>
+        {% endif %}
+        {% if p.resp_vendedor == None %}
+        <p class="text-center">PENDIENTE</p>
+        {% endif %}
+      </div>
+      <div class="col my-auto">
+        <p class="text-center"><a href="#" class="btn btn-dark ">Ver presupuesto</a></p>
+        {% if p.resp_vendedor == True %}
+        <p class="text-center"><a href="#" class="btn btn-dark ">Ver respuesta</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

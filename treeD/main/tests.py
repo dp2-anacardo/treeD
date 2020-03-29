@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from main.models import Impresion, Compra, Perfil, DirecPerfil
+from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -287,3 +287,27 @@ class VerPerfilTest(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
+
+class ListarPresupuestosTest(TestCase):
+
+    fixtures =["initialize.xml"]
+
+    def test_listar_presupuestos_interesados(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/enviados')
+
+        presupuestos_enviados = Presupuesto.objects.all().filter(interesado=24)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_enviados))
+
+    def test_listar_presupuestos_vendedores(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/recibidos')
+
+        presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=3)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_recibidos))

@@ -26,7 +26,6 @@ class ImgPruebaTest(TestCase):
             self.assertTrue(img_prueba)
             path = Path("./carga/imagenes/3d.png")
             os.remove(path)
-from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
 
 class PedirPresupuestoTest(TestCase):
     
@@ -356,6 +355,58 @@ class VerPerfilTest(TestCase):
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
 
+class AceptarPresupuestosTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_aceptar_presupuesto_vendedor(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, True)
+    def test_aceptar_presupuesto_vendedor_invalido(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, None)
+    def test_aceptar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=24)
+        self.assertEqual(presupuesto.interesado, usuario)
+    def test_aceptar_presupuesto_interesado_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=3)
+        self.assertNotEqual(presupuesto.interesado, usuario)
+    def test_factura_pago_presupuesto(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        response2 = self.client.post('/impresion/detalleCompra/32/')
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 302)
+    def test_factura_pago_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        self.assertEqual(response1.status_code, 302)
+    def test_comprar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/comprar/32/31/')
+        self.assertEqual(response.status_code, 200)
+    def test_comprar_presupuesto_vendedor(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/impresion/comprar/32/31/')
+        self.assertEqual(response.status_code, 302)
 class VerPresupuestoTest(TestCase):
 
     fixtures = ["initialize.xml"]

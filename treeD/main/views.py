@@ -459,6 +459,7 @@ def detalles_compra(request, pk):
     try:
         impresion = Impresion.objects.get(pk=pk)
         comprador = usuario_logueado(request)
+        assert comprador != impresion.vendedor
 
         if request.method == "POST":
             form = DireccionForm(request.POST)
@@ -511,6 +512,113 @@ def mostrar_perfil(request, pk):
     except:
         return redirect('error_url')
 
+#ToDo: Redirigir al formulario para añadir precio, notas y fecha de entrega
+def aceptar_presupuesto_vendedor(request, pk):
+
+    try:
+        usuario= usuario_logueado(request)
+        presupuesto= Presupuesto.objects.get(id=pk)
+        assert presupuesto.vendedor == usuario
+        assert presupuesto.resp_vendedor == None
+        assert presupuesto.resp_interesado == None
+        presupuesto.resp_vendedor=True
+        presupuesto.save()
+        #Aqui
+        return redirect('index')
+    except:
+        return redirect('error_url')
+
+def aceptar_presupuesto_interesado(request, pk):
+
+    try:
+        usuario= usuario_logueado(request)
+        presupuesto= Presupuesto.objects.get(id=pk)
+        assert presupuesto.interesado == usuario
+        assert presupuesto.resp_vendedor == True
+        assert presupuesto.resp_interesado == None
+        return detalles_presupuesto(request, presupuesto.id)
+    except:
+        return redirect('error_url')
+
+def detalles_presupuesto(request, pk):
+
+    try:
+        presupuesto = Presupuesto.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
+        assert comprador == presupuesto.interesado
+
+        if request.method == "POST":
+            form = DireccionForm(request.POST)
+            if form.is_valid():
+                direccionSeleccionada = form.cleaned_data.get("direccion")
+                direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
+
+                precio = presupuesto.precio + 1
+                idPresupuesto = str(pk)
+
+                paypal_dict = {
+                    "business": "treeD@business.example.com",
+                    "amount": str(precio),
+                    "item_name": presupuesto.peticion,
+                    "currency_code": "EUR",
+                    "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                    "return": request.build_absolute_uri(reverse('comprarPresupuesto_url' , args=[idPresupuesto, direccion.id])),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarPresupuesto_url', args=[idPresupuesto])),
+                }
+
+                if settings.DEBUG == False:
+                    formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+                else:
+                    formPago = PayPalPaymentsForm(initial=paypal_dict)
+
+                vistaPaypal = True
+
+                return render(request, "presupuestos/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
+                        'presupuesto':presupuesto, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+        else:
+            form = DireccionForm()
+            form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
+            
+        vistaPaypal = False
+
+        return render(request, "presupuestos/facturarCompra.html", {"form": form, "perfil": comprador, 'presupuesto':presupuesto, 'vistaPaypal': vistaPaypal})
+
+    except:
+       return redirect('error_url')
+
+@csrf_exempt
+def comprar_presupuesto(request, pk, direccion):
+
+    try:
+        presupuesto = Presupuesto.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
+        direc= DirecPerfil.objects.get(id = direccion)
+        
+        assert presupuesto.interesado == comprador
+        compras = list(Compra.objects.filter(comprador=comprador))
+        fecha_actual = date.today()
+        
+        compra = Compra(
+            comprador=comprador,
+            vendedor=presupuesto.vendedor,
+            nombre_impresion=presupuesto.peticion,
+            desc_impresion=presupuesto.descripcion,
+            precio_impresion=presupuesto.precio,
+            fecha_compra=fecha_actual,
+            direccion = direc
+        )
+        compra.save()
+        img= ImgImpresion.objects.get(pk=34)
+        imagen = ImgCompra(imagen=img.imagen, compra=compra)
+        imagen.save()
+        presupuesto.resp_interesado=True
+        presupuesto.save()
+        compras.append(compra)
+
+        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
+        
+    except:
+        return redirect('error_url')
 def mostrarPresupuesto(request, pk):
 
     try:
@@ -560,13 +668,13 @@ def hazte_afiliado(request):
             paypal_dict = {
                         "cmd": "_xclick-subscriptions",
                         "business": 'treeD@business.example.com',
-                        "a3": "10.00",                      # monthly price
-                        "p3": 1,                           # duration of each unit (depends on unit)
-                        "t3": "M",                         # duration unit ("M for Month")
-                        "src": "1",                        # make payments recur
-                        "sra": "1",                        # reattempt payment on payment error
+                        "a3": "10.00",                      
+                        "p3": 1,                           
+                        "t3": "M",                         
+                        "src": "1",                        
+                        "sra": "1",                        
                         "item_name": "Subscripcion en TreeD",
-                        'custom': perfil.id,     # custom data, pass something meaningful here
+                        'custom': perfil.id,     
                         "currency_code": "EUR",
                         "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                         "return": request.build_absolute_uri(reverse('subscripcion_url')),

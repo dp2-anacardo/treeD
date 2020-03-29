@@ -138,7 +138,6 @@ def listar_impresiones(request):
         impresiones_no_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=False))
         impresiones_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=True))
         impresiones_afiliados.extend(impresiones_no_afiliados)
-        print(impresiones_afiliados)
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {
             'impresiones':impresiones_afiliados,
@@ -371,7 +370,9 @@ def buscador_impresiones_3d(request):
                 query = query.filter(precio__gte=precio_min)
             if precio_max is not None:
                 query = query.filter(precio__lte=precio_max)
-
+            
+            query = query.order_by('-vendedor__es_afiliado')
+            
     else:
         form = BuscadorForm()
 

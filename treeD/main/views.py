@@ -546,6 +546,47 @@ def mostrar_perfil(request, pk):
     except:
         return redirect('error_url')
 
+def rechazar_presupuesto_interesado(request, pk):
+    try:
+        perfil = usuario_logueado(request)
+        presupuesto = Presupuesto.objects.get(pk=pk)
+
+        assert presupuesto.resp_vendedor == True
+        assert not presupuesto.resp_interesado == True
+        assert not presupuesto.resp_interesado == False
+        assert perfil == presupuesto.interesado
+
+        presupuesto.resp_interesado = False
+        presupuesto.resp_vendedor = False
+        presupuesto.save()
+
+        presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+    
+    except:
+        return redirect('error_url')
+
+def rechazar_presupuesto_vendedor(request, pk):
+    try:
+        perfil = usuario_logueado(request)
+        presupuesto = Presupuesto.objects.get(pk=pk)
+
+        assert not presupuesto.resp_vendedor == True
+        assert not presupuesto.resp_vendedor == False
+        assert perfil == presupuesto.vendedor
+
+        presupuesto.resp_vendedor = False
+        presupuesto.resp_interesado = False
+        presupuesto.save()
+
+        presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+
+    except:
+        return redirect('error_url')
+
 #ToDo: Redirigir al formulario para añadir precio, notas y fecha de entrega
 def aceptar_presupuesto_vendedor(request, pk):
 

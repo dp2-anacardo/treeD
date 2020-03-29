@@ -202,6 +202,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
         <field type="CharField" name="peticion">Figurita de Goku</field>
+        <field type="CharField" name="descripcion">Figurita de Goku</field>
         <field type="FloatField" name="precio">15.0</field>
         <field type="CharField" name="notas">Super saiyan</field>
         <field type="BooleanField" name="resp_vendedor">True</field>
@@ -210,6 +211,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
         <field type="CharField" name="peticion">Mascarilla</field>
+        <field type="CharField" name="descripcion">Mascarilla</field>
         <field type="FloatField" name="precio">25.0</field>
         <field type="CharField" name="notas">Contra el coronavirus</field>
         <field type="BooleanField" name="resp_vendedor">False</field>
@@ -219,6 +221,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
         <field type="CharField" name="peticion">Figurita de Vegetta SS2</field>
+        <field type="CharField" name="descripcion">Figurita de Vegetta SS2</field>
         <field type="FloatField" name="precio">19.50</field>
         <field type="CharField" name="notas">La figura cuando pelea contra Cell</field>
     </object>
@@ -226,6 +229,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">3</field> <!--IPATIA--> 
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field type="CharField" name="peticion">Funda para Samsung Galaxy A5</field>
+        <field type="CharField" name="descripcion">Funda para Samsung Galaxy A5</field>
         <field type="FloatField" name="precio">6.80</field>
         <field type="CharField" name="notas">En concreto la del A5 2017</field>
         <field type="BooleanField" name="resp_vendedor">True</field>

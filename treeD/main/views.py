@@ -457,29 +457,8 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
-
-        paypal_dict = {
-                "cmd": "_xclick-subscriptions",
-                "business": 'treeD@business.example.com',
-                "a3": "10.00",                      # monthly price
-                "p3": 1,                           # duration of each unit (depends on unit)
-                "t3": "M",                         # duration unit ("M for Month")
-                "src": "1",                        # make payments recur
-                "sra": "1",                        # reattempt payment on payment error
-                "item_name": "Subscripcion en TreeD",
-                'custom': perfil.id,     # custom data, pass something meaningful here
-                "currency_code": "EUR",
-                "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
-                "return": request.build_absolute_uri(reverse('subscripcion_url')),
-                "cancel_return": request.build_absolute_uri(reverse('mostrarPerfil_url' , args=[perfil.id])),
-        }
-        if settings.DEBUG == False:
-            formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
-        else:
-            formPago = PayPalPaymentsForm(initial=paypal_dict)
-
         return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
-         'impresiones':impresiones,"formAfiliado": formPago})
+         'impresiones':impresiones})
 
     except:
         return redirect('error_url')
@@ -499,4 +478,31 @@ def subscribirse(request):
         return redirect('error_url')
 
 def hazte_afiliado(request):
-    return render(request, 'hazteAfiliado.html')
+    #try:
+
+        if request.user.is_authenticated:
+            perfil = usuario_logueado(request)
+            paypal_dict = {
+                        "cmd": "_xclick-subscriptions",
+                        "business": 'treeD@business.example.com',
+                        "a3": "10.00",                      # monthly price
+                        "p3": 1,                           # duration of each unit (depends on unit)
+                        "t3": "M",                         # duration unit ("M for Month")
+                        "src": "1",                        # make payments recur
+                        "sra": "1",                        # reattempt payment on payment error
+                        "item_name": "Subscripcion en TreeD",
+                        'custom': perfil.id,     # custom data, pass something meaningful here
+                        "currency_code": "EUR",
+                        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                        "return": request.build_absolute_uri(reverse('subscripcion_url')),
+                        "cancel_return": request.build_absolute_uri(reverse('mostrarPerfil_url' , args=[perfil.id])),
+                }
+            if settings.DEBUG == False:
+                formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+            else:
+                formPago = PayPalPaymentsForm(initial=paypal_dict)
+            return render(request, 'hazteAfiliado.html',{"formAfiliado": formPago, 'perfil':perfil})
+        else:
+            return render(request, 'hazteAfiliado.html')
+    #except:
+        #return redirect('error_url')

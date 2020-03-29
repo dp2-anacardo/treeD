@@ -47,13 +47,18 @@
         <br>
         <br>
         <br>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and perfil.es_afiliado == False %}
         <div class="text-center">
             <div class="text-center">{{formAfiliado.render}}</div> <br> <br> <br>
         </div>
+        {% elif user.is_authenticated and perfil.es_afiliado == True %}
+        <div class="text-center">
+            <a href="/" class="btn btn-dark m-auto">YA ESTAS AFILIADO</a> <br> <br> <br>
+        </div>
         {% else %}
         <div class="text-center">
-            <a href="/register" class="btn btn-dark m-auto">Afiliarse</a> <br> <br> <br>
+            <a href="/register" class="btn btn-dark m-auto">Registrarse</a> <a href="/login" class="btn btn-dark m-auto">Loguearse</a><br> <br> <br>
+            
         </div>
         {%endif%}
     </div>

@@ -417,6 +417,29 @@ class VerPerfilTest(TestCase):
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
 
+class ListarPresupuestosTest(TestCase):
+
+    fixtures =["initialize.xml"]
+
+    def test_listar_presupuestos_interesados(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/enviados')
+
+        presupuestos_enviados = Presupuesto.objects.all().filter(interesado=24)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_enviados))
+
+    def test_listar_presupuestos_vendedores(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/recibidos')
+
+        presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=3)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_recibidos))
 class RechazarPresupuestosTest(TestCase):
 
     fixtures = ["initialize.xml"]
@@ -424,50 +447,50 @@ class RechazarPresupuestosTest(TestCase):
     def test_rechazar_presupuesto_vendedor(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/34')
+        response = c.get('/presupuesto/rechazar/vendedor/34/')
         self.assertEqual(response.status_code, 200)
 
     def test_rechazar_presupuesto_vendedor_aceptado(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/32')
+        response = c.get('/presupuesto/rechazar/vendedor/32/')
         self.assertEqual(response.status_code, 302)
 
     def test_rechazar_presupuesto_vendedor_rechazado(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/33')
+        response = c.get('/presupuesto/rechazar/vendedor/33/')
         self.assertEqual(response.status_code, 302)
 
     def test_rechazar_presupuesto_interesado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/32')
+        response = c.get('/presupuesto/rechazar/interesado/32/')
         self.assertEqual(response.status_code, 200)
 
     def test_rechazar_presupuesto_interesado_aceptado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/35')
+        response = c.get('/presupuesto/rechazar/interesado/35/')
         self.assertEqual(response.status_code, 302)
     
     def test_rechazar_presupuesto_interesado_rechazado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/33')
+        response = c.get('/presupuesto/rechazar/interesado/33/')
         self.assertEqual(response.status_code, 302)
     
     def test_rechazar_presupuesto_no_recibido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/rechazar/vendedor/35')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 301)
 
     def test_rechazar_presupuesto_no_enviado(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/rechazar/interesado/32')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 301)
 
 class AceptarPresupuestosTest(TestCase):
 

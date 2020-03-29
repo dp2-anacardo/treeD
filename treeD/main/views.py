@@ -9,11 +9,6 @@ from django.urls import reverse
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil, Presupuesto
-from datetime import date
-
 from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
@@ -197,10 +192,12 @@ def listar_impresiones(request):
 
     try:
         form = BuscadorForm(request.POST)
-        impresiones = Impresion.objects.all()
+        impresiones_no_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=False))
+        impresiones_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=True))
+        impresiones_afiliados.extend(impresiones_no_afiliados)
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {
-            'impresiones':impresiones,
+            'impresiones':impresiones_afiliados,
             'categorias':categorias,
             'form':form
         })
@@ -263,7 +260,7 @@ def crear_usuario(request):
 
     try:
         if request.user.is_authenticated == True:
-            return redirect('error_url')
+            return redirect('error_url')  
             
         if request.method == "POST":
             form_usuario = UserForm(request.POST)
@@ -453,7 +450,9 @@ def buscador_impresiones_3d(request):
                 query = query.filter(precio__gte=precio_min)
             if precio_max is not None:
                 query = query.filter(precio__lte=precio_max)
-
+            
+            query = query.order_by('-vendedor__es_afiliado')
+            
     else:
         form = BuscadorForm()
 
@@ -546,14 +545,36 @@ def mostrar_perfil(request, pk):
     except:
         return redirect('error_url')
 
+
+def listar_presupuestos_enviados(request):
+    try:
+        perfil = usuario_logueado(request)
+
+        presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
+
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos_enviados})
+
+    except:
+        return redirect('error_url')
+
+def listar_presupuestos_recibidos(request):
+    try:
+        perfil = usuario_logueado(request)
+
+        presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos_recibidos})
+    
+    except:
+        return redirect('error_url')
+        
 def rechazar_presupuesto_interesado(request, pk):
     try:
         perfil = usuario_logueado(request)
         presupuesto = Presupuesto.objects.get(pk=pk)
 
         assert presupuesto.resp_vendedor == True
-        assert not presupuesto.resp_interesado == True
-        assert not presupuesto.resp_interesado == False
+        assert presupuesto.resp_interesado == None
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
@@ -562,7 +583,7 @@ def rechazar_presupuesto_interesado(request, pk):
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos})
     
     except:
         return redirect('error_url')
@@ -582,7 +603,7 @@ def rechazar_presupuesto_vendedor(request, pk):
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos})
 
     except:
         return redirect('error_url')

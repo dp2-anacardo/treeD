@@ -53,7 +53,6 @@ def editar_usuario_logueado(request):
         if form_1.is_valid() and form_2.is_valid():
             form_1.save()
             form_2.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/perfil/"+str(usuario.perfil.id))
 
         else:

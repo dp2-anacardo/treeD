@@ -1,5 +1,35 @@
-<form action="/responderPresupuesto/{{ pk }}/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+    <div class="container"></div>
+    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+        <h1 class="display-4 py-2 text-center">Responder Presupuesto</h1>
+        {% if form.errors %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
+        
+        <form action="/responderPresupuesto/{{ pk }}/" method="post">
+            {% csrf_token %}
+            <div class="text-center">Fecha de Envio</div>    
+            {{form.fecha_envio}}
+            <br>
+            <div class="text-center">Notas</div>
+            {{form.notas}}
+            <br>
+            <div class="text-center">Precio</div>
+            {{form.precio}}
+            <br>
+            <div class="text-center">
+                <button type='submit' class="btn btn-primary btn-dark">Responder</button></form>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}

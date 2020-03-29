@@ -1,5 +1,3 @@
-""" Vistas del sistema
-"""
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -9,8 +7,8 @@ from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsFor
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from main.forms import PedirPresupuestoForm,EditarUsernameForm,EditarPasswordForm,EditarPerfilForm,AñadirDirecPerfilForm,BuscadorForm,ImpresionForm,CargarImagenForm,BuscarUsuariosForm,DireccionForm,PerfilForm,DirecPerfilForm,UserForm
-from main.models import ImgPrueba,ImgCompra,ImgImpresion,DirecPerfil,Categoria,Impresion,Perfil,Compra,Presupuesto
+from main.forms import PedirPresupuestoForm,EditarUsernameForm,EditarPasswordForm,EditarPerfilForm,AñadirDirecPerfilForm,BuscadorForm,ImpresionForm,CargarImagenForm,BuscarUsuariosForm,DireccionForm,PerfilForm,DirecPerfilForm,UserForm,ImagenForm
+from main.models import ImgCompra,ImgImpresion,DirecPerfil,Categoria,Impresion,Perfil,Compra,Presupuesto
 from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
@@ -242,9 +240,9 @@ def crear_usuario(request):
             form_imagen = ImagenForm(request.FILES)
 
         return render(request,'registration/register.html',{
-            'form_usuario':form_usuario, 
-            'form_perfil':form_perfil, 
-            'form_direccion':form_direccion, 
+            'form_usuario':form_usuario,
+            'form_perfil':form_perfil,
+            'form_direccion':form_direccion,
             'form_imagen':form_imagen
             })
     
@@ -465,8 +463,8 @@ def detalles_compra(request, pk):
 
                 vistaPaypal = True
 
-                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'impresion':impresion, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador,
+                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal})
         else:
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
@@ -512,7 +510,7 @@ def mostrarPresupuesto(request, pk):
         else:
             respuestaVendedor = 'PENDIENTE'
 
-        return render (request, 'presupuestos/mostrarPresupuesto.html', {'presupuesto':presupuesto, 'respuestaInteresado':respuestaInteresado, 
+        return render (request, 'presupuestos/mostrarPresupuesto.html', {'presupuesto':presupuesto, 'respuestaInteresado':respuestaInteresado,
                     'respuestaVendedor':respuestaVendedor})
     except:
         return redirect('error_url')

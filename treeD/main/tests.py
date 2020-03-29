@@ -38,7 +38,6 @@ class EditarPerfilTest(TestCase):
             "email": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
-        self.assertTemplateUsed(response, 'perfil.html')
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
 
     def test_editar_perfil_no_valido(self):
@@ -217,10 +216,6 @@ class ComprarImpresionesTest(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
 
-
-
-
-
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
     """
@@ -301,4 +296,19 @@ class VerPresupuestoTest(TestCase):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)
+class Subscripciones(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subscripcion_correcta(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/usuarios/afiliarse/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_subscripcion_incorrecta(self):
+        c = Client()
+        c.login(username='Ipatia', password='suario1')
+        response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 302)

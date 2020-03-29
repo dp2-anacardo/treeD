@@ -1,5 +1,3 @@
-""" Vistas del sistema
-"""
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -12,11 +10,7 @@ from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsFor
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from datetime import date
 from django.contrib.auth import login, authenticate
-# from paypal.standard.ipn.signals import valid_ipn_received
-# from main.signals import ipn_receiver
-# from django.dispatch import receiver
 
 @login_required(login_url="/login/")
 def pedir_presupuesto(request, pk):
@@ -60,7 +54,6 @@ def editar_usuario_logueado(request):
         if form_1.is_valid() and form_2.is_valid():
             form_1.save()
             form_2.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/perfil/"+str(usuario.perfil.id))
 
         else:
@@ -271,9 +264,9 @@ def crear_usuario(request):
             form_imagen = ImagenForm(request.FILES)
 
         return render(request,'registration/register.html',{
-            'form_usuario':form_usuario, 
-            'form_perfil':form_perfil, 
-            'form_direccion':form_direccion, 
+            'form_usuario':form_usuario,
+            'form_perfil':form_perfil,
+            'form_direccion':form_direccion,
             'form_imagen':form_imagen
             })
     except:
@@ -493,8 +486,8 @@ def detalles_compra(request, pk):
 
                 vistaPaypal = True
 
-                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'impresion':impresion, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador,
+                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal})
         else:
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
@@ -517,6 +510,33 @@ def mostrar_perfil(request, pk):
 
     except:
         return redirect('error_url')
+
+def mostrarPresupuesto(request, pk):
+
+    try:
+        presupuesto = Presupuesto.objects.get(id=pk)
+        usuario = usuario_logueado(request)
+        assert presupuesto.interesado == usuario or presupuesto.vendedor == usuario
+        respuestaInteresado=''
+        respuestaVendedor=''
+        if presupuesto.resp_interesado == True:
+            respuestaInteresado = 'ACEPTADO'
+        elif presupuesto.resp_interesado == False:
+            respuestaInteresado = 'RECHAZADO'
+        else:
+            respuestaInteresado = 'PENDIENTE'
+
+        if presupuesto.resp_vendedor == True:
+            respuestaVendedor = 'ACEPTADO'
+        elif presupuesto.resp_vendedor == False:
+            respuestaVendedor = 'RECHAZADO'
+        else:
+            respuestaVendedor = 'PENDIENTE'
+
+        return render (request, 'presupuestos/mostrarPresupuesto.html', {'presupuesto':presupuesto, 'respuestaInteresado':respuestaInteresado,
+                    'respuestaVendedor':respuestaVendedor})
+    except:
+        return redirect('error_url')
         
 @csrf_exempt
 def subscribirse(request):
@@ -533,7 +553,7 @@ def subscribirse(request):
         return redirect('error_url')
 
 def hazte_afiliado(request):
-    #try:
+    try:
 
         if request.user.is_authenticated:
             perfil = usuario_logueado(request)
@@ -559,5 +579,5 @@ def hazte_afiliado(request):
             return render(request, 'hazteAfiliado.html',{"formAfiliado": formPago, 'perfil':perfil})
         else:
             return render(request, 'hazteAfiliado.html')
-    #except:
-        #return redirect('error_url')
+    except:
+        return redirect('error_url')

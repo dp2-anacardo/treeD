@@ -1,6 +1,5 @@
 from paypal.standard.ipn.signals import valid_ipn_received
 from django.dispatch import receiver
-from django.contrib.auth.models import User
 from main.models import Perfil
 
 @receiver(valid_ipn_received)

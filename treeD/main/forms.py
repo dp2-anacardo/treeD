@@ -20,7 +20,7 @@ class PedirPresupuestoForm(forms.ModelForm):
         }
 
 class EditarUsernameForm(forms.ModelForm):
-    username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Username'}))
 
     class Meta:
         model = User

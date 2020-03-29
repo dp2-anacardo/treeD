@@ -1,7 +1,141 @@
 from django.test import TestCase, Client
-from django.urls import reverse
+from main.models import *
 from django.contrib.auth.models import User
-from main.models import Impresion, Compra, Perfil, DirecPerfil
+from pathlib import Path
+from django.urls import reverse
+import os
+
+class ImgPruebaTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subir_img_prueba_compra(self):
+        """ Miro si esa compra tiene prueba de envio subidas, hago la peticion
+            y compruebo que ahora tiene una imagen subida
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
+            compra = Compra.objects.get(pk=25)
+            img_prueba = list(ImgPrueba.objects.filter(compra=compra))
+            self.assertTrue(not img_prueba)
+            self.client.post("/compra/subirImagenes/25/", {
+                "imagen": imagen
+            }, follow=True)
+            img_prueba = ImgPrueba.objects.get(compra=compra)
+            self.assertTrue(img_prueba)
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
+
+class PedirPresupuestoTest(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_pedir_presupuesto_no_logueado(self):
+        """ Test donde un user no logueado intenta hacer un
+            presupuesto. Enviado a la pagina de login
+        """
+        response = self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "registration/login.html")
+
+    def test_pedir_presupuesto_get(self):
+        """ Test donde se llama al formulario de pedir presupuesto
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.get('/pedirPresupuesto/3/')
+        self.assertTemplateUsed(response, "pedirPresupuesto.html")
+
+    def test_pedir_presupuesto_no_valido(self):
+        """ Test donde un user logueado se autopide un presupuesto.
+            Enviado a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/pedirPresupuesto/24/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_pedir_presupuesto_valido(self):
+        """ Test donde un user logueado pide un presupuesto. Se
+            crea el presupuesto en BD.
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura 2',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        presupuesto = Presupuesto.objects.get(peticion='Quiero una figura 2')
+        self.assertEqual(
+            presupuesto.descripcion,
+            'Quiero una figura de IQ del Rainbow Six: Siege'
+        )
+
+class ResponderPresupuestoTest(TestCase):
+    
+    fixtures = ["initialize.xml"]
+    
+    def setUp(self):
+        vendedor = Perfil.objects.get(pk=3)
+        interesado = Perfil.objects.get(pk=24)
+        Presupuesto.objects.create(
+            pk=4000,
+            interesado=interesado,
+            vendedor=vendedor,
+            peticion='Quiero una figura',
+            descripcion='Quiero una figura de IQ del Rainbow Six: Siege',
+            precio=None,
+            notas=None,
+            fecha_envio=None,
+            resp_interesado=None,
+            resp_vendedor=None
+        )
+
+    def test_responder_presupuesto_no_logueado(self):
+        """ Test donde un user no logueado intenta responder un
+            presupuesto. Enviado a la pagina de login
+        """
+        response = self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        self.assertTemplateUsed(response, "registration/login.html")
+    
+    def test_responder_presupuesto_get(self):
+        """ Test donde se llama al formulario de responder presupuesto
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        response = self.client.get('/responderPresupuesto/4000/')
+        self.assertTemplateUsed(response, "responderPresupuesto.html")
+    
+    def test_responder_presupuesto_no_valido(self):
+        """ Test donde un user logueado responde un presupuesto 
+            que no le pertenece. Enviado a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_pedir_presupuesto_valido(self):
+        """ Test donde un user logueado responde un presupuesto. Se
+            crea el presupuesto en BD.
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        self.client.post('/responderPresupuesto/4000/', {
+            'notas': 'El tamaño es de 15 cm',
+            "fecha_envio": '13/9/2021',
+            "precio": 12.0
+        }, follow=True )
+        presupuesto = Presupuesto.objects.get(pk=4000)
+        self.assertEqual(presupuesto.precio, 12.0)
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -38,7 +172,6 @@ class EditarPerfilTest(TestCase):
             "email": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
-        self.assertTemplateUsed(response, 'perfil.html')
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
 
     def test_editar_perfil_no_valido(self):
@@ -217,10 +350,6 @@ class ComprarImpresionesTest(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
 
-
-
-
-
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
     """
@@ -288,55 +417,84 @@ class VerPerfilTest(TestCase):
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
 
-
-class RechazarPresupuestosTest(TestCase):
+class AceptarPresupuestosTest(TestCase):
 
     fixtures = ["initialize.xml"]
 
-    def test_rechazar_presupuesto_vendedor(self):
+    def test_aceptar_presupuesto_vendedor(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/34')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, True)
+    def test_aceptar_presupuesto_vendedor_invalido(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, None)
+    def test_aceptar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=24)
+        self.assertEqual(presupuesto.interesado, usuario)
+    def test_aceptar_presupuesto_interesado_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=3)
+        self.assertNotEqual(presupuesto.interesado, usuario)
+    def test_factura_pago_presupuesto(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        response2 = self.client.post('/impresion/detalleCompra/32/')
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 302)
+    def test_factura_pago_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        self.assertEqual(response1.status_code, 302)
+    def test_comprar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/comprar/32/31/')
+        self.assertEqual(response.status_code, 200)
+    def test_comprar_presupuesto_vendedor(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/impresion/comprar/32/31/')
+        self.assertEqual(response.status_code, 302)
+class VerPresupuestoTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+    def test_ver_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)
+class Subscripciones(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subscripcion_correcta(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 200)
 
-    def test_rechazar_presupuesto_vendedor_aceptado(self):
+    def test_subscripcion_incorrecta(self):
         c = Client()
-        c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/32')
-        self.assertEqual(response.status_code, 302)
-
-    def test_rechazar_presupuesto_vendedor_rechazado(self):
-        c = Client()
-        c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/33')
-        self.assertEqual(response.status_code, 302)
-
-    def test_rechazar_presupuesto_interesado(self):
-        c = Client()
-        c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/32')
-        self.assertEqual(response.status_code, 200)
-
-    def test_rechazar_presupuesto_interesado_aceptado(self):
-        c = Client()
-        c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/35')
-        self.assertEqual(response.status_code, 302)
-    
-    def test_rechazar_presupuesto_interesado_rechazado(self):
-        c = Client()
-        c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/rechazar/interesado/33')
-        self.assertEqual(response.status_code, 302)
-    
-    def test_rechazar_presupuesto_no_recibido(self):
-        c = Client()
-        c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/vendedor/35')
-        self.assertEqual(response.status_code, 302)
-
-    def test_rechazar_presupuesto_no_enviado(self):
-        c = Client()
-        c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/rechazar/interesado/32')
+        c.login(username='Ipatia', password='suario1')
+        response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 302)

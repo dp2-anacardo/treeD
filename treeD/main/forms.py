@@ -2,10 +2,22 @@
 """
 
 from django import forms
-from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria
+from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria, Presupuesto
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 import re
+
+class PedirPresupuestoForm(forms.ModelForm):
+    class Meta:
+        model = Presupuesto
+        fields = {
+            'peticion',
+            'descripcion',
+        }
+        widgets = {
+            'peticion':forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Peticion'}),
+            'descripcion':forms.Textarea(attrs={'class': 'form-control', 'placeholder':'Descripcion'}),
+        }
 
 class EditarUsernameForm(forms.ModelForm):
     username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))

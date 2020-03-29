@@ -202,4 +202,20 @@
         <field type="BooleanField" name="resp_vendedor">False</field>
         <field type="BooleanField" name="resp_interesado">False</field>
     </object>
+    <object pk="34" model="main.Presupuesto">
+        <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
+        <field type="CharField" name="peticion">Figurita de Vegetta SS2</field>
+        <field type="FloatField" name="precio">19.50</field>
+        <field type="CharField" name="notas">La figura cuando pelea contra Cell</field>
+    </object>
+    <object pk="35" model="main.Presupuesto">
+        <field to="main.perfil" name="interesado" rel="ManyToOneRel">3</field> <!--IPATIA--> 
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">24</field> <!--AAANUEL-->
+        <field type="CharField" name="peticion">Funda para Samsung Galaxy A5</field>
+        <field type="FloatField" name="precio">6.80</field>
+        <field type="CharField" name="notas">En concreto la del A5 2017</field>
+        <field type="BooleanField" name="resp_vendedor">True</field>
+        <field type="BooleanField" name="resp_interesado">True</field>
+    </object>
 </django-objects>

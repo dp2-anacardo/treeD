@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-lg-6 text-center">
           <br>
-          <img src={{perfil.imagen.url}} class="img-fluid">
+          <img src={{perfil.imagen.url}} class="img-fluid border border-dark">
           <br>
           <br>
           {% if user.perfil.id == perfil.id %}
@@ -22,8 +22,12 @@
 
         <div class="col-lg-6 ">
           <br>
-          <h5>Apodo:</h5>
-          <p>{{perfil.usuario.username}}</p>
+          <div><h5>Apodo: </h5> 
+          <p>{{perfil.usuario.username}} 
+            {%if perfil.esAfiliado%}
+            <img src="{% static "tick.png" %}" height="20" width="20"></p>
+            {%endif%}
+          </div>
 
           {% if user.perfil.id == perfil.id %}
           <br>

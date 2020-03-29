@@ -2,11 +2,25 @@
 {% load static %}
 {% block content %}
 <div class="bottom-footer">
-    <form action="/pedirPresupuesto/{{ pk }}/" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input  class="btn btn-primary btn-dark" type="submit" value="Enviar">
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+                <h1 class="display-4">Pedir Presupuesto</h1>
+                <br>
+                <br>
+                <form action="/pedirPresupuesto/{{ pk }}/" method="post">
+                    {% csrf_token %}
+                    <div class="text-center">Descripcion</div>
+                    {{ form.descripcion }}
+                    <div class="text-center">Peticion</div>
+                    {{ form.peticion }}
+                    <br>
+                    <br>
+                    <button type='submit' class="btn btn-primary btn-dark">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

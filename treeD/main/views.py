@@ -9,13 +9,9 @@ from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsFor
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from main.forms import *
-from main.models import *
-from datetime import date
+from main.forms import PedirPresupuestoForm,EditarUsernameForm,EditarPasswordForm,EditarPerfilForm,AñadirDirecPerfilForm,BuscadorForm,ImpresionForm,CargarImagenForm,BuscarUsuariosForm,DireccionForm,PerfilForm,DirecPerfilForm,UserForm
+from main.models import ImgPrueba,ImgCompra,ImgImpresion,DirecPerfil,Categoria,Impresion,Perfil,Compra,Presupuesto
 from django.contrib.auth import login, authenticate
-# from paypal.standard.ipn.signals import valid_ipn_received
-# from main.signals import ipn_receiver
-# from django.dispatch import receiver
 
 @login_required(login_url="/login/")
 def pedir_presupuesto(request, pk):

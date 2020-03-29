@@ -9,7 +9,6 @@ from django.urls import reverse
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-
 from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
@@ -574,8 +573,7 @@ def rechazar_presupuesto_interesado(request, pk):
         presupuesto = Presupuesto.objects.get(pk=pk)
 
         assert presupuesto.resp_vendedor == True
-        assert not presupuesto.resp_interesado == True
-        assert not presupuesto.resp_interesado == False
+        assert presupuesto.resp_interesado == None
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False

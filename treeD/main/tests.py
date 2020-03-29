@@ -85,7 +85,7 @@ class ResponderPresupuestoTest(TestCase):
         """ Test donde se llama al formulario de responder presupuesto
         """
         self.client.login(username="Ipatia", password="Usuario1")
-        response = self.client.get('/responderPresupuesto/4000/', follow=True)
+        response = self.client.get('/responderPresupuesto/4000/')
         self.assertTemplateUsed(response, "responderPresupuesto.html")
     
     def test_responder_presupuesto_no_valido(self):

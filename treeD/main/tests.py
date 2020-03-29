@@ -13,7 +13,7 @@ class ImgPruebaTest(TestCase):
         """ Miro si esa compra tiene prueba de envio subidas, hago la peticion
             y compruebo que ahora tiene una imagen subida
         """
-        self.client.login(username="Ipatia", password="usuario1")
+        self.client.login(username="Ipatia", password="Usuario1")
         file = Path("./main/static/3d.png")
         with open(file, 'rb') as imagen:
             compra = Compra.objects.get(pk=25)

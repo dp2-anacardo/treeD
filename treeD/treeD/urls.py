@@ -48,6 +48,7 @@ urlpatterns = [
     path('usuarios/listar/', views.buscar_usuarios, name="listarPerfiles_url"),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
+    path('pedirPresupuesto/<int:pk>/', views.pedir_presupuesto, name="pedirPresupuesto_url"),
     path('hazteAfiliado/', views.hazte_afiliado, name="hazteAfiliado_url"),
 
     path('usuarios/afiliarse/', views.subscribirse, name="subscripcion_url"),

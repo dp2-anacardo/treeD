@@ -26,6 +26,55 @@ class ImgPruebaTest(TestCase):
             self.assertTrue(img_prueba)
             path = Path("./carga/imagenes/3d.png")
             os.remove(path)
+from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
+
+class PedirPresupuestoTest(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_pedir_presupuesto_no_logueado(self):
+        """ Test donde un user no logueado intenta hacer un
+            presupuesto. Enviado a la pagina de login
+        """
+        response = self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "registration/login.html")
+
+    def test_pedir_presupuesto_get(self):
+        """ Test donde se llama al formulario de pedir presupuesto
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.get('/pedirPresupuesto/3/')
+        self.assertTemplateUsed(response, "pedirPresupuesto.html")
+
+    def test_pedir_presupuesto_no_valido(self):
+        """ Test donde un user logueado se autopide un presupuesto.
+            Enviado a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/pedirPresupuesto/24/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_pedir_presupuesto_valido(self):
+        """ Test donde un user logueado pide un presupuesto. Se
+            crea el presupuesto en BD.
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        presupuesto = Presupuesto.objects.get(peticion='Quiero una figura')
+        self.assertEqual(
+            presupuesto.descripcion,
+            'Quiero una figura de IQ del Rainbow Six: Siege'
+        )
+
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.

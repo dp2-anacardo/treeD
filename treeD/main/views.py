@@ -1,14 +1,15 @@
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from main.models import *
+from main.forms import *
 from datetime import date
 from django.urls import reverse
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from main.forms import PedirPresupuestoForm,EditarUsernameForm,EditarPasswordForm,EditarPerfilForm,AñadirDirecPerfilForm,BuscadorForm,ImpresionForm,CargarImagenForm,BuscarUsuariosForm,DireccionForm,PerfilForm,DirecPerfilForm,UserForm,ImagenForm
-from main.models import ImgCompra,ImgImpresion,DirecPerfil,Categoria,Impresion,Perfil,Compra,Presupuesto
 from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
@@ -200,6 +201,30 @@ def mostrar_impresion(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
+def subir_imagenes_prueba_compra(request, pk):
+
+    try:
+        user = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=user)
+        compra = Compra.objects.get(pk=pk)
+        assert perfil == compra.vendedor
+        assert len(list(ImgPrueba.objects.filter(compra=compra))) == 0
+
+        if request.method == "POST":
+            form = ImagenesPruebaForm(request.POST, request.FILES)
+            files = request.FILES.getlist('imagen')
+            if form.is_valid():
+                for i in files:
+                    img_prueba = ImgPrueba(imagen=i, compra=compra)
+                    img_prueba.save()
+                return redirect('/impresion/listarVentas')
+        else:
+            form = ImagenesPruebaForm()
+            return render(request, 'subirImagenesPrueba.html', {'form': form})
+    except:
+        return redirect('error_url')
+
 def crear_usuario(request):
 
     try:
@@ -244,10 +269,9 @@ def crear_usuario(request):
             'form_direccion':form_direccion,
             'form_imagen':form_imagen
             })
-    
     except:
         return redirect('error_url')
-
+  
 
 def crear_impresion(request):
 
@@ -516,7 +540,6 @@ def aceptar_presupuesto_interesado(request, pk):
     except:
         return redirect('error_url')
 
-#TODO: poner la cancel_return de mostrar el presupuesto
 def detalles_presupuesto(request, pk):
 
     try:
@@ -645,13 +668,13 @@ def hazte_afiliado(request):
             paypal_dict = {
                         "cmd": "_xclick-subscriptions",
                         "business": 'treeD@business.example.com',
-                        "a3": "10.00",                      # monthly price
-                        "p3": 1,                           # duration of each unit (depends on unit)
-                        "t3": "M",                         # duration unit ("M for Month")
-                        "src": "1",                        # make payments recur
-                        "sra": "1",                        # reattempt payment on payment error
+                        "a3": "10.00",                      
+                        "p3": 1,                           
+                        "t3": "M",                         
+                        "src": "1",                        
+                        "sra": "1",                        
                         "item_name": "Subscripcion en TreeD",
-                        'custom': perfil.id,     # custom data, pass something meaningful here
+                        'custom': perfil.id,     
                         "currency_code": "EUR",
                         "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                         "return": request.build_absolute_uri(reverse('subscripcion_url')),

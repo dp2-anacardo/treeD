@@ -1,6 +1,31 @@
 from django.test import TestCase, Client
+from main.models import *
 from django.contrib.auth.models import User
-from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
+from pathlib import Path
+from django.urls import reverse
+import os
+
+class ImgPruebaTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subir_img_prueba_compra(self):
+        """ Miro si esa compra tiene prueba de envio subidas, hago la peticion
+            y compruebo que ahora tiene una imagen subida
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
+            compra = Compra.objects.get(pk=25)
+            img_prueba = list(ImgPrueba.objects.filter(compra=compra))
+            self.assertTrue(not img_prueba)
+            self.client.post("/compra/subirImagenes/25/", {
+                "imagen": imagen
+            }, follow=True)
+            img_prueba = ImgPrueba.objects.get(compra=compra)
+            self.assertTrue(img_prueba)
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
 
 class PedirPresupuestoTest(TestCase):
     

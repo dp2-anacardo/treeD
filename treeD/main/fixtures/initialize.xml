@@ -192,6 +192,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field type="CharField" name="peticion">Figurita de Goku</field>
+        <field type="CharField" name="descripcion">Goku con el pelo en amarillo</field>
         <field type="FloatField" name="precio">15.0</field>
         <field type="CharField" name="notas">Super saiyan</field>
     </object>
@@ -199,6 +200,7 @@
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
         <field type="CharField" name="peticion">Mascarilla</field>
+        <field type="CharField" name="descripcion">Para los hospitales</field>
         <field type="FloatField" name="precio">25.0</field>
         <field type="CharField" name="notas">Contra el coronavirus</field>
     </object>

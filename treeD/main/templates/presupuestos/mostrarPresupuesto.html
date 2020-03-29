@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Presupuesto</h1>
+<div class="bottom-footer">
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Titulo:</h5><p class="text-center">AQUI ESTARIA EL TITULO DEL PRESUPUESTO</p>
+       <h5 class="text-center">Precio:</h5><p class="text-center">{{presupuesto.precio}}€</p>
+      </div>
+       <div class="col-lg-4 my-auto">
+       <h5 class="text-center">Peticion:</h5><p class="text-center">{{presupuesto.peticion}}</p><br>
+       <h5 class="text-center">Notas:</h5><p class="text-center">{{presupuesto.notas}}</p>
+      </div>
+      <div class="col-lg-4 my-auto">
+        <h5 class="text-center">Interesado:</h5><p class="text-center">{{presupuesto.interesado}}</p>
+        <h5 class="text-center">Respuesta del interesado:</h5><p class="text-center">{{respuestaInteresado}}</p>
+        <br>
+        <h5 class="text-center">Vendedor:</h5><p class="text-center">{{presupuesto.vendedor}}</p>
+        <h5 class="text-center">Respuesta del vendedor:</h5><p class="text-center">{{respuestaVendedor}}</p><br>
+       </div>
+    </div>
+    <br>
+  </div>
+</div>
+{% endblock %}
+

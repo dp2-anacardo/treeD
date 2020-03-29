@@ -1,7 +1,54 @@
 from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
 from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
+
+class PedirPresupuestoTest(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_pedir_presupuesto_no_logueado(self):
+        """ Test donde un user no logueado intenta hacer un
+            presupuesto. Enviado a la pagina de login
+        """
+        response = self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "registration/login.html")
+
+    def test_pedir_presupuesto_get(self):
+        """ Test donde se llama al formulario de pedir presupuesto
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.get('/pedirPresupuesto/3/')
+        self.assertTemplateUsed(response, "pedirPresupuesto.html")
+
+    def test_pedir_presupuesto_no_valido(self):
+        """ Test donde un user logueado se autopide un presupuesto.
+            Enviado a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.post('/pedirPresupuesto/24/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_pedir_presupuesto_valido(self):
+        """ Test donde un user logueado pide un presupuesto. Se
+            crea el presupuesto en BD.
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        self.client.post('/pedirPresupuesto/3/', {
+            'peticion': 'Quiero una figura',
+            "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
+        }, follow=True )
+        presupuesto = Presupuesto.objects.get(peticion='Quiero una figura')
+        self.assertEqual(
+            presupuesto.descripcion,
+            'Quiero una figura de IQ del Rainbow Six: Siege'
+        )
+
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -38,7 +85,6 @@ class EditarPerfilTest(TestCase):
             "email": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
-        self.assertTemplateUsed(response, 'perfil.html')
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
 
     def test_editar_perfil_no_valido(self):
@@ -217,10 +263,6 @@ class ComprarImpresionesTest(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
 
-
-
-
-
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
     """
@@ -339,4 +381,33 @@ class AceptarPresupuestosTest(TestCase):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/comprar/32/31/')
+        self.assertEqual(response.status_code, 302)
+class VerPresupuestoTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+    def test_ver_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)
+class Subscripciones(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subscripcion_correcta(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/usuarios/afiliarse/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_subscripcion_incorrecta(self):
+        c = Client()
+        c.login(username='Ipatia', password='suario1')
+        response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 302)

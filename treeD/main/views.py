@@ -1,5 +1,3 @@
-""" Vistas del sistema
-"""
 from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -9,10 +7,40 @@ from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsFor
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil, Presupuesto
-from datetime import date
+from main.forms import PedirPresupuestoForm,EditarUsernameForm,EditarPasswordForm,EditarPerfilForm,AñadirDirecPerfilForm,BuscadorForm,ImpresionForm,CargarImagenForm,BuscarUsuariosForm,DireccionForm,PerfilForm,DirecPerfilForm,UserForm,ImagenForm
+from main.models import ImgCompra,ImgImpresion,DirecPerfil,Categoria,Impresion,Perfil,Compra,Presupuesto
 from django.contrib.auth import login, authenticate
+
+@login_required(login_url="/login/")
+def pedir_presupuesto(request, pk):
+    try:
+        interesado = User.objects.get(pk=request.user.id)
+        p_interesado = Perfil.objects.get(usuario=interesado)
+        p_vendedor = Perfil.objects.get(pk=pk)
+        assert p_interesado != p_vendedor
+        
+        if request.method == "POST":
+            form = PedirPresupuestoForm(data=request.POST)
+            if form.is_valid():
+                presupuesto = form.save(commit=False)
+                presupuesto.vendedor = p_vendedor
+                presupuesto.interesado = p_interesado
+                presupuesto.save()
+                #TODO: Redirijir a lista de presupuestos enviados cuando este hecho
+                return redirect("/perfil/"+str(p_interesado.id))
+            else:
+                return render(request, "pedirPresupuesto.html", {
+                    "form": form,
+                    'pk': pk
+                })
+        else:
+            form = PedirPresupuestoForm()
+            return render(request, "pedirPresupuesto.html", {
+                    "form": form,
+                    'pk': pk
+            })
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def editar_usuario_logueado(request):
@@ -25,7 +53,6 @@ def editar_usuario_logueado(request):
         if form_1.is_valid() and form_2.is_valid():
             form_1.save()
             form_2.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/perfil/"+str(usuario.perfil.id))
 
         else:
@@ -176,6 +203,9 @@ def mostrar_impresion(request, pk):
 def crear_usuario(request):
 
     try:
+        if request.user.is_authenticated == True:
+            return redirect('error_url')
+            
         if request.method == "POST":
             form_usuario = UserForm(request.POST)
             form_perfil = PerfilForm(request.POST)
@@ -209,9 +239,9 @@ def crear_usuario(request):
             form_imagen = ImagenForm(request.FILES)
 
         return render(request,'registration/register.html',{
-            'form_usuario':form_usuario, 
-            'form_perfil':form_perfil, 
-            'form_direccion':form_direccion, 
+            'form_usuario':form_usuario,
+            'form_perfil':form_perfil,
+            'form_direccion':form_direccion,
             'form_imagen':form_imagen
             })
     
@@ -433,8 +463,8 @@ def detalles_compra(request, pk):
 
                 vistaPaypal = True
 
-                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'impresion':impresion, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador,
+                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal})
         else:
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
@@ -445,15 +475,13 @@ def detalles_compra(request, pk):
 
     except:
        return redirect('error_url')
-    
-
+   
+@csrf_exempt
 def mostrar_perfil(request, pk):
     try:
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
-
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
-
         return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
          'impresiones':impresiones})
 
@@ -488,8 +516,7 @@ def aceptar_presupuesto_interesado(request, pk):
     except:
         return redirect('error_url')
 
-#ToDo: poner la cancel_return de mostrar el presupuesto
-#ToDo: cambiar el nombre_impresion=presupuesto.peticion por nombre_impresion=presupuesto.titulo en la vista
+#TODO: poner la cancel_return de mostrar el presupuesto
 def detalles_presupuesto(request, pk):
 
     try:
@@ -513,7 +540,7 @@ def detalles_presupuesto(request, pk):
                     "currency_code": "EUR",
                     "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                     "return": request.build_absolute_uri(reverse('comprarPresupuesto_url' , args=[idPresupuesto, direccion.id])),
-                    "cancel_return": request.build_absolute_uri(reverse('index')),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarPresupuesto_url', args=[idPresupuesto])),
                 }
 
                 if settings.DEBUG == False:
@@ -536,11 +563,10 @@ def detalles_presupuesto(request, pk):
     except:
        return redirect('error_url')
 
-#ToDo: cambiar el nombre_impresion=presupuesto.peticion por nombre_impresion=presupuesto.titulo
 @csrf_exempt
 def comprar_presupuesto(request, pk, direccion):
 
-    #try:
+    try:
         presupuesto = Presupuesto.objects.get(pk=pk)
         comprador = usuario_logueado(request)
         direc= DirecPerfil.objects.get(id = direccion)
@@ -553,7 +579,7 @@ def comprar_presupuesto(request, pk, direccion):
             comprador=comprador,
             vendedor=presupuesto.vendedor,
             nombre_impresion=presupuesto.peticion,
-            desc_impresion=presupuesto.notas,
+            desc_impresion=presupuesto.descripcion,
             precio_impresion=presupuesto.precio,
             fecha_compra=fecha_actual,
             direccion = direc
@@ -568,5 +594,75 @@ def comprar_presupuesto(request, pk, direccion):
 
         return render(request, 'impresiones/listarCompras.html', {'compras': compras})
         
-    # except:
-    #     return redirect('error_url')
+    except:
+        return redirect('error_url')
+def mostrarPresupuesto(request, pk):
+
+    try:
+        presupuesto = Presupuesto.objects.get(id=pk)
+        usuario = usuario_logueado(request)
+        assert presupuesto.interesado == usuario or presupuesto.vendedor == usuario
+        respuestaInteresado=''
+        respuestaVendedor=''
+        if presupuesto.resp_interesado == True:
+            respuestaInteresado = 'ACEPTADO'
+        elif presupuesto.resp_interesado == False:
+            respuestaInteresado = 'RECHAZADO'
+        else:
+            respuestaInteresado = 'PENDIENTE'
+
+        if presupuesto.resp_vendedor == True:
+            respuestaVendedor = 'ACEPTADO'
+        elif presupuesto.resp_vendedor == False:
+            respuestaVendedor = 'RECHAZADO'
+        else:
+            respuestaVendedor = 'PENDIENTE'
+
+        return render (request, 'presupuestos/mostrarPresupuesto.html', {'presupuesto':presupuesto, 'respuestaInteresado':respuestaInteresado,
+                    'respuestaVendedor':respuestaVendedor})
+    except:
+        return redirect('error_url')
+        
+@csrf_exempt
+def subscribirse(request):
+
+    try:
+        usuario = usuario_logueado(request)
+        usuario.es_afiliado = True
+        usuario.save()
+        direcciones = DirecPerfil.objects.all().filter(perfil=usuario)
+        impresiones = Impresion.objects.all().filter(vendedor=usuario)
+        return render(request, 'perfil.html', {'perfil':usuario, 'direcciones':direcciones,
+         'impresiones':impresiones})
+    except:
+        return redirect('error_url')
+
+def hazte_afiliado(request):
+    try:
+
+        if request.user.is_authenticated:
+            perfil = usuario_logueado(request)
+            paypal_dict = {
+                        "cmd": "_xclick-subscriptions",
+                        "business": 'treeD@business.example.com',
+                        "a3": "10.00",                      # monthly price
+                        "p3": 1,                           # duration of each unit (depends on unit)
+                        "t3": "M",                         # duration unit ("M for Month")
+                        "src": "1",                        # make payments recur
+                        "sra": "1",                        # reattempt payment on payment error
+                        "item_name": "Subscripcion en TreeD",
+                        'custom': perfil.id,     # custom data, pass something meaningful here
+                        "currency_code": "EUR",
+                        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                        "return": request.build_absolute_uri(reverse('subscripcion_url')),
+                        "cancel_return": request.build_absolute_uri(reverse('mostrarPerfil_url' , args=[perfil.id])),
+                }
+            if settings.DEBUG == False:
+                formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+            else:
+                formPago = PayPalPaymentsForm(initial=paypal_dict)
+            return render(request, 'hazteAfiliado.html',{"formAfiliado": formPago, 'perfil':perfil})
+        else:
+            return render(request, 'hazteAfiliado.html')
+    except:
+        return redirect('error_url')

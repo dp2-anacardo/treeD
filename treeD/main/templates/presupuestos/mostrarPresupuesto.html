@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<!--
 <h1 class="text-center">Presupuesto</h1>
 <div class="bottom-footer">
-  <div class="container jumbotron">
+  <div class="container ">
     <div class="row">
       <div class="col-lg-4 my-auto">
        <h5 class="text-center">Titulo:</h5><p class="text-center">AQUI ESTARIA EL TITULO DEL PRESUPUESTO</p>
@@ -25,5 +25,82 @@
     <br>
   </div>
 </div>
-{% endblock %}
+-->
 
+
+{% if user == presupuesto.vendedor.usuario %}
+<div class="bottom-footer">
+  <div class="container ">
+
+    <div class="jumbotron">
+      <h5 class="display-4 text-center">Interesado:</h5>
+      <p class="lead text-center">{{presupuesto.interesado}}</p>
+      <h5 class="display-4 text-center">Petición:</h5>
+      <p class="lead text-center">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 text-center">Descripción:</h5>
+      <p class="lead text-center">{{presupuesto.descripcion}}</p>
+      {% if presupuesto.resp_vendedor == True %}
+      <h5 class="display-4 text-center">Estado:</h5>
+      <p class="lead text-center">{{respuestaInteresado}}</p>
+      {% endif %}
+    </div>
+    {% if presupuesto.resp_vendedor == True%}
+    <h2 class="display-4 text-center">Respuesta</h2>
+    <div class="jumbotron">
+      <h5 class="display-4 text-center">Fecha de Envio:</h5>
+      <p class="lead text-center">{{presupuesto.fecha_envio}}</p>
+      <h5 class="display-4 text-center">Notas:</h5>
+      <p class="lead text-center">{{presupuesto.notas}}</p>
+      <h5 class="display-4 text-center">Precio:</h5>
+      <p class="lead text-center">{{presupuesto.precio}}€</p>
+    </div>
+    <div class="text-center">
+      <a href="" class="btn btn-dark">Comprar</a>
+      <a href="" class="btn btn-secondary">Rechazar</a>
+    </div>
+    {% endif %}
+
+    {% if presupuesto.resp_vendedor == None %}
+    <div class="text-center">
+      <a href="{% url 'responderPresupuesto_url' presupuesto.id %}" class="btn btn-dark">Responder</a>
+      <a href="" class="btn btn-secondary">Rechazar</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endif %}
+
+{% if user == presupuesto.interesado.usuario %}
+<div class="bottom-footer">
+  <div class="container ">
+    <div class="jumbotron">
+      <h5 class="display-4 text-center">Vendedor:</h5>
+      <p class="lead text-center">{{presupuesto.vendedor}}</p>
+      <h5 class="display-4 text-center">Petición:</h5>
+      <p class="lead text-center">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 text-center">Descripción:</h5>
+      <p class="lead text-center">{{presupuesto.descripcion}}</p>
+      <h5 class="display-4 text-center">Estado:</h5>
+      <p class="lead text-center">{{respuestaVendedor}}</p>
+    </div>
+    {% if presupuesto.resp_vendedor == True%}
+    <h2 class="display-2 text-center">Respuesta</h2>
+    <div class="jumbotron">
+      <h5 class="display-4 text-center">Fecha de Envio:</h5>
+      <p class="lead text-center">{{presupuesto.fecha_envio}}</p>
+      <h5 class="display-4 text-center">Notas:</h5>
+      <p class="lead text-center">{{presupuesto.notas}}</p>
+      <h5 class="display-4 text-center">Precio:</h5>
+      <p class="lead text-center">{{presupuesto.precio}}€</p>
+    </div>
+    <div class="text-center">
+      <a href="" class="btn btn-dark">Comprar</a>
+      <a href="" class="btn btn-secondary">Rechazar</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

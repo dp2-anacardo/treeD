@@ -46,7 +46,7 @@
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
-    <!--DIREC PERFIL-->d
+    <!--DIREC PERFIL-->
     <object pk="30" model="main.direcPerfil">
         <field type="CharField" name="direccion">C/Anacardo Nº1</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>

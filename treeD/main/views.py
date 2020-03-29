@@ -135,10 +135,13 @@ def listar_impresiones(request):
 
     try:
         form = BuscadorForm(request.POST)
-        impresiones = Impresion.objects.all()
+        impresiones_no_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=False))
+        impresiones_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=True))
+        impresiones_afiliados.extend(impresiones_no_afiliados)
+        print(impresiones_afiliados)
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {
-            'impresiones':impresiones,
+            'impresiones':impresiones_afiliados,
             'categorias':categorias,
             'form':form
         })

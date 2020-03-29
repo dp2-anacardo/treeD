@@ -4,9 +4,116 @@ from django.core.exceptions import EmptyResultSet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, ImgPrueba
-from main.forms import ImpresionForm, CargarImagenForm, BuscadorForm, ImagenesPruebaForm
+from main.models import *
+from main.forms import *
 from datetime import date
+from django.urls import reverse
+from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from datetime import date
+from django.contrib.auth import login, authenticate
+# from paypal.standard.ipn.signals import valid_ipn_received
+# from main.signals import ipn_receiver
+# from django.dispatch import receiver
+
+@login_required(login_url="/login/")
+def editar_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    if request.method == "POST":
+        form_1 = EditarUsernameForm(data=request.POST, instance=usuario)
+        form_2 = EditarPerfilForm(data=request.POST, files=request.FILES, instance=perfil)
+        if form_1.is_valid() and form_2.is_valid():
+            form_1.save()
+            form_2.save()
+            #TODO: Redirigir a show de perfil cuando este hecho
+            return redirect("/perfil/"+str(usuario.perfil.id))
+
+        else:
+            return render(request, "editarPerfil.html", {
+                "form_1": form_1,
+                "form_2": form_2,
+            })
+
+    else:
+        form_1 = EditarUsernameForm(instance=usuario)
+        form_2 = EditarPerfilForm(instance=perfil)
+        return render(request, "editarPerfil.html", {
+            "form_1": form_1,
+            "form_2": form_2
+        })
+
+@login_required(login_url="/login/")
+def editar_pw_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+
+    if request.method == "POST":
+        form = EditarPasswordForm(data=request.POST)
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            usuario.set_password(password)
+            usuario.save()
+            #TODO: Redirigir a show de perfil cuando este hecho
+            return redirect("/")
+
+        else:
+            return render(request, "editarPassword.html", {
+                "form": form
+            })
+
+    else:
+        form = EditarPasswordForm()
+        return render(request, "editarPassword.html", {
+            "form": form
+        })
+
+@login_required(login_url="/login/")
+def mostrar_direcciones_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+    direcciones = DirecPerfil.objects.filter(perfil=perfil)
+    form = AñadirDirecPerfilForm()
+    return render(request, "mostrarDirecciones.html", {
+        "direcciones": direcciones,
+        "form": form
+    })
+
+@login_required(login_url="/login/")
+def añadir_direccion_usuario_logueado(request):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    if request.method == "POST":
+        form = AñadirDirecPerfilForm(request.POST)
+        if form.is_valid():
+            direc = form.cleaned_data.get("direccion")
+            dp = DirecPerfil(direccion=direc, perfil=perfil)
+            dp.save()
+            #TODO: Redirigir a show de perfil cuando este hecho
+            return redirect("/mostrarDirecciones")
+
+        else:
+            return redirect("/mostrarDirecciones")
+
+    else:
+        return redirect("/mostrarDirecciones")
+
+@login_required(login_url="/login/")
+def eliminar_direccion_usuario_logueado(request, pk):
+    usuario = User.objects.get(pk=request.user.id)
+    perfil = Perfil.objects.get(usuario=usuario)
+
+    try:
+        direc = DirecPerfil.objects.get(pk=pk)
+        if direc.perfil != perfil:
+            return redirect('error_url')
+        direc.delete()
+        return redirect('/mostrarDirecciones')
+    except:
+        return redirect('error_url')
 
 def usuario_logueado(request):
 
@@ -45,10 +152,12 @@ def listar_impresiones(request):
 def home(request):
     return render(request, 'impresiones/index.html')
 
+@csrf_exempt
 def mostrar_impresion(request, pk):
     
     try:
         impresion = Impresion.objects.get(pk=pk)
+
         comprar = True
         user = None
         try:
@@ -92,6 +201,53 @@ def subir_imagenes_prueba_compra(request, pk):
     except:
         return redirect('error_url')
 
+def crear_usuario(request):
+
+    try:
+        if request.user.is_authenticated == True:
+            return redirect('error_url')
+            
+        if request.method == "POST":
+            form_usuario = UserForm(request.POST)
+            form_perfil = PerfilForm(request.POST)
+            form_imagen = ImagenForm(request.POST, request.FILES)
+            form_direccion = DirecPerfilForm(request.POST)
+            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid:
+            
+                usuario = form_usuario.save()
+                perfil = form_perfil.save(commit = False)
+                perfil.usuario = usuario
+                if form_imagen.cleaned_data['imagen'] is not None:
+                    imagen = request.FILES['imagen']
+                    perfil.imagen = imagen
+                perfil.es_afiliado = False
+                perfil.save()
+                
+                direccion = form_direccion.save(commit = False)
+                direccion.perfil = perfil
+                direccion.save()
+
+                username = form_usuario.cleaned_data['username']
+                password = form_usuario.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
+                login(request, user)
+                return redirect('/')
+        
+        else:
+            form_usuario = UserForm()
+            form_perfil = PerfilForm()
+            form_direccion = DirecPerfilForm()
+            form_imagen = ImagenForm(request.FILES)
+
+        return render(request,'registration/register.html',{
+            'form_usuario':form_usuario, 
+            'form_perfil':form_perfil, 
+            'form_direccion':form_direccion, 
+            'form_imagen':form_imagen
+            })
+    except:
+        return redirect('error_url')
+  
 
 def crear_impresion(request):
 
@@ -181,10 +337,13 @@ def listar_impresiones_publicadas(request):
 
     return render(request, 'index.html')
 
-def comprar_impresion_3d(request, pk):
+@csrf_exempt
+def comprar_impresion_3d(request, pk, direccion):
+
     try:
         impresion = Impresion.objects.get(pk=pk)
         comprador = usuario_logueado(request)
+        direc= DirecPerfil.objects.get(id = direccion)
         
         assert impresion.vendedor != comprador
         compras = list(Compra.objects.filter(comprador=comprador))
@@ -198,7 +357,8 @@ def comprar_impresion_3d(request, pk):
             nombre_impresion=impresion.nombre,
             desc_impresion=impresion.descripcion,
             precio_impresion=impresion.precio,
-            fecha_compra=fecha_actual
+            fecha_compra=fecha_actual,
+            direccion = direc
         )
         compra.save()
 
@@ -215,9 +375,7 @@ def comprar_impresion_3d(request, pk):
 
 
 def buscador_impresiones_3d(request):
-    """
-    Funcion que busca impresiones 3D que cumplen una serie de parametros
-    """
+
     query = Impresion.objects.all()
 
     if request.method == "POST":
@@ -244,12 +402,131 @@ def buscador_impresiones_3d(request):
     return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
 
 def listar_ventas_realizadas(request):
-    """
-    Funcion que lista las impresiones vendidas por un vendedor
-    """
+   
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')
+
+def buscar_usuarios(request):
+    
+    if request.user.is_authenticated:
+
+        perfil_user = Perfil.objects.get(usuario=request.user)
+        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
+        query = query.exclude(impresion__isnull=True)
+
+        if request.method == "POST":
+            form = BuscarUsuariosForm(request.POST)
+            if form.is_valid():
+                nombre = form.cleaned_data.get("nombre")
+                query = query.filter(nombre__icontains=nombre)
+                return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+        else:
+            form = BuscarUsuariosForm()
+            return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+    
+    return render(request, 'index.html')
+
+def detalles_compra(request, pk):
+
+    try:
+        impresion = Impresion.objects.get(pk=pk)
+        comprador = usuario_logueado(request)
+
+        if request.method == "POST":
+            form = DireccionForm(request.POST)
+            if form.is_valid():
+                direccionSeleccionada = form.cleaned_data.get("direccion")
+                direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
+
+                precio = impresion.precio + 1
+                idImpresion = str(pk)
+
+                paypal_dict = {
+                    "business": "treeD@business.example.com",
+                    "amount": str(precio),
+                    "item_name": impresion.nombre,
+                    "currency_code": "EUR",
+                    "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                    "return": request.build_absolute_uri(reverse('comprarImpresion_url' , args=[idImpresion, direccion.id])),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarImpresion_url' , args=[idImpresion])),
+                }
+
+                if settings.DEBUG == False:
+                    formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+                else:
+                    formPago = PayPalPaymentsForm(initial=paypal_dict)
+
+                vistaPaypal = True
+
+                return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
+                        'impresion':impresion, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+        else:
+            form = DireccionForm()
+            form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
+            
+        vistaPaypal = False
+
+        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal})
+
+    except:
+       return redirect('error_url')
+   
+@csrf_exempt
+def mostrar_perfil(request, pk):
+    try:
+        perfil = Perfil.objects.get(pk=pk)
+        direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
+        impresiones = Impresion.objects.all().filter(vendedor=perfil)
+        return render(request, 'perfil.html', {'perfil':perfil, 'direcciones':direcciones,
+         'impresiones':impresiones})
+
+    except:
+        return redirect('error_url')
+        
+@csrf_exempt
+def subscribirse(request):
+
+    try:
+        usuario = usuario_logueado(request)
+        usuario.es_afiliado = True
+        usuario.save()
+        direcciones = DirecPerfil.objects.all().filter(perfil=usuario)
+        impresiones = Impresion.objects.all().filter(vendedor=usuario)
+        return render(request, 'perfil.html', {'perfil':usuario, 'direcciones':direcciones,
+         'impresiones':impresiones})
+    except:
+        return redirect('error_url')
+
+def hazte_afiliado(request):
+    #try:
+
+        if request.user.is_authenticated:
+            perfil = usuario_logueado(request)
+            paypal_dict = {
+                        "cmd": "_xclick-subscriptions",
+                        "business": 'treeD@business.example.com',
+                        "a3": "10.00",                      # monthly price
+                        "p3": 1,                           # duration of each unit (depends on unit)
+                        "t3": "M",                         # duration unit ("M for Month")
+                        "src": "1",                        # make payments recur
+                        "sra": "1",                        # reattempt payment on payment error
+                        "item_name": "Subscripcion en TreeD",
+                        'custom': perfil.id,     # custom data, pass something meaningful here
+                        "currency_code": "EUR",
+                        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+                        "return": request.build_absolute_uri(reverse('subscripcion_url')),
+                        "cancel_return": request.build_absolute_uri(reverse('mostrarPerfil_url' , args=[perfil.id])),
+                }
+            if settings.DEBUG == False:
+                formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+            else:
+                formPago = PayPalPaymentsForm(initial=paypal_dict)
+            return render(request, 'hazteAfiliado.html',{"formAfiliado": formPago, 'perfil':perfil})
+        else:
+            return render(request, 'hazteAfiliado.html')
+    #except:
+        #return redirect('error_url')

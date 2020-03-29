@@ -540,7 +540,7 @@ def detalles_presupuesto(request, pk):
 @csrf_exempt
 def comprar_presupuesto(request, pk, direccion):
 
-    try:
+    #try:
         presupuesto = Presupuesto.objects.get(pk=pk)
         comprador = usuario_logueado(request)
         direc= DirecPerfil.objects.get(id = direccion)
@@ -559,11 +559,14 @@ def comprar_presupuesto(request, pk, direccion):
             direccion = direc
         )
         compra.save()
+        img= ImgImpresion.objects.get(pk=34)
+        imagen = ImgCompra(imagen=img.imagen, compra=compra)
+        imagen.save()
         presupuesto.resp_interesado=True
         presupuesto.save()
         compras.append(compra)
 
         return render(request, 'impresiones/listarCompras.html', {'compras': compras})
         
-    except:
-        return redirect('error_url')
+    # except:
+    #     return redirect('error_url')

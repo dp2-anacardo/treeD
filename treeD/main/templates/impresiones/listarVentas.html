@@ -13,6 +13,10 @@
       <div class="col-lg-4 my-auto">
        <h5 class="text-center">Nombre de la impresión:</h5><p class="text-center">{{v.nombre_impresion}}</p>
        <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{v.fecha_compra}}</p>
+       {% if v.imgprueba_set.all.0 == None %}
+       <div class="text-center">
+       <a href="{% url 'subirImagenesPrueba_url' v.id %}" class="btn btn-dark ">Subir Pruebas de Envío</a></div>
+       {% endif %}
       </div>
        <div class="col-lg-4 my-auto">
        <h5 class="text-center">Precio:</h5><p class="text-center">{{v.precio_impresion}}€</p>

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+    <div class="container">
+        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+            <h1 class="display-4 py-2 text-center">Pruebas de Envío</h1>
+            <p class="lead">Se recomienda subir como prueba de que el envio ha sido realizado una imagen del recibo del envío.</p>
+            <form action="" method="post" enctype="multipart/form-data" id="upload-image-form">
+                {% csrf_token %}
+                <div class="text-center">
+
+                    {{ form.imagen }}
+
+                    <br>
+                    <button type='submit' class="btn btn-primary btn-dark">Subir</button>
+                </div>
+        </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

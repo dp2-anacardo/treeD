@@ -2,7 +2,7 @@
 """
 
 from django import forms
-from main.models import Impresion, ImgImpresion, Perfil, DirecPerfil, Categoria, Presupuesto
+from main.models import *
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from datetime import date
@@ -55,7 +55,7 @@ class ResponderPresupuestoForm(forms.ModelForm):
             raise ValidationError({'fecha_envio': [msg,]})
 
 class EditarUsernameForm(forms.ModelForm):
-    username = forms.CharField(label="Username",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Username'}))
+    username = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Username'}))
 
     class Meta:
         model = User
@@ -222,6 +222,11 @@ class CargarImagenForm(forms.ModelForm):
     class Meta:
         model = ImgImpresion
         fields = ('imagen',)
+
+class ImagenesPruebaForm(forms.Form):
+    imagen = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
+    )
 
 class BuscarUsuariosForm(forms.Form):
     

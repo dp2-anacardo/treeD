@@ -1,7 +1,31 @@
 from django.test import TestCase, Client
-from django.urls import reverse
+from main.models import *
 from django.contrib.auth.models import User
-from main.models import Impresion, Compra, Perfil, DirecPerfil, Presupuesto
+from pathlib import Path
+from django.urls import reverse
+import os
+
+class ImgPruebaTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subir_img_prueba_compra(self):
+        """ Miro si esa compra tiene prueba de envio subidas, hago la peticion
+            y compruebo que ahora tiene una imagen subida
+        """
+        self.client.login(username="Ipatia", password="Usuario1")
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
+            compra = Compra.objects.get(pk=25)
+            img_prueba = list(ImgPrueba.objects.filter(compra=compra))
+            self.assertTrue(not img_prueba)
+            self.client.post("/compra/subirImagenes/25/", {
+                "imagen": imagen
+            }, follow=True)
+            img_prueba = ImgPrueba.objects.get(compra=compra)
+            self.assertTrue(img_prueba)
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
 
 class PedirPresupuestoTest(TestCase):
     
@@ -148,7 +172,6 @@ class EditarPerfilTest(TestCase):
             "email": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
-        self.assertTemplateUsed(response, 'perfil.html')
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
 
     def test_editar_perfil_no_valido(self):
@@ -327,10 +350,6 @@ class ComprarImpresionesTest(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
 
-
-
-
-
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
     """
@@ -396,4 +415,86 @@ class VerPerfilTest(TestCase):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/perfil/0/')
+        self.assertEqual(response.status_code, 302)
+
+class AceptarPresupuestosTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_aceptar_presupuesto_vendedor(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, True)
+    def test_aceptar_presupuesto_vendedor_invalido(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        self.assertEqual(presupuesto.resp_vendedor, None)
+    def test_aceptar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=24)
+        self.assertEqual(presupuesto.interesado, usuario)
+    def test_aceptar_presupuesto_interesado_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/aceptarPresupuestoInteresado/32/')
+        presupuesto = Presupuesto.objects.get(pk=32)
+        usuario = Perfil.objects.get(pk=3)
+        self.assertNotEqual(presupuesto.interesado, usuario)
+    def test_factura_pago_presupuesto(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        response2 = self.client.post('/impresion/detalleCompra/32/')
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 302)
+    def test_factura_pago_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response1 = c.get('/presupuesto/detallePresupuesto/32/')
+        self.assertEqual(response1.status_code, 302)
+    def test_comprar_presupuesto_interesado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/presupuesto/comprar/32/31/')
+        self.assertEqual(response.status_code, 200)
+    def test_comprar_presupuesto_vendedor(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/impresion/comprar/32/31/')
+        self.assertEqual(response.status_code, 302)
+class VerPresupuestoTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+    def test_ver_presupuesto_invalido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarPresupuesto/0/')
+        self.assertEqual(response.status_code, 302)
+class Subscripciones(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_subscripcion_correcta(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/usuarios/afiliarse/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_subscripcion_incorrecta(self):
+        c = Client()
+        c.login(username='Ipatia', password='suario1')
+        response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 302)

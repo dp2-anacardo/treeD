@@ -143,6 +143,9 @@
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
     </object>
+    <object pk="34" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">presupuesto_default.png</field>
+    </object>
     <!--COMPRAS-->
     <object pk="25" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
@@ -174,5 +177,24 @@
     <object pk="29" model="main.imgCompra">
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
+    </object>
+    <!--PRESUPUESTOS-->
+    <object pk="32" model="main.Presupuesto">
+        <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
+        <field type="CharField" name="peticion">Figurita de Goku</field>
+        <field type="CharField" name="descripcion">Quiero una figura de Goku</field>
+        <field type="FloatField" name="precio">15.0</field>
+        <field type="CharField" name="notas">Super saiyan</field>
+        <field type="DateField" name="fecha_envio">2020-05-09</field>
+    </object>
+    <object pk="33" model="main.Presupuesto">
+        <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field>
+        <field type="CharField" name="peticion">Mascarilla</field>
+        <field type="CharField" name="descripcion">Quiero una mascarilla</field>
+        <field type="FloatField" name="precio">25.0</field>
+        <field type="CharField" name="notas">Contra el coronavirus</field>
+        <field type="DateField" name="fecha_envio">2020-09-09</field>
     </object>
 </django-objects>

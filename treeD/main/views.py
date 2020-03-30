@@ -468,24 +468,20 @@ def listar_ventas_realizadas(request):
     return render(request, 'index.html')
 
 def buscar_usuarios(request):
-    
-    if request.user.is_authenticated:
 
-        perfil_user = Perfil.objects.get(usuario=request.user)
-        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
-        query = query.exclude(impresion__isnull=True)
+        query = Perfil.objects.all().exclude(impresion__isnull=True)
 
         if request.method == "POST":
             form = BuscarUsuariosForm(request.POST)
             if form.is_valid():
                 nombre = form.cleaned_data.get("nombre")
                 query = query.filter(nombre__icontains=nombre)
+                query = query.order_by('-es_afiliado')
                 return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
         else:
             form = BuscarUsuariosForm()
+            query = query.order_by('-es_afiliado')
             return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
-    
-    return render(request, 'index.html')
 
 def detalles_compra(request, pk):
 

@@ -204,8 +204,8 @@
         </field>
     </object>
     <object pk="46" model="main.impresion">
-        <field type="CharField" name="nombre">Conejo de jueguete</field>
-        <field type="CharField" name="descripcion">Conejo de juguete imprimible en cualquier color para niños</field>
+        <field type="CharField" name="nombre">Conejo para adornar</field>
+        <field type="CharField" name="descripcion">Conejo imprimible en cualquier color para adornar</field>
         <field type="FloatField" name="precio">25.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">39</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -252,8 +252,8 @@
         </field>
     </object>
     <object pk="58" model="main.impresion">
-        <field type="CharField" name="nombre">Pistola de juguete</field>
-        <field type="CharField" name="descripcion">Pistola de juguete, se entregara no montada</field>
+        <field type="CharField" name="nombre">Réplica de una Colt 1911</field>
+        <field type="CharField" name="descripcion">Réplica de una Colt 1911 no funcional, se entregara no montada</field>
         <field type="FloatField" name="precio">26.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">40</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -263,8 +263,8 @@
         </field>
     </object>
     <object pk="59" model="main.impresion">
-        <field type="CharField" name="nombre">Ford mustang GT de juguete</field>
-        <field type="CharField" name="descripcion">Mítico Ford mustang GT para los niños</field>
+        <field type="CharField" name="nombre">Réplica de un Ford mustang GT</field>
+        <field type="CharField" name="descripcion">Replica del mítico Ford mustang GT para los niños</field>
         <field type="FloatField" name="precio">50.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">40</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -426,8 +426,8 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Ford mustang GT de juguete</field>
-        <field type="CharField" name="desc_impresion">Mítico Ford mustang GT para los niños</field>
+        <field type="CharField" name="nombre_impresion">Réplica de un Ford mustang GT</field>
+        <field type="CharField" name="desc_impresion">Replica del mítico Ford mustang GT para los niños</field>
         <field type="FloatField" name="precio_impresion">51.0</field>
         <field type="DateField" name="fecha_compra">2020-02-16</field>
     </object>

@@ -17,6 +17,13 @@
        <div class="col-lg-4 my-auto">
        <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precio_impresion}}€</p>
        <h5 class="text-center">Vendedor:</h5><p class="text-center">{{c.vendedor}}</p>
+       <h5 class="text-center">Estado:</h5><p class="text-center">    
+              {% if c.imgprueba_set.first.imagen == None %}
+                PENDIENTE
+              {% else %}
+                ENVIADO
+              {%endif%}
+        </p>
       </div>
     </div>
     <br>

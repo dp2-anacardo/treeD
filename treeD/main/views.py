@@ -300,7 +300,6 @@ def crear_usuario(request):
     except:
         return redirect('error_url')
   
-
 def crear_impresion(request):
 
     try:
@@ -311,9 +310,8 @@ def crear_impresion(request):
             files = request.FILES.getlist('imagen')
             if form_impresion.is_valid() and form_imagen.is_valid():
                 categorias = form_impresion.cleaned_data.get("categorias")
-                print(categorias)
                 if not categorias:
-                    categorias = Categoria.objects.filter(categoria='OTRAS COSAS')
+                   categorias =Categoria.objects.filter(pk=13)
                 impresion = form_impresion.save(commit=False)
                 impresion.vendedor = usuario_logueado(request)
                 impresion.save()
@@ -334,6 +332,7 @@ def crear_impresion(request):
         })
     except:
         return redirect('error_url')
+
 
 def eliminar_impresion(request, pk):
 
@@ -371,6 +370,12 @@ def editar_impresion(request, pk):
             if form_impresion.is_valid():
                 form_impresion.save()
                 return redirect('/misPublicaciones')
+            else:
+                return render(request, 'impresiones/editarImpresion.html', {
+                'formulario1': form_impresion,
+                'imagenes': imagenes_impresion,
+                'pk': pk
+            })
     except:
         return redirect('error_url')
     
@@ -514,14 +519,15 @@ def detalles_compra(request, pk):
                 vistaPaypal = True
 
                 return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador,
-                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal, 'precio':precio})
         else:
+            precio = impresion.precio + 1
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
             
         vistaPaypal = False
 
-        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal})
+        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal,'precio':precio})
 
     except:
        return redirect('error_url')
@@ -645,14 +651,15 @@ def detalles_presupuesto(request, pk):
                 vistaPaypal = True
 
                 return render(request, "presupuestos/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'presupuesto':presupuesto, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                        'presupuesto':presupuesto, 'direccion':direccion, 'vistaPaypal': vistaPaypal, 'precio':precio})
         else:
+            precio = presupuesto.precio + 1
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
             
         vistaPaypal = False
 
-        return render(request, "presupuestos/facturarCompra.html", {"form": form, "perfil": comprador, 'presupuesto':presupuesto, 'vistaPaypal': vistaPaypal})
+        return render(request, "presupuestos/facturarCompra.html", {"form": form, "perfil": comprador, 'presupuesto':presupuesto, 'vistaPaypal': vistaPaypal, 'precio':precio})
 
     except:
        return redirect('error_url')

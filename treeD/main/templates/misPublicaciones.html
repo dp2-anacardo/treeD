@@ -27,6 +27,8 @@
             </div><br>
     </div>
 </div>
-{% endfor %}
+{% empty %}
+  <h1 class="text-center display-4">No has publicado nada</h1>
+  {% endfor %}
 </div>
 {% endblock %}

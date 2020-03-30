@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="bottom-footer">
   <div class="container">
@@ -48,25 +49,20 @@
       {% for impresion in impresiones %}
       <div class="col-lg-4">
         {% if impresion.vendedor.es_afiliado %}
-        <div class="card text-white bg-dark  mx-auto" style="width: 18rem;">
+        <div id = "zoom"class="card  mx-auto" style="width: 18rem;">
 
           <div class="card-header text-center">
-            Afiliado
+            Vendedor Afiliado
+            <img class="float-left"src="{% static "tick.png" %}" height="20" width="20">
           </div>
           {% else %}
-          <div class="card border-dark mx-auto" style="width: 18rem;">
+          <div class="card mx-auto" style="width: 18rem;">
             {% endif %}
+            <a class="card-block stretched-link text-decoration-none" href="{% url 'mostrarImpresion_url' impresion.id %}"></a>
             <img class="card-img-top" src={{impresion.imgimpresion_set.all.0.imagen.url}} height="190" width="286">
             <div class="card-body">
               <h5 class="card-title text-center">{{impresion.nombre}}</h5>
               <p class="card-text text-center">{{impresion.precio}}€</p>
-              <div class="col text-center">
-                {% if impresion.vendedor.es_afiliado %}
-                <a href="{% url 'mostrarImpresion_url' impresion.id %}" class="btn btn-light m-auto">Ver</a>
-                {% else %}
-                <a href="{% url 'mostrarImpresion_url' impresion.id %}" class="btn btn-dark m-auto">Ver</a>
-                {% endif %}
-              </div>
             </div>
           </div>
           <br>

@@ -46,7 +46,7 @@ class ResponderPresupuestoForm(forms.ModelForm):
         fecha_envio = cleaned_data.get("fecha_envio")
         today = date.today()
 
-        if precio < 0:
+        if precio <= 0:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg,]})
 

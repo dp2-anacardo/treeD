@@ -205,7 +205,7 @@ class EditarPerfilTest(TestCase):
             'password': 'Usuario2',
             "check_pw": 'Usuario2',
         }, follow=True)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'registration/login.html')
         self.client.logout()
         self.client.login(username="Ipatia", password="Usuario2")
         user = User.objects.get(username="Ipatia")

@@ -143,7 +143,7 @@
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">17</field>
     </object>
-    <object pk="34" model="main.imgImpresion">
+    <object pk="56" model="main.imgImpresion">
         <field type="ImageField" name="imagen">presupuesto_default.png</field>
     </object>
     <!--COMPRAS-->

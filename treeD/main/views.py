@@ -640,7 +640,7 @@ def detalles_presupuesto(request, pk):
                     "currency_code": "EUR",
                     "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                     "return": request.build_absolute_uri(reverse('comprarPresupuesto_url' , args=[idPresupuesto, direccion.id])),
-                    "cancel_return": request.build_absolute_uri(reverse('mostrarPresupuesto_url', args=[idPresupuesto])),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarRespuesta_url', args=[idPresupuesto])),
                 }
 
                 if settings.DEBUG == False:

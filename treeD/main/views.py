@@ -688,7 +688,7 @@ def comprar_presupuesto(request, pk, direccion):
             direccion = direc
         )
         compra.save()
-        img= ImgImpresion.objects.get(pk=34)
+        img= ImgImpresion.objects.get(pk=56)
         imagen = ImgCompra(imagen=img.imagen, compra=compra)
         imagen.save()
         presupuesto.resp_interesado=True

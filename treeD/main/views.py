@@ -607,22 +607,6 @@ def rechazar_presupuesto_vendedor(request, pk):
     except:
         return redirect('error_url')
 
-#ToDo: Redirigir al formulario para añadir precio, notas y fecha de entrega
-def aceptar_presupuesto_vendedor(request, pk):
-
-    try:
-        usuario= usuario_logueado(request)
-        presupuesto= Presupuesto.objects.get(id=pk)
-        assert presupuesto.vendedor == usuario
-        assert presupuesto.resp_vendedor == None
-        assert presupuesto.resp_interesado == None
-        presupuesto.resp_vendedor=True
-        presupuesto.save()
-        #Aqui
-        return redirect('index')
-    except:
-        return redirect('error_url')
-
 def aceptar_presupuesto_interesado(request, pk):
 
     try:

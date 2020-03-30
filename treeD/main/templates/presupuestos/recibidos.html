@@ -32,7 +32,7 @@
       </div>
       <div class="col my-auto">
         <p class="text-center"><a href="{% url 'mostrarPresupuesto_url' p.id %}" class="btn btn-dark ">Ver presupuesto</a></p>
-        {% if p.resp_interesado == True %}
+        {% if p.resp_vendedor == True %}
         <p class="text-center"><a href="{% url 'mostrarRespuesta_url' p.id %}" class="btn btn-dark ">Ver respuesta</a></p>
         {% endif %}
       </div>

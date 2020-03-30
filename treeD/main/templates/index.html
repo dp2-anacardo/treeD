@@ -31,7 +31,11 @@
       <p class="lead mb-0 text-center">Vende tus impresiones 3D y saca partido a tu impresora 3D</p>
       <br>
       <div class="text-center">
-      <a href="/register/" class="btn btn-dark btn-lg">¡Regístrate Ahora!</a>
+        {% if user.is_authenticated %}
+        <a href="/misPublicaciones/" class="btn btn-dark btn-lg">¡Publica ahora!</a>
+        {% else %}
+        <a href="/register/" class="btn btn-dark btn-lg">¡Regístrate Ahora!</a>
+        {% endif %}
     </div>
     <br>
     </div>

@@ -477,7 +477,7 @@ def buscar_usuarios(request):
             form = BuscarUsuariosForm(request.POST)
             if form.is_valid():
                 nombre = form.cleaned_data.get("nombre")
-                query = query.filter(nombre__icontains=nombre)
+                query = query.filter(usuario__username__icontains=nombre)
                 query = query.order_by('-es_afiliado')
                 return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
         else:

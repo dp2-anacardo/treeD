@@ -187,7 +187,7 @@ def listar_compras_impresiones(request):
 
 def listar_impresiones(request):
 
-    #try:
+    try:
         form = BuscadorForm(request.POST)
         impresiones_no_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=False))
         impresiones_afiliados = list(Impresion.objects.all().filter(vendedor__es_afiliado=True))
@@ -198,8 +198,8 @@ def listar_impresiones(request):
             'categorias':categorias,
             'form':form
         })
-    #except:
-     #   return redirect('error_url')
+    except:
+       return redirect('error_url')
 
 def home(request):
     return render(request, 'impresiones/index.html')

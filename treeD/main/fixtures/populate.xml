@@ -193,7 +193,7 @@
     </object>
     <object pk="45" model="main.impresion">
         <field type="CharField" name="nombre">Molde muñeco articulado</field>
-        <field type="CharField" name="descripcion">Model para crear con resina un muñeco articulado</field>
+        <field type="CharField" name="descripcion">Molde para crear con resina un muñeco articulado</field>
         <field type="FloatField" name="precio">50.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">39</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
@@ -424,12 +424,57 @@
     </object>
     <object pk="74" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
-        <field to="main.perfil" name="comprador" rel="OneToOneRel">39</field>
-        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">42</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
         <field type="CharField" name="nombre_impresion">Ford mustang GT de juguete</field>
         <field type="CharField" name="desc_impresion">Mítico Ford mustang GT para los niños</field>
         <field type="FloatField" name="precio_impresion">51.0</field>
-        <field type="DateField" name="fecha_compra">2020-03-25</field>
+        <field type="DateField" name="fecha_compra">2020-02-16</field>
+    </object>
+    <object pk="75" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
+        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
+        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-16</field>
+    </object>
+    <object pk="76" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">39</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">42</field>
+        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
+        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-18</field>
+    </object>
+    <object pk="77" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
+        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
+        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-17</field>
+    </object>
+    <object pk="78" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
+        <field type="CharField" name="nombre_impresion">Set raquetas y pelota de ping pong</field>
+        <field type="CharField" name="desc_impresion">Set de raqueta y pelota para jugar el ping pong</field>
+        <field type="FloatField" name="precio_impresion">24.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-26</field>
+    </object>
+    <object pk="79" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">39</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
+        <field type="CharField" name="nombre_impresion">Molde muñeco articulado</field>
+        <field type="CharField" name="desc_impresion">Model para crear con resina un muñeco articulado</field>
+        <field type="FloatField" name="precio_impresion">51.0</field>
+        <field type="DateField" name="fecha_compra">2020-03-28</field>
     </object>
     <!--IMAGENES COMPRAS-->
     <object pk="27" model="main.imgCompra">
@@ -444,42 +489,89 @@
         <field type="ImageField" name="imagen">image4.jpg</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">25</field>
     </object>
+    <object pk="80" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image2.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">73</field>
+    </object>
+    <object pk="81" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image16.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">74</field>
+    </object>
+    <object pk="82" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image18.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">75</field>
+    </object>
+    <object pk="83" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image19.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">75</field>
+    </object>
+    <object pk="84" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image18.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">76</field>
+    </object>
+    <object pk="85" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image19.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">76</field>
+    </object>
+    <object pk="86" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image18.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">77</field>
+    </object>
+    <object pk="87" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image19.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">77</field>
+    </object>
+    <object pk="88" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image20.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">78</field>
+    </object>
+    <object pk="89" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image21.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">78</field>
+    </object>
+    <object pk="90" model="main.imgCompra">
+        <field type="ImageField" name="imagen">image5.jpg</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">79</field>
+    </object>
     <!--PRESUPUESTOS-->
     <object pk="32" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
-        <field type="CharField" name="peticion">Figurita de Goku</field>
-        <field type="CharField" name="descripcion">Figurita de Goku</field>
-        <field type="FloatField" name="precio">15.0</field>
-        <field type="CharField" name="notas">Super saiyan</field>
+        <field type="CharField" name="peticion">Figura de Goku (Dragon ball Z)</field>
+        <field type="CharField" name="descripcion">Goku super saiyan 2, que mida unos 17cm de alto</field>
+        <field type="FloatField" name="precio">200.0</field>
+        <field type="CharField" name="notas">Si es posible, medirá unos 20cm de alto y estará fabricada en PVC de alta calidad. Incluye peana para su exposición.</field>
+        <field type="DateField" name="fecha_envio">2020-03-28</field>
         <field type="BooleanField" name="resp_vendedor">True</field>
     </object>
     <object pk="33" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
-        <field type="CharField" name="peticion">Mascarilla</field>
-        <field type="CharField" name="descripcion">Mascarilla</field>
-        <field type="FloatField" name="precio">25.0</field>
-        <field type="CharField" name="notas">Contra el coronavirus</field>
+        <field type="CharField" name="peticion">FIGURA BANPRESTO ONE PIECE - MANGA ONE PIECE</field>
+        <field type="CharField" name="descripcion">BANPRESTO DEL MANGA ONE PIECE QUE MIDA UNOS 25 CM DE ALTO</field>
         <field type="BooleanField" name="resp_vendedor">False</field>
         <field type="BooleanField" name="resp_interesado">False</field>
     </object>
     <object pk="34" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">3</field> <!--IPATIA-->
-        <field type="CharField" name="peticion">Figurita de Vegetta SS2</field>
-        <field type="CharField" name="descripcion">Figurita de Vegetta SS2</field>
-        <field type="FloatField" name="precio">19.50</field>
-        <field type="CharField" name="notas">La figura cuando pelea contra Cell</field>
+        <field type="CharField" name="peticion">Figura de Vegetta Super Saiyan 2</field>
+        <field type="CharField" name="descripcion">Figura de Vegetta SS2 que mida unos 20cm</field>
     </object>
     <object pk="35" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">3</field> <!--IPATIA--> 
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">24</field> <!--AAANUEL-->
         <field type="CharField" name="peticion">Funda para Samsung Galaxy A5</field>
-        <field type="CharField" name="descripcion">Funda para Samsung Galaxy A5</field>
+        <field type="CharField" name="descripcion">Funda para Samsung Galaxy A5 que sea transparente</field>
         <field type="FloatField" name="precio">6.80</field>
-        <field type="CharField" name="notas">En concreto la del A5 2017</field>
+        <field type="CharField" name="notas">En concreto la del A5 2017 totalmente transparente</field>
         <field type="BooleanField" name="resp_vendedor">True</field>
         <field type="BooleanField" name="resp_interesado">True</field>
+    </object>
+    <object pk="91" model="main.Presupuesto">
+        <field to="main.perfil" name="interesado" rel="ManyToOneRel">39</field> <!--AAANUEL-->
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">40</field> <!--IPATIA-->
+        <field type="CharField" name="peticion">The Child aka Baby Yoda de STAR WARS</field>
+        <field type="CharField" name="descripcion">Se trata de una figura articulada hecha en PVC que mide unos 16 cm de alto.</field>
     </object>
 </django-objects>

@@ -19,6 +19,16 @@
         <p class="text-center">{{p.interesado}}</p>
       </div>
       <div class="col my-auto">
+        <h5 class="text-center">Respuesta del vendedor:</h5>
+        {% if p.resp_vendedor == True %}
+        <p class="text-center">ACEPTADO</p>
+        {% endif %}
+        {% if p.resp_vendedor == False %}
+        <p class="text-center">RECHAZADO</p>
+        {% endif %}
+        {% if p.resp_vendedor == None %}
+        <p class="text-center">PENDIENTE</p>
+        {% endif %}
         <h5 class="text-center">Respuesta del interesado:</h5>
         {% if p.resp_interesado == True %}
         <p class="text-center">ACEPTADO</p>

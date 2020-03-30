@@ -578,7 +578,7 @@ def rechazar_presupuesto_interesado(request, pk):
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
-        presupuesto.resp_vendedor = False
+        #presupuesto.resp_vendedor = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
@@ -598,7 +598,7 @@ def rechazar_presupuesto_vendedor(request, pk):
         assert perfil == presupuesto.vendedor
 
         presupuesto.resp_vendedor = False
-        presupuesto.resp_interesado = False
+        #presupuesto.resp_interesado = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)

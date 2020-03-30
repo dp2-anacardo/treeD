@@ -29,6 +29,16 @@
         {% if p.resp_vendedor == None %}
         <p class="text-center">PENDIENTE</p>
         {% endif %}
+        <h5 class="text-center">Respuesta del interesado:</h5>
+        {% if p.resp_interesado == True %}
+        <p class="text-center">ACEPTADO</p>
+        {% endif %}
+        {% if p.resp_interesado == False %}
+        <p class="text-center">RECHAZADO</p>
+        {% endif %}
+        {% if p.resp_interesado == None %}
+        <p class="text-center">PENDIENTE</p>
+        {% endif %}
       </div>
       <div class="col my-auto">
         <p class="text-center"><a href="{% url 'mostrarPresupuesto_url' p.id %}" class="btn btn-dark ">Ver presupuesto</a></p>

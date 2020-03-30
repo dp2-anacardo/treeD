@@ -26,8 +26,7 @@ def pedir_presupuesto(request, pk):
                 presupuesto.vendedor = p_vendedor
                 presupuesto.interesado = p_interesado
                 presupuesto.save()
-                #TODO: Redirijir a lista de presupuestos enviados cuando este hecho
-                return redirect("/perfil/"+str(p_interesado.id))
+                return redirect("/presupuesto/enviados")
             else:
                 return render(request, "pedirPresupuesto.html", {
                     "form": form,
@@ -109,8 +108,7 @@ def editar_pw_usuario_logueado(request):
             password = form.cleaned_data.get("password")
             usuario.set_password(password)
             usuario.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
-            return redirect("/")
+            return redirect("/login")
 
         else:
             return render(request, "editarPassword.html", {
@@ -145,7 +143,6 @@ def añadir_direccion_usuario_logueado(request):
             direc = form.cleaned_data.get("direccion")
             dp = DirecPerfil(direccion=direc, perfil=perfil)
             dp.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/mostrarDirecciones")
 
         else:
@@ -578,7 +575,6 @@ def rechazar_presupuesto_interesado(request, pk):
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
-        #presupuesto.resp_vendedor = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
@@ -598,7 +594,6 @@ def rechazar_presupuesto_vendedor(request, pk):
         assert perfil == presupuesto.vendedor
 
         presupuesto.resp_vendedor = False
-        #presupuesto.resp_interesado = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)

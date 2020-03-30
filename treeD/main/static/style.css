@@ -17,4 +17,16 @@ ul{
   list-style-type:none;
 }
 
+.carousel-item,
+.carousel-inner,
+.carousel-inner img {
+  height: 100%;
+  width: 100%;
+}
 
+.carousel-item {
+  text-align: center;
+}
+.carousel {
+  height: 400px;
+}

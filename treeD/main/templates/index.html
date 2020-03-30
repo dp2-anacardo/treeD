@@ -22,24 +22,41 @@
       </div>
   </div>
   </div>
-
-<div class="d-flex flex-row justify-content-center">
+<br>
+<div class="container">
+<div class="row ">
     <div class="col-md-4">
       <img class="index-icons" src="{% static "3d-printer.png" %}" alt="Smiley face" height="120" width="120">
       <h3 class="text-center">Impresiones 3D</h3>
       <p class="lead mb-0 text-center">Vende tus impresiones 3D y saca partido a tu impresora 3D</p>
+      <br>
+      <div class="text-center">
+      <a href="/register/" class="btn btn-dark btn-lg">¡Regístrate Ahora!</a>
+    </div>
+    <br>
     </div>
     <div class="col-md-4">
-      <img class="index-icons" src="{% static "3d.png" %}" alt="Smiley face" height="120" width="120">
-      <h3 class="text-center">Modelos 3D</h3>
-      <p class="lead mb-0 text-center">Vende tus modelos para impresiones 3D</p>
+      <img class="index-icons" src="{% static "presupuesto_default.png" %}" alt="Smiley face" height="120" width="120">
+      <h3 class="text-center">Presupuestos</h3>
+      <p class="lead mb-0 text-center">Pida piezas completamente personalizadas a los vendedores</p>
+      <br>
+      <div class="text-center">
+        <a href="/usuarios/listar/" class="btn btn-dark btn-lg">¡Busca Vendedores!</a>
+      </div>
+      <br>
     </div>
     <div class="col-md-4">
-      <img class="index-icons" src="{% static "group.png" %}" alt="Smiley face" height="120" width="120">
+      <img class="index-icons" src="{% static "affiliate.png" %}" alt="Smiley face" height="120" width="120">
       <h3 class="text-center">Afiliados</h3>
       <p class="lead mb-0 text-center">Forma parte de nuestro sistema de afliados y aumenta tus ventas</p>
+      <br>
+      <div class="text-center">
+        <a href="/hazteAfiliado/" class="btn btn-dark btn-lg">¡Hazte Afiliado!</a>
       </div>
-  </div>
-
+      <br>
+      </div>
+  
+    </div>
+</div>
 </div>
 {% endblock %}

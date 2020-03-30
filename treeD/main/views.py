@@ -9,11 +9,6 @@ from django.urls import reverse
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from main.forms import *
-from main.models import Impresion, Perfil, Compra, Categoria, ImgImpresion, ImgCompra, DirecPerfil, Presupuesto
-from datetime import date
-
 from django.contrib.auth import login, authenticate
 
 @login_required(login_url="/login/")
@@ -265,7 +260,7 @@ def crear_usuario(request):
 
     try:
         if request.user.is_authenticated == True:
-            return redirect('error_url')
+            return redirect('error_url')  
             
         if request.method == "POST":
             form_usuario = UserForm(request.POST)
@@ -550,23 +545,45 @@ def mostrar_perfil(request, pk):
     except:
         return redirect('error_url')
 
+
+def listar_presupuestos_enviados(request):
+    try:
+        perfil = usuario_logueado(request)
+
+        presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
+
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos_enviados})
+
+    except:
+        return redirect('error_url')
+
+def listar_presupuestos_recibidos(request):
+    try:
+        perfil = usuario_logueado(request)
+
+        presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
+
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos_recibidos})
+    
+    except:
+        return redirect('error_url')
+        
 def rechazar_presupuesto_interesado(request, pk):
     try:
         perfil = usuario_logueado(request)
         presupuesto = Presupuesto.objects.get(pk=pk)
 
         assert presupuesto.resp_vendedor == True
-        assert not presupuesto.resp_interesado == True
-        assert not presupuesto.resp_interesado == False
+        assert presupuesto.resp_interesado == None
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
-        presupuesto.resp_vendedor = False
+        #presupuesto.resp_vendedor = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/enviados.html', {'presupuestos':presupuestos})
     
     except:
         return redirect('error_url')
@@ -581,29 +598,13 @@ def rechazar_presupuesto_vendedor(request, pk):
         assert perfil == presupuesto.vendedor
 
         presupuesto.resp_vendedor = False
-        presupuesto.resp_interesado = False
+        #presupuesto.resp_interesado = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
 
-        return render(request, 'presupuestos/list.html', {'presupuestos':presupuestos})
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos':presupuestos})
 
-    except:
-        return redirect('error_url')
-
-#ToDo: Redirigir al formulario para añadir precio, notas y fecha de entrega
-def aceptar_presupuesto_vendedor(request, pk):
-
-    try:
-        usuario= usuario_logueado(request)
-        presupuesto= Presupuesto.objects.get(id=pk)
-        assert presupuesto.vendedor == usuario
-        assert presupuesto.resp_vendedor == None
-        assert presupuesto.resp_interesado == None
-        presupuesto.resp_vendedor=True
-        presupuesto.save()
-        #Aqui
-        return redirect('index')
     except:
         return redirect('error_url')
 
@@ -766,5 +767,15 @@ def hazte_afiliado(request):
             return render(request, 'hazteAfiliado.html',{"formAfiliado": formPago, 'perfil':perfil})
         else:
             return render(request, 'hazteAfiliado.html')
+    except:
+        return redirect('error_url')
+
+
+def ver_respuesta_presupuesto(request, pk):
+    try:
+        presupuesto = Presupuesto.objects.get(id=pk)
+        usuario = usuario_logueado(request)
+        assert presupuesto.interesado == usuario or presupuesto.vendedor == usuario
+        return render (request, 'presupuestos/mostrarRespuesta.html', {'presupuesto':presupuesto})
     except:
         return redirect('error_url')

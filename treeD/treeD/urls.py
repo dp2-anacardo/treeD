@@ -39,8 +39,10 @@ urlpatterns = [
     path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado, name="editarDirecciones_url"),
     path('añadirDireccion/', views.añadir_direccion_usuario_logueado),
     path('eliminarDireccion/<int:pk>/', views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
-    path('presupuesto/rechazar/interesado/<int:pk>', views.rechazar_presupuesto_interesado, name='rechazarPresInteresado_url'),
-    path('presupuesto/rechazar/vendedor/<int:pk>', views.rechazar_presupuesto_vendedor, name='rechazarPresVendedor_url'),
+    path('presupuesto/recibidos', views.listar_presupuestos_recibidos, name='presupuestosRecibidos_url'),
+    path('presupuesto/enviados', views.listar_presupuestos_enviados, name='presupuestosEnviados_url'),
+    path('presupuesto/rechazar/interesado/<int:pk>/', views.rechazar_presupuesto_interesado, name='rechazarPresInteresado_url'),
+    path('presupuesto/rechazar/vendedor/<int:pk>/', views.rechazar_presupuesto_vendedor, name='rechazarPresVendedor_url'),
     path('login/', LoginView.as_view(), name="login_url"),
     path('logout/', LogoutView.as_view(), name="logout_url"),
     path('register/', views.crear_usuario, name="crear_usuario_url"),
@@ -51,7 +53,6 @@ urlpatterns = [
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('impresion/detalleCompra/<int:pk>/', views.detalles_compra, name="detalleCompra_url"),
     path('presupuesto/detallePresupuesto/<int:pk>/', views.detalles_presupuesto, name="detallePresupuesto_url"),
-    path('presupuesto/aceptarPresupuestoVendedor/<int:pk>/', views.aceptar_presupuesto_vendedor, name="aceptarPresupuestoVendedor_url"),
     path('presupuesto/aceptarPresupuestoInteresado/<int:pk>/', views.aceptar_presupuesto_interesado, name="aceptarPresupuestoInteresado_url"),
     path('presupuesto/comprar/<int:pk>/<int:direccion>/', views.comprar_presupuesto, name="comprarPresupuesto_url"),
     path('presupuesto/mostrarPresupuesto/<int:pk>/', views.mostrarPresupuesto, name="mostrarPresupuesto_url"),
@@ -59,5 +60,6 @@ urlpatterns = [
     path('responderPresupuesto/<int:pk>/', views.responder_presupuesto, name="responderPresupuesto_url"),
     path('hazteAfiliado/', views.hazte_afiliado, name="hazteAfiliado_url"),
     path('usuarios/afiliarse/', views.subscribirse, name="subscripcion_url"),
+    path('presupuesto/mostrarRespuesta/<int:pk>/', views.ver_respuesta_presupuesto, name="mostrarRespuesta_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -2,28 +2,52 @@
 {% load static %}
 {% block content %}
 
-<h1 class="text-center">Presupuesto</h1>
+
+{% if presupuesto.resp_vendedor == None and user == presupuesto.vendedor.usuario%}
 <div class="bottom-footer">
-  <div class="container jumbotron">
-    <div class="row">
-      <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Titulo:</h5><p class="text-center">AQUI ESTARIA EL TITULO DEL PRESUPUESTO</p>
-       <h5 class="text-center">Precio:</h5><p class="text-center">{{presupuesto.precio}}€</p>
-      </div>
-       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Peticion:</h5><p class="text-center">{{presupuesto.peticion}}</p><br>
-       <h5 class="text-center">Notas:</h5><p class="text-center">{{presupuesto.notas}}</p>
-      </div>
-      <div class="col-lg-4 my-auto">
-        <h5 class="text-center">Interesado:</h5><p class="text-center">{{presupuesto.interesado}}</p>
-        <h5 class="text-center">Respuesta del interesado:</h5><p class="text-center">{{respuestaInteresado}}</p>
-        <br>
-        <h5 class="text-center">Vendedor:</h5><p class="text-center">{{presupuesto.vendedor}}</p>
-        <h5 class="text-center">Respuesta del vendedor:</h5><p class="text-center">{{respuestaVendedor}}</p><br>
-       </div>
-    </div>
+  <div class="container ">
+    <h2 class="display-2 text-center">Presupuesto</h2>
     <br>
+    <br>
+    <div class="jumbotron">
+    <div class="row">
+    <div class="col-lg-6">
+      <h5 class="display-4 ml-5">Título</h5><p class="lead ml-5">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 ml-5">Descripción</h5><p class="lead ml-5 ">{{presupuesto.descripcion}}</p>
+    </div>
+    
+    <div class="col-lg-6">
+      <div class="text-center">
+        <br>
+        <br>
+        <a href="{% url 'responderPresupuesto_url' presupuesto.id %}" class="btn btn-lg btn-dark ">Responder</a>
+        <br>
+        <br>
+        <a href="{% url 'rechazarPresVendedor_url' presupuesto.id %}" class="btn btn-lg btn-secondary">Rechazar</a>
+      </div>
+    </div>
+    
   </div>
 </div>
-{% endblock %}
+</div>
+</div>
 
+{% else %}
+<div class="bottom-footer">
+  <div class="container ">
+    <h2 class="display-2 text-center">Presupuesto</h2>
+    <br>
+    <br>
+    <div class="jumbotron">
+    <div class="text-center">
+      <h5 class="display-4 ">Título</h5><p class="lead">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 ">Descripción</h5><p class="lead">{{presupuesto.descripcion}}</p>
+  </div>
+</div>
+</div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

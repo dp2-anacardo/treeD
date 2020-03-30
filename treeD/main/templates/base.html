@@ -23,10 +23,10 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav">
                         <a href="/impresion/listarImpresiones" class="nav-item nav-link">Impresiones 3D</a>
-                        <a href="/hazteAfiliado" class="nav-item nav-link">Hazte Afiliado</a>
                         {% if user.is_authenticated %}
                         <a href="/usuarios/listar" class="nav-item nav-link">Vendedores</a>
                         {% endif %}
+                        <a href="/hazteAfiliado" class="nav-item nav-link">Hazte Afiliado</a>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="navbar-nav ml-auto">
@@ -36,11 +36,11 @@
                         </a>
                       
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="/editarPerfil">Editar Perfil</a>
                           <a class="dropdown-item" href="/perfil/{{user.perfil.id}}">Mi Perfil</a>
                           <a class="dropdown-item" href="/misPublicaciones/">Mis Publicaciones</a>
                           <a class="dropdown-item" href="/impresion/listarVentas">Mis Ventas</a>
                           <a class="dropdown-item" href="/impresion/listarCompras">Mis Compras</a>
+                          <a class="dropdown-item" href="/presupuesto/enviados">Mis Presupuestos</a>
                           <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                         </div>
                       </div>

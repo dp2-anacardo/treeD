@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import *
+from main.models import Impresion, Perfil, Compra, ImgImpresion, ImgCompra, ImgPrueba, Categoria, DirecPerfil, Presupuesto
 
 # Register your models here.
 admin.site.register(Impresion)

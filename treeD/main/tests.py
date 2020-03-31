@@ -1,8 +1,7 @@
 from django.test import TestCase, Client
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Compra, ImgPrueba, ImgImpresion, Impresion, Presupuesto
 from django.contrib.auth.models import User
 from pathlib import Path
-from django.urls import reverse
 import os
 
 

@@ -2,7 +2,7 @@
 """
 
 from django import forms
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from datetime import date

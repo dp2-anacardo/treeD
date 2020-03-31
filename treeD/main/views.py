@@ -502,7 +502,7 @@ def detalles_compra(request, pk):
             form = DireccionForm(request.POST)
             if form.is_valid():
                 direccionSeleccionada = form.cleaned_data.get("direccion")
-                direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
+                direccion = DirecPerfil.objects.get(id=direccionSeleccionada.id)
 
                 precio = impresion.precio + 1
                 idImpresion = str(pk)
@@ -639,7 +639,7 @@ def detalles_presupuesto(request, pk):
             form = DireccionForm(request.POST)
             if form.is_valid():
                 direccionSeleccionada = form.cleaned_data.get("direccion")
-                direccion = DirecPerfil.objects.get(direccion=direccionSeleccionada)
+                direccion = DirecPerfil.objects.get(id=direccionSeleccionada.id)
 
                 precio = presupuesto.precio + 1
                 idPresupuesto = str(pk)

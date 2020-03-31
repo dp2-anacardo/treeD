@@ -264,6 +264,7 @@ def subir_imagenes_prueba_compra(request, pk):
                     img_prueba = ImgPrueba(imagen=i, compra=compra)
                     img_prueba.save()
                 return redirect('/impresion/listarVentas')
+            return render(request, 'subirImagenesPrueba.html', {'form': form})
         else:
             form = ImagenesPruebaForm()
             return render(request, 'subirImagenesPrueba.html', {'form': form})
@@ -307,7 +308,7 @@ def crear_usuario(request):
             form_usuario = UserForm()
             form_perfil = PerfilForm()
             form_direccion = DirecPerfilForm()
-            form_imagen = ImagenForm(request.FILES)
+            form_imagen = ImagenForm()
 
         return render(request, 'registration/register.html', {
             'form_usuario': form_usuario,
@@ -345,7 +346,7 @@ def crear_impresion(request):
                 return redirect('/misPublicaciones')
         else:
             form_impresion = ImpresionForm()
-            form_imagen = CargarImagenForm(request.FILES)
+            form_imagen = CargarImagenForm()
         return render(request, 'impresiones/crearImpresion.html', {
             'formulario1': form_impresion,
             'formulario_imagen': form_imagen

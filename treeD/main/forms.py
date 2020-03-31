@@ -12,6 +12,13 @@ import re
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+def validate_file_extension(value):
+    import os
+    from django.core.exceptions import ValidationError
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.jpg', '.png', '.jpeg', '.bmp']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Los archivos deben ser imagenes .jpg, .png, .jpeg o .bmp')
 
 class PedirPresupuestoForm(forms.ModelForm):
     class Meta:
@@ -135,7 +142,8 @@ class EditarPerfilForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(
-            attrs={'multiple': False, 'class': 'form-control-file'})
+            attrs={'multiple': False, 'class': 'form-control-file'}),
+            validators=[validate_file_extension]
     )
 
     class Meta:
@@ -151,7 +159,7 @@ class EditarPerfilForm(forms.ModelForm):
     def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre')
 
-        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", nombre):
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", nombre):
             raise forms.ValidationError(
                 self.error_messages['nombre_letters'],
                 code='nombre_letters',
@@ -161,7 +169,7 @@ class EditarPerfilForm(forms.ModelForm):
     def clean_apellidos(self):
         apellidos = self.cleaned_data.get('apellidos')
 
-        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", apellidos):
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", apellidos):
             raise forms.ValidationError(
                 self.error_messages['apellidos_letters'],
                 code='apellidos_letters',
@@ -255,8 +263,9 @@ class ImpresionForm(forms.ModelForm):
         precio = cleaned_data.get("precio")
 
         if precio <= 0:
-            msg = "Precio no valido"
+            msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg, ]})
+
 
     def __init__(self, *args, **kwargs):
         super(self.__class__, self).__init__(*args, **kwargs)
@@ -266,7 +275,8 @@ class ImpresionForm(forms.ModelForm):
 class CargarImagenForm(forms.ModelForm):
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(
-            attrs={'multiple': True, 'class': 'form-control-file'})
+            attrs={'multiple': True, 'class': 'form-control-file'}),
+            validators=[validate_file_extension]
     )
 
     class Meta:
@@ -277,7 +287,8 @@ class CargarImagenForm(forms.ModelForm):
 class ImagenesPruebaForm(forms.Form):
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(
-            attrs={'multiple': False, 'class': 'form-control-file'})
+            attrs={'multiple': False, 'class': 'form-control-file'}),
+            validators=[validate_file_extension]
     )
 
 
@@ -302,8 +313,8 @@ class DireccionForm(forms.Form):
 class ImagenForm(forms.Form):
     imagen = forms.ImageField(required=False,
                               widget=forms.ClearableFileInput(
-                                  attrs={'class': 'form-control-file'})
-                              )
+                                  attrs={'class': 'form-control-file'}),
+                                  validators=[validate_file_extension])
 
 
 class PerfilForm(forms.ModelForm):
@@ -331,7 +342,7 @@ class PerfilForm(forms.ModelForm):
     def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre')
 
-        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", nombre):
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", nombre):
             raise forms.ValidationError(
                 self.error_messages['nombre_letters'],
                 code='nombre_letters',
@@ -341,7 +352,7 @@ class PerfilForm(forms.ModelForm):
     def clean_apellidos(self):
         apellidos = self.cleaned_data.get('apellidos')
 
-        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", apellidos):
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", apellidos):
             raise forms.ValidationError(
                 self.error_messages['apellidos_letters'],
                 code='apellidos_letters',

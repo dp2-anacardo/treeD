@@ -5,6 +5,15 @@
     <div class="container">
         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
             <h1 class="display-4 py-2 text-center">Pruebas de Envío</h1>
+                {% if form %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
             <p class="lead">Se recomienda subir como prueba de que el envio ha sido realizado una imagen del recibo del envío.</p>
             <form action="" method="post" enctype="multipart/form-data" id="upload-image-form">
                 {% csrf_token %}

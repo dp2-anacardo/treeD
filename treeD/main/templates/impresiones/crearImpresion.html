@@ -8,10 +8,23 @@
               <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
                   <h1 class="display-4 py-2 text-truncate">Nueva Impresión</h1>
                   {% if formulario1.errors %}
-                  <div class="alert alert-danger" role="alert">
-                    Precio no válido
-                  </div>
-                    {% endif %}
+                  {% for field in formulario1 %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
+              {% if formulario_imagen.errors %}
+                  {% for field in formulario_imagen %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
                   <div class="px-2">
                     
                     <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 

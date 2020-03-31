@@ -1,9 +1,10 @@
 from django.test import TestCase, Client
-from main.models import *
+from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
 from django.contrib.auth.models import User
 from pathlib import Path
 from django.urls import reverse
 import os
+
 
 class ImgPruebaTest(TestCase):
 
@@ -27,8 +28,9 @@ class ImgPruebaTest(TestCase):
             path = Path("./carga/imagenes/3d.png")
             os.remove(path)
 
+
 class PedirPresupuestoTest(TestCase):
-    
+
     fixtures = ["initialize.xml"]
 
     def test_pedir_presupuesto_no_logueado(self):
@@ -38,7 +40,7 @@ class PedirPresupuestoTest(TestCase):
         response = self.client.post('/pedirPresupuesto/3/', {
             'peticion': 'Quiero una figura',
             "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
-        }, follow=True )
+        }, follow=True)
         self.assertTemplateUsed(response, "registration/login.html")
 
     def test_pedir_presupuesto_get(self):
@@ -56,7 +58,7 @@ class PedirPresupuestoTest(TestCase):
         response = self.client.post('/pedirPresupuesto/24/', {
             'peticion': 'Quiero una figura',
             "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
-        }, follow=True )
+        }, follow=True)
         self.assertTemplateUsed(response, "impresiones/paginaError.html")
 
     def test_pedir_presupuesto_valido(self):
@@ -67,17 +69,18 @@ class PedirPresupuestoTest(TestCase):
         self.client.post('/pedirPresupuesto/3/', {
             'peticion': 'Quiero una figura 2',
             "descripcion": 'Quiero una figura de IQ del Rainbow Six: Siege'
-        }, follow=True )
+        }, follow=True)
         presupuesto = Presupuesto.objects.get(peticion='Quiero una figura 2')
         self.assertEqual(
             presupuesto.descripcion,
             'Quiero una figura de IQ del Rainbow Six: Siege'
         )
 
+
 class ResponderPresupuestoTest(TestCase):
-    
+
     fixtures = ["initialize.xml"]
-    
+
     def setUp(self):
         vendedor = Perfil.objects.get(pk=3)
         interesado = Perfil.objects.get(pk=24)
@@ -102,16 +105,16 @@ class ResponderPresupuestoTest(TestCase):
             'notas': 'El tamaño es de 15 cm',
             "fecha_envio": '13/9/2021',
             "precio": 12.0
-        }, follow=True )
+        }, follow=True)
         self.assertTemplateUsed(response, "registration/login.html")
-    
+
     def test_responder_presupuesto_get(self):
         """ Test donde se llama al formulario de responder presupuesto
         """
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/responderPresupuesto/4000/')
         self.assertTemplateUsed(response, "responderPresupuesto.html")
-    
+
     def test_responder_presupuesto_no_valido(self):
         """ Test donde un user logueado responde un presupuesto 
             que no le pertenece. Enviado a pagina de error
@@ -121,7 +124,7 @@ class ResponderPresupuestoTest(TestCase):
             'notas': 'El tamaño es de 15 cm',
             "fecha_envio": '13/9/2021',
             "precio": 12.0
-        }, follow=True )
+        }, follow=True)
         self.assertTemplateUsed(response, "impresiones/paginaError.html")
 
     def test_pedir_presupuesto_valido(self):
@@ -133,9 +136,10 @@ class ResponderPresupuestoTest(TestCase):
             'notas': 'El tamaño es de 15 cm',
             "fecha_envio": '13/9/2021',
             "precio": 12.0
-        }, follow=True )
+        }, follow=True)
         presupuesto = Presupuesto.objects.get(pk=4000)
         self.assertEqual(presupuesto.precio, 12.0)
+
 
 class BuscadorFormTest(TestCase):
     """ Test referentes al buscador de impresiones 3D.
@@ -154,7 +158,9 @@ class BuscadorFormTest(TestCase):
             'precio_min': 19.0,
             'precio_max': 21.0
         })
-        self.assertQuerysetEqual(response.context['impresiones'], result, transform=lambda x: x)
+        self.assertQuerysetEqual(
+            response.context['impresiones'], result, transform=lambda x: x)
+
 
 class EditarPerfilTest(TestCase):
 
@@ -189,7 +195,7 @@ class EditarPerfilTest(TestCase):
 
     def test_editar_password_no_valido(self):
         """ La contraseña no es valida, vuelve al formulario """
-        
+
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.post('/editarPassword/', {
             'password': 'Usuario2',
@@ -199,7 +205,7 @@ class EditarPerfilTest(TestCase):
 
     def test_editar_password_valido(self):
         """ La contraseña es valida, retorna al index y ahora la pass es otra """
-        
+
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.post('/editarPassword/', {
             'password': 'Usuario2',
@@ -212,17 +218,18 @@ class EditarPerfilTest(TestCase):
         self.assertTrue(user.is_authenticated)
 
     def test_mostrar_direcciones(self):
-        
+
         self.client.login(username="Ipatia", password="Usuario1")
         user = User.objects.get(username="Ipatia")
         perfil = Perfil.objects.get(usuario=user)
         response = self.client.get('/mostrarDirecciones/')
         direcciones = DirecPerfil.objects.filter(perfil=perfil)
-        self.assertQuerysetEqual(response.context['direcciones'], direcciones, transform=lambda x: x)
+        self.assertQuerysetEqual(
+            response.context['direcciones'], direcciones, transform=lambda x: x)
 
     def test_añadir_eliminar_direccion(self):
         """ Creamos una direccion, testeamos que se ha creado, la borramos y comprobamos que se ha borrado """
-        
+
         """ Añadir direccion """
         self.client.login(username="Ipatia", password="Usuario1")
         user = User.objects.get(username="Ipatia")
@@ -230,15 +237,20 @@ class EditarPerfilTest(TestCase):
         response = self.client.post('/añadirDireccion/', {
             'direccion': 'C/Anacardo, Segundo piso de pistacho, Nº234',
         }, follow=True)
-        direccion_added = DirecPerfil.objects.get(direccion='C/Anacardo, Segundo piso de pistacho, Nº234')
+        direccion_added = DirecPerfil.objects.get(
+            direccion='C/Anacardo, Segundo piso de pistacho, Nº234')
         self.assertTemplateUsed(response, 'mostrarDirecciones.html')
-        self.assertEquals(direccion_added.direccion, 'C/Anacardo, Segundo piso de pistacho, Nº234')
+        self.assertEquals(direccion_added.direccion,
+                          'C/Anacardo, Segundo piso de pistacho, Nº234')
         self.assertEquals(direccion_added.perfil, perfil)
 
         """ Eliminar direccion """
-        response = self.client.get('/eliminarDireccion/' + str(direccion_added.id) + '/')
-        direccion = list(DirecPerfil.objects.filter(direccion='C/Anacardo, Segundo piso de pistacho, Nº234'))
+        response = self.client.get(
+            '/eliminarDireccion/' + str(direccion_added.id) + '/')
+        direccion = list(DirecPerfil.objects.filter(
+            direccion='C/Anacardo, Segundo piso de pistacho, Nº234'))
         self.assertTrue(not direccion)
+
 
 class ListarImpresionesPublicadasTest(TestCase):
     """ Test referentes a listar impresiones publicadas
@@ -260,8 +272,10 @@ class ListarImpresionesPublicadasTest(TestCase):
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/misPublicaciones/')
         result = Impresion.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
-                
+        self.assertQuerysetEqual(
+            response.context['query'], result, transform=lambda x: x)
+
+
 class ListarComprasDeImpresionesTest(TestCase):
     """ Test referentes al listar las compras de las impresiones 3D.
     """
@@ -275,6 +289,7 @@ class ListarComprasDeImpresionesTest(TestCase):
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/listarCompras/')
         self.assertEqual(response.status_code, 200)
+
 
 class CRUDImpresiones3D(TestCase):
 
@@ -296,7 +311,7 @@ class CRUDImpresiones3D(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code, 200)
-    
+
     def test_eliminar_impresion_3d(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
@@ -304,6 +319,7 @@ class CRUDImpresiones3D(TestCase):
         c.get('/impresion/eliminarImpresion/18/')
         tamaño_d = len(Impresion.objects.all())
         self.assertNotEquals(tamaño_a, tamaño_d)
+
 
 class ListarImpresionesTest(TestCase):
     """ Test referentes al listar de impresiones 3D.
@@ -317,7 +333,9 @@ class ListarImpresionesTest(TestCase):
 
         response = self.client.get('/impresion/listarImpresiones/')
         self.assertEquals(len(response.context['impresiones']), len(result))
-        self.assertQuerysetEqual(response.context['impresiones'], result, transform=lambda x: x)
+        self.assertQuerysetEqual(
+            response.context['impresiones'], result, transform=lambda x: x)
+
 
 class ComprarImpresionesTest(TestCase):
 
@@ -346,9 +364,10 @@ class ComprarImpresionesTest(TestCase):
         c.login(username='AAAnuel', password='Usuario2')
         response1 = c.get('/impresion/detalleCompra/17/')
         response2 = self.client.post('/impresion/detalleCompra/17/')
-    
+
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
+
 
 class ListarVentasRealizadas(TestCase):
     """ Test referentes al listar de impresiones vendidas por un vendedor.
@@ -369,10 +388,12 @@ class ListarVentasRealizadas(TestCase):
         self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/impresion/listarVentas/')
         result = Compra.objects.filter(vendedor=3)
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        self.assertQuerysetEqual(
+            response.context['query'], result, transform=lambda x: x)
+
 
 class AdministracionUsuarios(TestCase):
-    
+
     fixtures = ["initialize.xml"]
 
     def test_buscar_usuario(self):
@@ -380,14 +401,15 @@ class AdministracionUsuarios(TestCase):
         result = Perfil.objects.filter(pk=3)
         self.client.login(username="AAAnuel", password="Usuario2")
         response = self.client.post('/usuarios/listar/', {
-            'nombre': 'Ipatia' })
+            'nombre': 'Ipatia'})
         response2 = self.client.get('/usuarios/listar/')
-        self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
+        self.assertQuerysetEqual(
+            response.context['query'], result, transform=lambda x: x)
         self.assertEqual(response2.status_code, 200)
 
     def test_listar_usuarios(self):
 
-        self.client.login(username="Ipatia", password="Usuario1") 
+        self.client.login(username="Ipatia", password="Usuario1")
         response = self.client.get('/usuarios/listar/')
         self.assertEqual(response.status_code, 200)
 
@@ -400,7 +422,8 @@ class RegistroTest(TestCase):
         c = Client()
         response = c.get('/register/')
         self.assertEqual(response.status_code, 200)
-        
+
+
 class VerPerfilTest(TestCase):
 
     fixtures = ["initialize.xml"]
@@ -417,9 +440,10 @@ class VerPerfilTest(TestCase):
         response = c.get('/perfil/0/')
         self.assertEqual(response.status_code, 302)
 
+
 class ListarPresupuestosTest(TestCase):
 
-    fixtures =["initialize.xml"]
+    fixtures = ["initialize.xml"]
 
     def test_listar_presupuestos_interesados(self):
         c = Client()
@@ -429,7 +453,8 @@ class ListarPresupuestosTest(TestCase):
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=24)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_enviados))
+        self.assertEquals(
+            len(response.context['presupuestos']), len(presupuestos_enviados))
 
     def test_listar_presupuestos_vendedores(self):
         c = Client()
@@ -439,7 +464,10 @@ class ListarPresupuestosTest(TestCase):
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=3)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEquals(len(response.context['presupuestos']), len(presupuestos_recibidos))
+        self.assertEquals(
+            len(response.context['presupuestos']), len(presupuestos_recibidos))
+
+
 class RechazarPresupuestosTest(TestCase):
 
     fixtures = ["initialize.xml"]
@@ -473,13 +501,13 @@ class RechazarPresupuestosTest(TestCase):
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/presupuesto/rechazar/interesado/35/')
         self.assertEqual(response.status_code, 302)
-    
+
     def test_rechazar_presupuesto_interesado_rechazado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/presupuesto/rechazar/interesado/33/')
         self.assertEqual(response.status_code, 302)
-    
+
     def test_rechazar_presupuesto_no_recibido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
@@ -492,6 +520,7 @@ class RechazarPresupuestosTest(TestCase):
         response = c.get('/presupuesto/rechazar/interesado/32')
         self.assertEqual(response.status_code, 301)
 
+
 class AceptarPresupuestosTest(TestCase):
 
     fixtures = ["initialize.xml"]
@@ -502,6 +531,7 @@ class AceptarPresupuestosTest(TestCase):
         response = c.get('/presupuesto/aceptarPresupuestoVendedor/32/')
         presupuesto = Presupuesto.objects.get(pk=32)
         self.assertEqual(presupuesto.resp_vendedor, True)
+
     def test_aceptar_presupuesto_interesado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
@@ -509,6 +539,7 @@ class AceptarPresupuestosTest(TestCase):
         presupuesto = Presupuesto.objects.get(pk=32)
         usuario = Perfil.objects.get(pk=24)
         self.assertEqual(presupuesto.interesado, usuario)
+
     def test_aceptar_presupuesto_interesado_invalido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
@@ -516,6 +547,7 @@ class AceptarPresupuestosTest(TestCase):
         presupuesto = Presupuesto.objects.get(pk=32)
         usuario = Perfil.objects.get(pk=3)
         self.assertNotEqual(presupuesto.interesado, usuario)
+
     def test_factura_pago_presupuesto(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
@@ -523,21 +555,26 @@ class AceptarPresupuestosTest(TestCase):
         response2 = self.client.post('/impresion/detalleCompra/32/')
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 302)
+
     def test_factura_pago_presupuesto_invalido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response1 = c.get('/presupuesto/detallePresupuesto/32/')
         self.assertEqual(response1.status_code, 302)
+
     def test_comprar_presupuesto_interesado(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/presupuesto/comprar/32/31/')
         self.assertEqual(response.status_code, 200)
+
     def test_comprar_presupuesto_vendedor(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/comprar/32/31/')
         self.assertEqual(response.status_code, 302)
+
+
 class VerPresupuestoTest(TestCase):
 
     fixtures = ["initialize.xml"]
@@ -547,11 +584,14 @@ class VerPresupuestoTest(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/mostrarPresupuesto/32/')
         self.assertEqual(response.status_code, 200)
+
     def test_ver_presupuesto_invalido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/mostrarPresupuesto/0/')
         self.assertEqual(response.status_code, 302)
+
+
 class Subscripciones(TestCase):
 
     fixtures = ["initialize.xml"]

@@ -46,7 +46,7 @@ class ResponderPresupuestoForm(forms.ModelForm):
         fecha_envio = cleaned_data.get("fecha_envio")
         today = date.today()
 
-        if precio < 0:
+        if precio <= 0:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg,]})
 
@@ -110,9 +110,15 @@ class EditarPasswordForm(forms.Form):
             raise ValidationError({'password': [msg,]})
 
 class EditarPerfilForm(forms.ModelForm):
+
+    error_messages = {
+        'nombre_letters': ("El nombre solo puede contener letras y símbolos"),
+        'apellidos_letters': ("Los apellidos solo pueden contener letras y símbolos"),
+    }
+
     nombre = forms.CharField(label="Nombre",widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Nombre'}))
     apellidos = forms.CharField(label="Apellidos",widget = forms.TextInput(attrs={'class': 'form-control','placeholder':'Apellidos'}))
-    email = forms.CharField(label="Email",widget = forms.TextInput(attrs={'class': 'form-control','placeholder':'email'}))
+    email = forms.CharField(label="Email",widget = forms.EmailInput(attrs={'class': 'form-control','placeholder':'email'}))
     descripcion = forms.CharField(label="Descripción", required=False,widget=forms.Textarea(attrs={'class': 'form-control','placeholder':'Descripcion','rows':4}))
     imagen = forms.ImageField(
         widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'form-control-file'})
@@ -127,6 +133,26 @@ class EditarPerfilForm(forms.ModelForm):
             "imagen",
             "email",
         )
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", nombre):
+            raise forms.ValidationError(
+                self.error_messages['nombre_letters'],
+                code='nombre_letters',
+            )
+        return nombre
+    
+    def clean_apellidos(self):
+        apellidos = self.cleaned_data.get('apellidos')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", apellidos):
+            raise forms.ValidationError(
+                self.error_messages['apellidos_letters'],
+                code='apellidos_letters',
+            )
+        return apellidos
 
     def __init__(self, *args, **kwargs):
         super(EditarPerfilForm, self).__init__(*args, **kwargs)        
@@ -246,6 +272,10 @@ class ImagenForm(forms.Form):
     )
 
 class PerfilForm(forms.ModelForm):
+    error_messages = {
+        'nombre_letters': ("El nombre solo puede contener letras y símbolos"),
+        'apellidos_letters': ("Los apellidos solo pueden contener letras y símbolos"),
+    }
     class Meta:
         model = Perfil
         fields = {
@@ -262,6 +292,27 @@ class PerfilForm(forms.ModelForm):
                 attrs={'class':'form-control', 'placeholder':'Descripción', 'rows':4}),
         }
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", nombre):
+            raise forms.ValidationError(
+                self.error_messages['nombre_letters'],
+                code='nombre_letters',
+            )
+        return nombre
+    
+    def clean_apellidos(self):
+        apellidos = self.cleaned_data.get('apellidos')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1]*$", apellidos):
+            raise forms.ValidationError(
+                self.error_messages['apellidos_letters'],
+                code='apellidos_letters',
+            )
+        return apellidos
+
+
 class DirecPerfilForm(forms.ModelForm):
     class Meta:
         model = DirecPerfil
@@ -276,7 +327,7 @@ class UserForm(forms.ModelForm):
 
     error_messages = {
         'password_mismatch': ("Las contraseñas no coinciden"),
-        "username_exists": ("Ya existe ese nombre de usuario"),
+        'username_exists': ("Ya existe ese nombre de usuario"),
         'password_short': ("La contraseña debe tener al menos 8 caracteres"),
         'password_letters': ("La contraseña solo puede contener letras y números"),
         'password_capital': ("La contraseña debe tener al menos una mayúscula"),

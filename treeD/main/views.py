@@ -26,8 +26,7 @@ def pedir_presupuesto(request, pk):
                 presupuesto.vendedor = p_vendedor
                 presupuesto.interesado = p_interesado
                 presupuesto.save()
-                #TODO: Redirijir a lista de presupuestos enviados cuando este hecho
-                return redirect("/perfil/"+str(p_interesado.id))
+                return redirect("/presupuesto/enviados")
             else:
                 return render(request, "pedirPresupuesto.html", {
                     "form": form,
@@ -109,8 +108,7 @@ def editar_pw_usuario_logueado(request):
             password = form.cleaned_data.get("password")
             usuario.set_password(password)
             usuario.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
-            return redirect("/")
+            return redirect("/login")
 
         else:
             return render(request, "editarPassword.html", {
@@ -145,7 +143,6 @@ def añadir_direccion_usuario_logueado(request):
             direc = form.cleaned_data.get("direccion")
             dp = DirecPerfil(direccion=direc, perfil=perfil)
             dp.save()
-            #TODO: Redirigir a show de perfil cuando este hecho
             return redirect("/mostrarDirecciones")
 
         else:
@@ -179,6 +176,7 @@ def usuario_logueado(request):
 def error(request):
     return render(request, 'impresiones/paginaError.html')
 
+@login_required(login_url="/login/")
 def listar_compras_impresiones(request):
 
     try:
@@ -202,7 +200,7 @@ def listar_impresiones(request):
             'form':form
         })
     except:
-        return redirect('error_url')
+       return redirect('error_url')
 
 def home(request):
     return render(request, 'impresiones/index.html')
@@ -302,8 +300,8 @@ def crear_usuario(request):
             })
     except:
         return redirect('error_url')
-  
 
+@login_required(login_url="/login/")
 def crear_impresion(request):
 
     try:
@@ -314,9 +312,8 @@ def crear_impresion(request):
             files = request.FILES.getlist('imagen')
             if form_impresion.is_valid() and form_imagen.is_valid():
                 categorias = form_impresion.cleaned_data.get("categorias")
-                print(categorias)
                 if not categorias:
-                    categorias = Categoria.objects.filter(categoria='OTRAS COSAS')
+                   categorias =Categoria.objects.filter(pk=13)
                 impresion = form_impresion.save(commit=False)
                 impresion.vendedor = usuario_logueado(request)
                 impresion.save()
@@ -338,6 +335,8 @@ def crear_impresion(request):
     except:
         return redirect('error_url')
 
+
+@login_required(login_url="/login/")
 def eliminar_impresion(request, pk):
 
     try:
@@ -353,6 +352,7 @@ def eliminar_impresion(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def editar_impresion(request, pk):
 
     try:
@@ -374,6 +374,12 @@ def editar_impresion(request, pk):
             if form_impresion.is_valid():
                 form_impresion.save()
                 return redirect('/misPublicaciones')
+            else:
+                return render(request, 'impresiones/editarImpresion.html', {
+                'formulario1': form_impresion,
+                'imagenes': imagenes_impresion,
+                'pk': pk
+            })
     except:
         return redirect('error_url')
     
@@ -381,6 +387,7 @@ def index(request):
     form = BuscadorForm(request.POST)
     return render(request, 'index.html', {'form': form})
 
+@login_required(login_url="/login/")
 def listar_impresiones_publicadas(request):
     """
     Funcion que lista las impresiones publicadas por un vendedor
@@ -458,6 +465,7 @@ def buscador_impresiones_3d(request):
 
     return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
 
+@login_required(login_url="/login/")
 def listar_ventas_realizadas(request):
    
     if request.user.is_authenticated:
@@ -468,24 +476,20 @@ def listar_ventas_realizadas(request):
     return render(request, 'index.html')
 
 def buscar_usuarios(request):
-    
-    if request.user.is_authenticated:
 
-        perfil_user = Perfil.objects.get(usuario=request.user)
-        query = Perfil.objects.all().exclude(nombre = perfil_user.nombre)
-        query = query.exclude(impresion__isnull=True)
+        query = Perfil.objects.all().exclude(impresion__isnull=True)
 
         if request.method == "POST":
             form = BuscarUsuariosForm(request.POST)
             if form.is_valid():
                 nombre = form.cleaned_data.get("nombre")
-                query = query.filter(nombre__icontains=nombre)
+                query = query.filter(usuario__username__icontains=nombre)
+                query = query.order_by('-es_afiliado')
                 return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
         else:
             form = BuscarUsuariosForm()
+            query = query.order_by('-es_afiliado')
             return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
-    
-    return render(request, 'index.html')
 
 def detalles_compra(request, pk):
 
@@ -521,14 +525,15 @@ def detalles_compra(request, pk):
                 vistaPaypal = True
 
                 return render(request, "impresiones/facturarCompra.html", {"formPago": formPago, "perfil": comprador,
-                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                        'impresion':impresion,'direccion':direccion, 'vistaPaypal': vistaPaypal, 'precio':precio})
         else:
+            precio = impresion.precio + 1
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
             
         vistaPaypal = False
 
-        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal})
+        return render(request, "impresiones/facturarCompra.html", {"form": form, "perfil": comprador, 'impresion':impresion, 'vistaPaypal': vistaPaypal,'precio':precio})
 
     except:
        return redirect('error_url')
@@ -546,6 +551,7 @@ def mostrar_perfil(request, pk):
         return redirect('error_url')
 
 
+@login_required(login_url="/login/")
 def listar_presupuestos_enviados(request):
     try:
         perfil = usuario_logueado(request)
@@ -557,6 +563,7 @@ def listar_presupuestos_enviados(request):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def listar_presupuestos_recibidos(request):
     try:
         perfil = usuario_logueado(request)
@@ -568,6 +575,7 @@ def listar_presupuestos_recibidos(request):
     except:
         return redirect('error_url')
         
+@login_required(login_url="/login/")
 def rechazar_presupuesto_interesado(request, pk):
     try:
         perfil = usuario_logueado(request)
@@ -578,7 +586,6 @@ def rechazar_presupuesto_interesado(request, pk):
         assert perfil == presupuesto.interesado
 
         presupuesto.resp_interesado = False
-        #presupuesto.resp_vendedor = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(interesado=perfil)
@@ -588,6 +595,7 @@ def rechazar_presupuesto_interesado(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def rechazar_presupuesto_vendedor(request, pk):
     try:
         perfil = usuario_logueado(request)
@@ -598,7 +606,6 @@ def rechazar_presupuesto_vendedor(request, pk):
         assert perfil == presupuesto.vendedor
 
         presupuesto.resp_vendedor = False
-        #presupuesto.resp_interesado = False
         presupuesto.save()
 
         presupuestos = Presupuesto.objects.all().filter(vendedor=perfil)
@@ -608,6 +615,7 @@ def rechazar_presupuesto_vendedor(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def aceptar_presupuesto_interesado(request, pk):
 
     try:
@@ -643,7 +651,7 @@ def detalles_presupuesto(request, pk):
                     "currency_code": "EUR",
                     "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
                     "return": request.build_absolute_uri(reverse('comprarPresupuesto_url' , args=[idPresupuesto, direccion.id])),
-                    "cancel_return": request.build_absolute_uri(reverse('mostrarPresupuesto_url', args=[idPresupuesto])),
+                    "cancel_return": request.build_absolute_uri(reverse('mostrarRespuesta_url', args=[idPresupuesto])),
                 }
 
                 if settings.DEBUG == False:
@@ -654,14 +662,15 @@ def detalles_presupuesto(request, pk):
                 vistaPaypal = True
 
                 return render(request, "presupuestos/facturarCompra.html", {"formPago": formPago, "perfil": comprador, 
-                        'presupuesto':presupuesto, 'direccion':direccion, 'vistaPaypal': vistaPaypal})
+                        'presupuesto':presupuesto, 'direccion':direccion, 'vistaPaypal': vistaPaypal, 'precio':precio})
         else:
+            precio = presupuesto.precio + 1
             form = DireccionForm()
             form.fields['direccion'].queryset = DirecPerfil.objects.filter(perfil=comprador)
             
         vistaPaypal = False
 
-        return render(request, "presupuestos/facturarCompra.html", {"form": form, "perfil": comprador, 'presupuesto':presupuesto, 'vistaPaypal': vistaPaypal})
+        return render(request, "presupuestos/facturarCompra.html", {"form": form, "perfil": comprador, 'presupuesto':presupuesto, 'vistaPaypal': vistaPaypal, 'precio':precio})
 
     except:
        return redirect('error_url')
@@ -688,7 +697,7 @@ def comprar_presupuesto(request, pk, direccion):
             direccion = direc
         )
         compra.save()
-        img= ImgImpresion.objects.get(pk=34)
+        img= ImgImpresion.objects.get(pk=56)
         imagen = ImgCompra(imagen=img.imagen, compra=compra)
         imagen.save()
         presupuesto.resp_interesado=True
@@ -699,6 +708,8 @@ def comprar_presupuesto(request, pk, direccion):
         
     except:
         return redirect('error_url')
+
+@login_required(login_url="/login/")
 def mostrarPresupuesto(request, pk):
 
     try:
@@ -770,7 +781,7 @@ def hazte_afiliado(request):
     except:
         return redirect('error_url')
 
-
+@login_required(login_url="/login/")
 def ver_respuesta_presupuesto(request, pk):
     try:
         presupuesto = Presupuesto.objects.get(id=pk)

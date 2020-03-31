@@ -176,6 +176,7 @@ def usuario_logueado(request):
 def error(request):
     return render(request, 'impresiones/paginaError.html')
 
+@login_required(login_url="/login/")
 def listar_compras_impresiones(request):
 
     try:
@@ -299,7 +300,8 @@ def crear_usuario(request):
             })
     except:
         return redirect('error_url')
-  
+
+@login_required(login_url="/login/")
 def crear_impresion(request):
 
     try:
@@ -334,6 +336,7 @@ def crear_impresion(request):
         return redirect('error_url')
 
 
+@login_required(login_url="/login/")
 def eliminar_impresion(request, pk):
 
     try:
@@ -349,6 +352,7 @@ def eliminar_impresion(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def editar_impresion(request, pk):
 
     try:
@@ -383,6 +387,7 @@ def index(request):
     form = BuscadorForm(request.POST)
     return render(request, 'index.html', {'form': form})
 
+@login_required(login_url="/login/")
 def listar_impresiones_publicadas(request):
     """
     Funcion que lista las impresiones publicadas por un vendedor
@@ -460,6 +465,7 @@ def buscador_impresiones_3d(request):
 
     return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
 
+@login_required(login_url="/login/")
 def listar_ventas_realizadas(request):
    
     if request.user.is_authenticated:
@@ -545,6 +551,7 @@ def mostrar_perfil(request, pk):
         return redirect('error_url')
 
 
+@login_required(login_url="/login/")
 def listar_presupuestos_enviados(request):
     try:
         perfil = usuario_logueado(request)
@@ -556,6 +563,7 @@ def listar_presupuestos_enviados(request):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def listar_presupuestos_recibidos(request):
     try:
         perfil = usuario_logueado(request)
@@ -567,6 +575,7 @@ def listar_presupuestos_recibidos(request):
     except:
         return redirect('error_url')
         
+@login_required(login_url="/login/")
 def rechazar_presupuesto_interesado(request, pk):
     try:
         perfil = usuario_logueado(request)
@@ -586,6 +595,7 @@ def rechazar_presupuesto_interesado(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def rechazar_presupuesto_vendedor(request, pk):
     try:
         perfil = usuario_logueado(request)
@@ -605,6 +615,7 @@ def rechazar_presupuesto_vendedor(request, pk):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
 def aceptar_presupuesto_interesado(request, pk):
 
     try:
@@ -697,6 +708,8 @@ def comprar_presupuesto(request, pk, direccion):
         
     except:
         return redirect('error_url')
+
+@login_required(login_url="/login/")
 def mostrarPresupuesto(request, pk):
 
     try:
@@ -768,7 +781,7 @@ def hazte_afiliado(request):
     except:
         return redirect('error_url')
 
-
+@login_required(login_url="/login/")
 def ver_respuesta_presupuesto(request, pk):
     try:
         presupuesto = Presupuesto.objects.get(id=pk)

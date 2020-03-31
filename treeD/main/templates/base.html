@@ -23,8 +23,10 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav">
                         <a href="/impresion/listarImpresiones" class="nav-item nav-link">Impresiones 3D</a>
-                        <a href="#" class="nav-item nav-link">Modelos 3D</a>
-                        <a href="#" class="nav-item nav-link">Vendedores</a>
+                        
+                        <a href="/usuarios/listar" class="nav-item nav-link">Vendedores</a>
+                       
+                        <a href="/hazteAfiliado" class="nav-item nav-link">Hazte Afiliado</a>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="navbar-nav ml-auto">
@@ -34,17 +36,18 @@
                         </a>
                       
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="#">Editar Perfil</a>
+                          <a class="dropdown-item" href="/perfil/{{user.perfil.id}}">Mi Perfil</a>
                           <a class="dropdown-item" href="/misPublicaciones/">Mis Publicaciones</a>
                           <a class="dropdown-item" href="/impresion/listarVentas">Mis Ventas</a>
                           <a class="dropdown-item" href="/impresion/listarCompras">Mis Compras</a>
+                          <a class="dropdown-item" href="/presupuesto/enviados">Mis Presupuestos</a>
                           <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                         </div>
                       </div>
                   </div>
                     {% else %}
                     <div class="navbar-nav ml-auto">
-                        <a href="#" class="nav-item nav-link">Registro</a>
+                        <a href="/register" class="nav-item nav-link">Registro</a>
                         <a href="/login" class="nav-item nav-link" >Login</a>
                     </div>
                     {% endif %}
@@ -57,7 +60,7 @@
             <div class="container-fluid py-3">
               <div class="d-flex justify-content-around">
                 <div class="col-lg-4 ">
-                  <a href="#" class="text-light text-lg-left"> Sobre nosotros</a>
+                  <a href="https://treedispp.wixsite.com/treed" class="text-light text-lg-left"> Sobre nosotros</a>
                 </div>
             <div class="col-lg-4 text-light text-lg-center" >© 2020 Copyright: TreeD
             </div>

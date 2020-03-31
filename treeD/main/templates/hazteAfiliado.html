@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="bottom-footer">
+    <div class="container">
+        
+        
+        <h1 class="text-center">Hazte Afiliado</h1>
+        <br>
+        <br>
+        
+        <div class="row">
+                <div class="col">
+                    <img class="index-icons" src="{% static "affiliate.png" %}"  height="200" width="200">
+                </div>
+                <div class="col">
+                    <br>
+                    <br>
+                    <h3 class="text-center">Mayor visibilidad</h3>
+                    <p class=" lead text-center"> Con nuestro sistema de afiliados podrá llegar a un mayor número de personas. Por 10€ al mes contará con una mayor visibilidad en la web.</p>
+                </div>
+                <div class="w-100"></div>
+
+                <div class="col">
+                    <br>
+                    <br>
+                    <br>
+                    <h3 class="text-center">Mayor beneficio</h3>
+                    <p class=" lead text-center"> Una mayor visibilidad en la web aumentará las probabilidades de aumentar considerablemente sus beneficios. Esta ventaja se renovará automáticamente al final de cada mes y podrá cancelarse en cualquier momento.</p>
+                </div>
+
+                <div class="col">
+                    <br>
+                    <br>
+                    <br>
+                    <img class="index-icons" src="{% static "cost.png" %}"  height="200" width="200">
+                </div>
+
+            
+               
+
+        </div>
+        
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        {% if user.is_authenticated and perfil.es_afiliado == False %}
+        <div class="text-center">
+            <div class="text-center">{{formAfiliado.render}}</div> <br> <br> <br>
+        </div>
+        {% elif user.is_authenticated and perfil.es_afiliado == True %}
+        <div class="text-center">
+            <a href="/" class="btn btn-dark m-auto">YA ESTAS AFILIADO</a> <br> <br> <br>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <a href="/register" class="btn btn-dark m-auto">Afíliate</a><br> <br> <br>
+            
+        </div>
+        {%endif%}
+    </div>
+</div>
+
+{% endblock %}

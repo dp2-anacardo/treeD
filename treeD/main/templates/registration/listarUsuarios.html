@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+<div class="container">
+<form action="" method="post">
+  {% csrf_token %}
+  <div class="form-inline justify-content-center">
+    {{form.nombre}}
+    <div class="btn-toolbar">
+    <button type="submit" class="btn btn-dark mr-2">Buscar</button>
+  </div>
+  </div>
+</form>
+</div>
+<br>
+{% for c in query %}
+<div class="container jumbotron">
+  <div class="row">
+    <div class="col my-auto text-center">
+      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >      
+    </div>
+    <div class="col">
+      <br>
+     <h5 class="text-center">Usuario:</h5><p class="text-center">{{c.usuario}}</p>
+     <h5 class="text-center">Descripción:</h5><p class="text-center">{{c.descripcion}}</p>
+    </div>
+    <div class="col  text-center">
+      <br>
+      <br>
+      <br>
+      <a href="{% url 'mostrarPerfil_url' c.id %}" class="btn btn-dark m-auto">Ver perfil</a>
+    </div>
+  </div>
+  <br>
+</div>
+    {% empty %}
+    <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
+</div>
+{% endfor %}
+{% endblock %}

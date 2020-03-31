@@ -8,19 +8,25 @@
   <div class="container jumbotron">
     <div class="row">
       <div class="col-lg-4 my-auto text-center">
-        <img src={{v.imagenes.all.0.imagen.url}} height="190" width="286" >
+        <img src={{v.imgcompra_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark">
       </div>
       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Nombre de la impresión:</h5><p class="text-center">{{v.nombreImpresion}}</p>
-       <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{v.fechaDeCompra}}</p>
+       <h5 class="text-center">Nombre de la impresión:</h5><p class="text-center">{{v.nombre_impresion}}</p>
+       <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{v.fecha_compra}}</p>
+       {% if v.imgprueba_set.all.0 == None %}
+       <div class="text-center">
+       <a href="{% url 'subirImagenesPrueba_url' v.id %}" class="btn btn-dark ">Subir Pruebas de Envío</a></div>
+       {% endif %}
       </div>
        <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Precio:</h5><p class="text-center">{{v.precioImpresion}}€</p>
+       <h5 class="text-center">Precio:</h5><p class="text-center">{{v.precio_impresion}}€</p>
        <h5 class="text-center">Comprador:</h5><p class="text-center">{{v.comprador}}</p>
       </div>
     </div>
     <br>
   </div>
+  {% empty %}
+  <h1 class="text-center display-4">No has realizado ninguna venta</h1>
   {% endfor %}
 </div>
 {% endblock %}

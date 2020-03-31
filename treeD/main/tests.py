@@ -251,7 +251,7 @@ class ListarImpresionesPublicadasTest(TestCase):
             index.html
         """
         response = self.client.get('/misPublicaciones/')
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertRedirects(response, '/login/?next=/misPublicaciones/')
 
     def test_listar_impresiones_publicadas_usuario(self):
         """ Testea que devuelve las impresiones publicadas
@@ -360,7 +360,7 @@ class ListarVentasRealizadas(TestCase):
             index.html
         """
         response = self.client.get('/impresion/listarVentas/')
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertRedirects(response, '/login/?next=/impresion/listarVentas/')
 
     def test_listar_ventas_realizadas_vendedor(self):
         """ Testea que devuelve las impresiones vendidas
@@ -380,7 +380,7 @@ class AdministracionUsuarios(TestCase):
         result = Perfil.objects.filter(pk=3)
         self.client.login(username="AAAnuel", password="Usuario2")
         response = self.client.post('/usuarios/listar/', {
-            'nombre': 'Álvaro' })
+            'nombre': 'Ipatia' })
         response2 = self.client.get('/usuarios/listar/')
         self.assertQuerysetEqual(response.context['query'], result, transform=lambda x: x)
         self.assertEqual(response2.status_code, 200)

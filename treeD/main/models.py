@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from usuarios.models import Perfil,DirecPerfil
 
 class ImgPrueba(models.Model):
     imagen = models.ImageField(upload_to='', verbose_name='Imagen')
@@ -31,15 +31,7 @@ class ImgImpresion(models.Model):
     class Meta:
         ordering = ('pk',)
 
-class DirecPerfil(models.Model):
-    direccion = models.TextField(verbose_name='Dirección')
-    perfil = models.ForeignKey('Perfil', on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
-        return self.direccion
-
-    class Meta:
-        ordering = ('pk',)
 
 class Categoria(models.Model):
     nombre = models.TextField(verbose_name='Nombre')
@@ -54,7 +46,7 @@ class Impresion(models.Model):
     nombre = models.TextField(verbose_name='Nombre')
     descripcion = models.TextField(verbose_name='Descripción')
     precio = models.FloatField(verbose_name='Precio')
-    vendedor = models.ForeignKey('Perfil', on_delete=models.CASCADE, null=True)
+    vendedor = models.ForeignKey('usuarios.Perfil', on_delete=models.CASCADE, null=True)
     categorias = models.ManyToManyField('Categoria')
     
     def __str__(self):
@@ -63,20 +55,7 @@ class Impresion(models.Model):
     class Meta:
         ordering = ('pk', )
 
-class Perfil(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
-    nombre = models.TextField(verbose_name='Nombre')
-    apellidos = models.TextField(verbose_name='Apellidos')
-    descripcion = models.TextField(verbose_name='Descripción', blank=True)
-    email = models.EmailField(verbose_name='Email')
-    imagen = models.ImageField(upload_to='', verbose_name='Imagen', default='default.png')
-    es_afiliado = models.BooleanField(verbose_name='Afiliado?')
-    
-    def __str__(self):
-        return self.usuario.username
-    
-    class Meta:
-        ordering = ('pk', )
+
 
 class Compra(models.Model):
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null=True)
@@ -84,7 +63,7 @@ class Compra(models.Model):
     nombre_impresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
     desc_impresion = models.TextField(verbose_name='Descripción de la impresión', blank=True)
     precio_impresion = models.FloatField(verbose_name='Precio de la impresión', null=True)
-    direccion = models.ForeignKey('DirecPerfil', on_delete=models.SET_NULL, null=True)
+    direccion = models.ForeignKey('usuarios.DirecPerfil', on_delete=models.SET_NULL, null=True)
     fecha_compra = models.DateField(verbose_name="Fecha de compra")
 
     def __str__(self):

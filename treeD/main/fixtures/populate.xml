@@ -52,7 +52,7 @@
         <field type="IntegerField" name="is_staff">0</field>
     </object>
     <!--PERFILES-->
-    <object pk="3" model="main.perfil">
+    <object pk="3" model="usuarios.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">2</field>
         <field type="CharField" name="nombre">Álvaro</field>
         <field type="CharField" name="apellidos">Díaz</field>
@@ -61,7 +61,7 @@
         <field type="ImageField" name="imagen">perfil1.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
-    <object pk="24" model="main.perfil">
+    <object pk="24" model="usuarios.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">23</field>
         <field type="CharField" name="nombre">Luis</field>
         <field type="CharField" name="apellidos">Cienfuegos</field>
@@ -70,7 +70,7 @@
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
-    <object pk="39" model="main.perfil">
+    <object pk="39" model="usuarios.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">36</field>
         <field type="CharField" name="nombre">Alejandro</field>
         <field type="CharField" name="apellidos">Jiminez</field>
@@ -79,7 +79,7 @@
         <field type="ImageField" name="imagen">perfil3.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
-    <object pk="40" model="main.perfil">
+    <object pk="40" model="usuarios.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">37</field>
         <field type="CharField" name="nombre">Jesus</field>
         <field type="CharField" name="apellidos">Martin</field>
@@ -88,7 +88,7 @@
         <field type="ImageField" name="imagen">perfil4.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
-    <object pk="41" model="main.perfil">
+    <object pk="41" model="usuarios.perfil">
         <field to="auth.user" name="usuario" rel="OneToOneRel">38</field>
         <field type="CharField" name="nombre">Antonio</field>
         <field type="CharField" name="apellidos">Cuesta</field>
@@ -98,23 +98,23 @@
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
     <!--DIREC PERFIL-->
-    <object pk="30" model="main.direcPerfil">
+    <object pk="30" model="usuarios.direcPerfil">
         <field type="CharField" name="direccion">Villanueva del Rey, C/Avenida de los ilustrados Nº5, 41409</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
     </object>
-    <object pk="31" model="main.direcPerfil">
+    <object pk="31" model="usuarios.direcPerfil">
         <field type="CharField" name="direccion">Benalmadena, C/Anacardo Nº2, 29639</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
     </object>
-    <object pk="42" model="main.direcPerfil">
+    <object pk="42" model="usuarios.direcPerfil">
         <field type="CharField" name="direccion">Sevilla, C/Betis Nº16, 41010</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">39</field>
     </object>
-    <object pk="43" model="main.direcPerfil">
+    <object pk="43" model="usuarios.direcPerfil">
         <field type="CharField" name="direccion">Madrid, C/Cervantes Nº12, 28231</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">40</field>
     </object>
-    <object pk="44" model="main.direcPerfil">
+    <object pk="44" model="usuarios.direcPerfil">
         <field type="CharField" name="direccion">Cordoba, C/Cruz conde Nº24, 14008</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">41</field>
     </object>

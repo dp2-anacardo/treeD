@@ -18,10 +18,23 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
-from main import views
+from main import views as views
+from usuarios import views as usuarios_views
 from django.conf.urls import include
 
+
 urlpatterns = [
+    #Usuarios
+    path('editarPerfil/', usuarios_views.editar_usuario_logueado, name="editarPerfil_url"),
+    path('editarPassword/', usuarios_views.editar_pw_usuario_logueado, name="editarPassword_url"),
+    path('mostrarDirecciones/', usuarios_views.mostrar_direcciones_usuario_logueado, name="editarDirecciones_url"),
+    path('añadirDireccion/', usuarios_views.añadir_direccion_usuario_logueado),
+    path('eliminarDireccion/<int:pk>/', usuarios_views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
+    path('login/', LoginView.as_view(), name="login_url"),
+    path('logout/', LogoutView.as_view(), name="logout_url"),
+    path('register/', usuarios_views.crear_usuario, name="crear_usuario_url"),
+    path('perfil/<int:pk>/', usuarios_views.mostrar_perfil, name="mostrarPerfil_url"),
+
     path('admin/', admin.site.urls),
     path('list/', views.buscador_impresiones_3d),
     path('impresion/comprar/<int:pk>/<int:direccion>/', views.comprar_impresion_3d, name="comprarImpresion_url"),
@@ -34,19 +47,11 @@ urlpatterns = [
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),
     path('compra/subirImagenes/<int:pk>/', views.subir_imagenes_prueba_compra, name="subirImagenesPrueba_url"),
     path('paginaError/', views.error, name="error_url"),
-    path('editarPerfil/', views.editar_usuario_logueado, name="editarPerfil_url"),
-    path('editarPassword/', views.editar_pw_usuario_logueado, name="editarPassword_url"),
-    path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado, name="editarDirecciones_url"),
-    path('añadirDireccion/', views.añadir_direccion_usuario_logueado),
-    path('eliminarDireccion/<int:pk>/', views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
+    
     path('presupuesto/recibidos', views.listar_presupuestos_recibidos, name='presupuestosRecibidos_url'),
     path('presupuesto/enviados', views.listar_presupuestos_enviados, name='presupuestosEnviados_url'),
     path('presupuesto/rechazar/interesado/<int:pk>/', views.rechazar_presupuesto_interesado, name='rechazarPresInteresado_url'),
     path('presupuesto/rechazar/vendedor/<int:pk>/', views.rechazar_presupuesto_vendedor, name='rechazarPresVendedor_url'),
-    path('login/', LoginView.as_view(), name="login_url"),
-    path('logout/', LogoutView.as_view(), name="logout_url"),
-    path('register/', views.crear_usuario, name="crear_usuario_url"),
-    path('perfil/<int:pk>/', views.mostrar_perfil, name="mostrarPerfil_url"),
     path('impresion/listarImpresiones/', views.listar_impresiones, name="listarImpresiones_url"),
     path('impresion/listarCompras/', views.listar_compras_impresiones, name="listarComprasRealizas_url"),
     path('usuarios/listar/', views.buscar_usuarios, name="listarPerfiles_url"),

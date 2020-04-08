@@ -31,4 +31,21 @@
   <h1 class="text-center display-4">No has publicado nada</h1>
   {% endfor %}
 </div>
+<div class="pagination">
+    <span class="step-links">
+        {% if query.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ query.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ query.number }} of {{ query.paginator.num_pages }}.
+        </span>
+
+        {% if query.has_next %}
+            <a href="?page={{ query.next_page_number }}">next</a>
+            <a href="?page={{ query.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

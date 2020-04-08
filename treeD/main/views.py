@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
 from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
+from django.core.paginator import Paginator
 
 
 @login_required(login_url="/login/")
@@ -192,7 +193,10 @@ def listar_compras_impresiones(request):
     try:
         usuario = usuario_logueado(request)
         compras = list(Compra.objects.all().filter(comprador=usuario))
-        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'impresiones/listarCompras.html', {'compras': page_obj})
     except:
         return redirect('error_url')
 
@@ -411,13 +415,14 @@ def index(request):
 
 @login_required(login_url="/login/")
 def listar_impresiones_publicadas(request):
-    """
-    Funcion que lista las impresiones publicadas por un vendedor
-    """
+    
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Impresion.objects.filter(vendedor=perfil_user)
-        return render(request, "misPublicaciones.html", {"query": query})
+        paginator=Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "misPublicaciones.html", {"query": page_obj})
 
     return render(request, 'index.html')
 
@@ -495,8 +500,10 @@ def listar_ventas_realizadas(request):
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
-        return render(request, "impresiones/listarVentas.html", {"query": query})
-
+        paginator = Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "impresiones/listarVentas.html", {"query": page_obj})
     return render(request, 'index.html')
 
 
@@ -573,9 +580,11 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
+        paginator = Paginator(impresiones, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': impresiones})
-
+                                               'impresiones': page_obj})
     except:
         return redirect('error_url')
 
@@ -584,10 +593,11 @@ def mostrar_perfil(request, pk):
 def listar_presupuestos_enviados(request):
     try:
         perfil = usuario_logueado(request)
-
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
-
-        return render(request, 'presupuestos/enviados.html', {'presupuestos': presupuestos_enviados})
+        paginator = Paginator(presupuestos_enviados, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'presupuestos/enviados.html', {'presupuestos': page_obj})
 
     except:
         return redirect('error_url')
@@ -597,11 +607,11 @@ def listar_presupuestos_enviados(request):
 def listar_presupuestos_recibidos(request):
     try:
         perfil = usuario_logueado(request)
-
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
-
-        return render(request, 'presupuestos/recibidos.html', {'presupuestos': presupuestos_recibidos})
-
+        paginator = Paginator(presupuestos_recibidos, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos': page_obj})
     except:
         return redirect('error_url')
 

@@ -447,7 +447,7 @@ class ListarPresupuestosTest(TestCase):
     def test_listar_presupuestos_interesados(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/enviados')
+        response = c.get('/presupuesto/enviados/')
 
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=24)
 
@@ -458,7 +458,7 @@ class ListarPresupuestosTest(TestCase):
     def test_listar_presupuestos_vendedores(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/recibidos')
+        response = c.get('/presupuesto/recibidos/')
 
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=3)
 

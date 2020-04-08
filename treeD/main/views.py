@@ -210,9 +210,12 @@ def listar_impresiones(request):
         impresiones_afiliados = list(
             Impresion.objects.all().filter(vendedor__es_afiliado=True))
         impresiones_afiliados.extend(impresiones_no_afiliados)
+        paginator = Paginator(impresiones_afiliados, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {
-            'impresiones': impresiones_afiliados,
+            'impresiones': page_obj,
             'categorias': categorias,
             'form': form
         })
@@ -467,6 +470,7 @@ def comprar_impresion_3d(request, pk, direccion):
 def buscador_impresiones_3d(request):
 
     query = Impresion.objects.all()
+    
 
     if request.method == "POST":
         form = BuscadorForm(request.POST)
@@ -487,11 +491,17 @@ def buscador_impresiones_3d(request):
                 query = query.filter(precio__lte=precio_max)
 
             query = query.order_by('-vendedor__es_afiliado')
+            paginator = Paginator(query, 6)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
 
     else:
+        paginator = Paginator(query, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         form = BuscadorForm()
 
-    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
+    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": page_obj})
 
 
 @login_required(login_url="/login/")
@@ -517,11 +527,17 @@ def buscar_usuarios(request):
             nombre = form.cleaned_data.get("nombre")
             query = query.filter(usuario__username__icontains=nombre)
             query = query.order_by('-es_afiliado')
-            return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+            paginator = Paginator(query, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
     else:
         form = BuscarUsuariosForm()
         query = query.order_by('-es_afiliado')
-        return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+        paginator = Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
 
 
 def detalles_compra(request, pk):
@@ -614,7 +630,6 @@ def listar_presupuestos_recibidos(request):
         return render(request, 'presupuestos/recibidos.html', {'presupuestos': page_obj})
     except:
         return redirect('error_url')
-
 
 @login_required(login_url="/login/")
 def rechazar_presupuesto_interesado(request, pk):

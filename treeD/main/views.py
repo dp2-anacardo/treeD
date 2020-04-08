@@ -862,7 +862,6 @@ def estadisticas_venta(request):
             numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre_impresion=i.nombre).count()
             compras.append(numeroCompras)
         diccionario = dict(zip(misImpresiones,compras))
-        #Aqui estan todas las impresiones mas vendidas, aqui hay que tocar para sacar el top 5
         top = sorted(diccionario.items(), key=operator.itemgetter(1), reverse=True)
 
         return render(request, 'registration/estadisticasVenta.html',{'VentasTotales':num_ventas_totales,

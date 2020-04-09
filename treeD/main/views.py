@@ -191,10 +191,11 @@ def listar_compras_impresiones(request):
 
     try:
         usuario = usuario_logueado(request)
-        compras = list(Compra.objects.all().filter(comprador=usuario))
+        compras = Compra.objects.all().filter(comprador=usuario)
+        compras = compras.order_by('-fecha_compra')
         return render(request, 'impresiones/listarCompras.html', {'compras': compras})
     except:
-        return redirect('error_url')
+       return redirect('error_url')
 
 
 def listar_impresiones(request):
@@ -495,6 +496,7 @@ def listar_ventas_realizadas(request):
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
+        query = query.order_by('-fecha_compra')
         return render(request, "impresiones/listarVentas.html", {"query": query})
 
     return render(request, 'index.html')

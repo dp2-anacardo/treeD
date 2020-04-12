@@ -7,9 +7,51 @@ from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
+from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm
 
+def ver_opiniones(request, pk):
+    try:
+        vendedor = Perfil.objects.get(pk=pk)
+        opiniones = Opinion.objects.filter(compra__vendedor=vendedor)
+
+        return render(request, "opiniones/listOpinionesVendedor.html", {
+            "pk": pk,
+            "opiniones": opiniones
+        })
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def crear_opinion(request, pk):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        puntuador = Perfil.objects.get(usuario=user)
+        compra = Compra.objects.get(pk=pk)
+        opinion = Opinion.objects.filter(puntuador=puntuador, compra=compra)
+        assert not opinion
+
+        if request.method == "POST":
+            form = CrearOpinionForm(data=request.POST)
+            if form.is_valid():
+                opinion = form.save(commit=False)
+                opinion.puntuador = puntuador
+                opinion.compra = compra
+                opinion.save()
+                return redirect("impresion/listarCompras/")
+            else:
+                return render(request, "opiniones/crearOpinion.html", {
+                    "form": form,
+                    "pk": pk
+                })
+        else:
+            form = CrearOpinionForm()
+            return render(request, "opiniones/crearOpinion.html", {
+                    "form": form,
+                    "pk": pk
+                })
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def pedir_presupuesto(request, pk):

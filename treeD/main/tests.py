@@ -1,9 +1,45 @@
 from django.test import TestCase, Client
-from main.models import Perfil, DirecPerfil, Compra, ImgPrueba, ImgImpresion, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Compra, ImgPrueba, ImgImpresion, Impresion, Presupuesto, Opinion
 from django.contrib.auth.models import User
 from pathlib import Path
 import os
 
+class OpinionTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_opiniones(self):
+        response = self.client.get('/opinion/listarOpiniones/3/')
+        opiniones = Opinion.objects.filter(compra__vendedor__pk=3)
+        self.assertQuerysetEqual(
+            response.context['opiniones'],
+            opiniones, transform=lambda x: x
+        )
+
+    def test_crear_opinion_no_valido(self):
+        """ Test donde un usuario intenta crear
+            una opinion en una compra donde ya
+            opino. Redirijido a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.get("/opinion/crearOpinion/25/", follow=True)
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_crear_opinion_valido(self):
+        """ Test donde un usuario intenta crear
+            una opinion en una compra.
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        self.client.post("/opinion/crearOpinion/26/", {
+            "nota": 3,
+            "opinion": "La impresion esta mal hecha, pero el trato ha sido bueno"
+        }, follow=True)
+        opinion = Opinion.objects.get(compra__pk=26, puntuador__pk=24)
+        self.assertEquals(opinion.nota, 3)
+        self.assertEquals(
+            opinion.opinion,
+            "La impresion esta mal hecha, pero el trato ha sido bueno"
+        )
 
 class ImgPruebaTest(TestCase):
 

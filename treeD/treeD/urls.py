@@ -29,6 +29,8 @@ urlpatterns = [
     path('misPublicaciones/', views.listar_impresiones_publicadas),
     path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
     path('impresion/mostrarImpresion/<int:pk>/', views.mostrar_impresion, name="mostrarImpresion_url"),
+    path('opinion/crearOpinion/<int:pk>/', views.crear_opinion, name="crearOpinion_url"),
+    path('opinion/listarOpiniones/<int:pk>/', views.ver_opiniones, name="verOpiniones_url"),
     path('impresion/crearImpresion/', views.crear_impresion, name="crearImpresion_url"),
     path('impresion/eliminarImpresion/<int:pk>/', views.eliminar_impresion, name="eliminarImpresion_url"),
     path('impresion/editarImpresion/<int:pk>/', views.editar_impresion, name="editarImpresion_url"),

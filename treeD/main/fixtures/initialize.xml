@@ -216,4 +216,11 @@
         <field type="BooleanField" name="resp_vendedor">True</field>
         <field type="BooleanField" name="resp_interesado">True</field>
     </object>
+    <!--PUNTUACIONES-->
+    <object pk="36" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">25</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">24</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">4</field>
+        <field type="CharField" name="opinion">Me ha gustado el producto, pero podria haber llegado un dia antes</field>
+    </object>
 </django-objects>

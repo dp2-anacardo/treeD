@@ -32,11 +32,15 @@ class ImgImpresion(models.Model):
         ordering = ('pk',)
 
 class DirecPerfil(models.Model):
-    direccion = models.TextField(verbose_name='Dirección')
+    ciudad = models.TextField(verbose_name='Ciudad')
+    localidad = models.TextField(verbose_name='Localidad')
+    calle = models.TextField(verbose_name='Calle o avenida')
+    numero = models.TextField(verbose_name='número')
+    codigo_postal = models.TextField(verbose_name='Código postal')
     perfil = models.ForeignKey('Perfil', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.direccion
+        return self.ciudad + ', ' +self.localidad + ', ' +self.calle + ' ' +  self.numero
 
     class Meta:
         ordering = ('pk',)

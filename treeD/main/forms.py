@@ -183,8 +183,16 @@ class EditarPerfilForm(forms.ModelForm):
 
 
 class AñadirDirecPerfilForm(forms.Form):
-    direccion = forms.CharField(label="Direccion principal", widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}))
+    ciudad = forms.CharField(label="Ciudad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    localidad = forms.CharField(label="Localidad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    calle = forms.CharField(label="Calle o avenida", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}))
+    numero = forms.CharField(label="Portal y número", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}))
+    codigo_postal = forms.CharField(label="Código postal", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': '41008'}))
 
 
 class BuscadorForm(forms.Form):
@@ -364,10 +372,19 @@ class DirecPerfilForm(forms.ModelForm):
     class Meta:
         model = DirecPerfil
         fields = {
-            'direccion',
+            'ciudad',
+            'localidad',
+            'calle',
+            'numero',
+            'codigo_postal',
         }
         widgets = {
-            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'localidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'calle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '41008'}),
+
         }
 
 

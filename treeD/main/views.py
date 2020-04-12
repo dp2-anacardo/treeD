@@ -147,8 +147,13 @@ def añadir_direccion_usuario_logueado(request):
     if request.method == "POST":
         form = AñadirDirecPerfilForm(request.POST)
         if form.is_valid():
-            direc = form.cleaned_data.get("direccion")
-            dp = DirecPerfil(direccion=direc, perfil=perfil)
+            ciudad = form.cleaned_data.get("ciudad")
+            localidad = form.cleaned_data.get("localidad")
+            calle = form.cleaned_data.get("calle")
+            numero = form.cleaned_data.get("numero")
+            codigo_postal = form.cleaned_data.get("codigo_postal")
+            dp = DirecPerfil(ciudad=ciudad, localidad=localidad, calle=calle, numero=numero,
+            codigo_postal=codigo_postal, perfil=perfil)
             dp.save()
             return redirect("/mostrarDirecciones")
 

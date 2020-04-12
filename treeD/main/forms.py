@@ -369,6 +369,10 @@ class PerfilForm(forms.ModelForm):
 
 
 class DirecPerfilForm(forms.ModelForm):
+    error_messages = {
+        'codigo_postal_error': ("El código postal debe tener 5 números"),
+    }
+    
     class Meta:
         model = DirecPerfil
         fields = {
@@ -386,6 +390,16 @@ class DirecPerfilForm(forms.ModelForm):
             'codigo_postal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '41008'}),
 
         }
+    
+    def clean_codigo_postal(self):
+        codigo_postal = self.cleaned_data.get('codigo_postal')
+
+        if not re.match("^[0-9]{5}$", codigo_postal):
+            raise forms.ValidationError(
+                self.error_messages['codigo_postal_error'],
+                code='codigo_postal_error',
+            )
+        return codigo_postal
 
 
 class UserForm(forms.ModelForm):

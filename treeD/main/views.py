@@ -839,7 +839,7 @@ def ver_respuesta_presupuesto(request, pk):
 
 def estadisticas_venta(request):
 
-    #try:
+    try:
         usuario = usuario_logueado(request)
         assert usuario.es_afiliado == True
 
@@ -880,5 +880,5 @@ def estadisticas_venta(request):
                     'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
                     'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
                     'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
-    #except:
-     #   return redirect('error_url')
+    except:
+        return redirect('error_url')

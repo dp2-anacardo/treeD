@@ -3,12 +3,15 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.urls import reverse
-from datetime import date
+from datetime import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
 from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
+import operator
+
+
 
 
 @login_required(login_url="/login/")
@@ -443,7 +446,8 @@ def comprar_impresion_3d(request, pk, direccion):
             desc_impresion=impresion.descripcion,
             precio_impresion=impresion.precio,
             fecha_compra=fecha_actual,
-            direccion=direc
+            direccion=direc,
+            pagado=False
         )
         compra.save()
 
@@ -731,7 +735,8 @@ def comprar_presupuesto(request, pk, direccion):
             desc_impresion=presupuesto.descripcion,
             precio_impresion=presupuesto.precio,
             fecha_compra=fecha_actual,
-            direccion=direc
+            direccion=direc,
+            pagado=False
         )
         compra.save()
         img = ImgImpresion.objects.get(pk=56)
@@ -829,5 +834,51 @@ def ver_respuesta_presupuesto(request, pk):
         usuario = usuario_logueado(request)
         assert presupuesto.interesado == usuario or presupuesto.vendedor == usuario
         return render(request, 'presupuestos/mostrarRespuesta.html', {'presupuesto': presupuesto})
+    except:
+        return redirect('error_url')
+
+def estadisticas_venta(request):
+
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+
+        num_ventas_totales=Compra.objects.filter(vendedor=usuario).count()
+        mes = datetime.now().month
+        num_ventas_mensuales=Compra.objects.filter(vendedor=usuario).filter(fecha_compra__month = mes).count()
+        productos= Compra.objects.filter(vendedor=usuario).filter(pagado=True)
+        num_ganancias_totales=0
+        for c in productos:
+            num_ganancias_totales = num_ganancias_totales + (c.precio_impresion - (0.1*c.precio_impresion))
+        productosMensuales= Compra.objects.filter(vendedor=usuario).filter(pagado=True).filter(fecha_compra__month = mes)
+        num_ganancias_mensuales=0
+        for c in productosMensuales:
+            num_ganancias_mensuales = num_ganancias_mensuales + (c.precio_impresion - (0.1*c.precio_impresion))
+        productosPendientesPago=Compra.objects.filter(vendedor=usuario).filter(pagado=False)
+        num_ganancias_pendientes=0
+        for c in productosPendientesPago:
+            num_ganancias_pendientes=num_ganancias_pendientes + (c.precio_impresion - (0.1*c.precio_impresion))
+        misImpresiones= Impresion.objects.filter(vendedor=usuario)
+        compras=[]
+        nombres = []
+        
+        for i in misImpresiones:
+            numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre_impresion=i.nombre).count()
+            compras.append(numeroCompras)
+        
+        diccionario = dict(zip(misImpresiones,compras))
+        top = sorted(diccionario.items(), key=operator.itemgetter(1), reverse=True)
+        
+        compras2=[]
+        for par in top:
+            if len(nombres) == 5:
+                break
+            nombres.append(par[0].nombre)
+            compras2.append(par[1])
+    
+        return render(request, 'registration/estadisticasVenta.html',{'VentasTotales':num_ventas_totales,
+                    'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
+                    'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
+                    'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
     except:
         return redirect('error_url')

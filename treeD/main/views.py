@@ -12,6 +12,8 @@ from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPr
 import operator
 
 
+
+
 @login_required(login_url="/login/")
 def pedir_presupuesto(request, pk):
     try:
@@ -837,7 +839,7 @@ def ver_respuesta_presupuesto(request, pk):
 
 def estadisticas_venta(request):
 
-    try:
+    #try:
         usuario = usuario_logueado(request)
         assert usuario.es_afiliado == True
 
@@ -858,15 +860,25 @@ def estadisticas_venta(request):
             num_ganancias_pendientes=num_ganancias_pendientes + (c.precio_impresion - (0.1*c.precio_impresion))
         misImpresiones= Impresion.objects.filter(vendedor=usuario)
         compras=[]
+        nombres = []
+        
         for i in misImpresiones:
             numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre_impresion=i.nombre).count()
             compras.append(numeroCompras)
+        
         diccionario = dict(zip(misImpresiones,compras))
         top = sorted(diccionario.items(), key=operator.itemgetter(1), reverse=True)
-
+        
+        compras2=[]
+        for par in top:
+            if len(nombres) == 5:
+                break
+            nombres.append(par[0].nombre)
+            compras2.append(par[1])
+    
         return render(request, 'registration/estadisticasVenta.html',{'VentasTotales':num_ventas_totales,
                     'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
                     'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
-                    'GananciasPendientes':num_ganancias_pendientes, 'diccionario':top})
-    except:
-        return redirect('error_url')
+                    'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
+    #except:
+     #   return redirect('error_url')

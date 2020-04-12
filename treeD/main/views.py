@@ -288,7 +288,7 @@ def crear_usuario(request):
             form_perfil = PerfilForm(request.POST)
             form_imagen = ImagenForm(request.POST, request.FILES)
             form_direccion = DirecPerfilForm(request.POST)
-            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid:
+            if form_direccion.is_valid() and form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid():
 
                 usuario = form_usuario.save()
                 perfil = form_perfil.save(commit=False)

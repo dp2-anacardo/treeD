@@ -37,6 +37,9 @@
                       
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                           <a class="dropdown-item" href="/perfil/{{user.perfil.id}}">Mi Perfil</a>
+                          {% if user.perfil.es_afiliado %}
+                          <a class="dropdown-item" href="/usuarios/estadisticas">Mis Estadísticas</a>
+                          {% endif %}
                           <a class="dropdown-item" href="/misPublicaciones/">Mis Publicaciones</a>
                           <a class="dropdown-item" href="/impresion/listarVentas">Mis Ventas</a>
                           <a class="dropdown-item" href="/impresion/listarCompras">Mis Compras</a>

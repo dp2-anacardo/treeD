@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+  <div class="container">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!--
+    Numero de ventas totales: {{VentasTotales}}<br>
+    Numero de ventas mensuales: {{VentasMensuales}}<br>
+    Ganancias totales: {{GananciasTotales}} €<br>
+    Ganancias mensuales: {{GananciasMensuales}} €<br>
+    Productos pendientes de pago: {{ProductosPendientesPago}}<br>
+    Ganancias pendientes: {{GananciasPendientes}} € <br>
+    Top 5 impresiones más vendidas: {{diccionario}}
+    -->
+
+    <div class="display-3 text-center">Mis estadísticas</div>
+    <br>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title text-center display-4">{{VentasTotales}}</h5>
+            <p class="card-text text-center">Impresiones vendidas</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title text-center display-4">{{VentasMensuales}}</h5>
+            <p class="card-text text-center">Ventas este mes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <div class="card-body">
+            <h4 class="card-title text-center display-4">{{GananciasTotales}} €</h4>
+            <p class="card-text text-center">Ganancias totales</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title text-center display-4">{{GananciasMensuales}}</h5>
+            <p class="card-text text-center">Ganancias este mes</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title text-center display-4">{{GananciasPendientes}}€</h5>
+            <p class="card-text text-center">Ganancias pendientes</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+      <br>
+      <div class="display-3 text-center">Impresiones más vendidas</div>
+      <br>
+      <canvas id="myChart" width="200"></canvas>
+      <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        datos = "{{numeroCompras}}";
+        datos = datos.substr(1).slice(0, -1); //Elimino los corchetes ya que reconoce la lista como string
+        array1 = datos.split(",").map(Number); //Separo por comas y convierto cada string a Number
+        coloR = []
+        colores = ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"]
+
+        etiquetas = "{{misImpresiones|safe}}";
+        etiquetas = etiquetas.substr(1).slice(0, -1);//Elimino los corchetes ya que reconoce la lista como string
+        array2 = etiquetas.split(',');
+        etiquetas2 = []
+        //Para cada impresion calculo un color y elimino '' del nombre
+        for (var i in array2) {
+          var limpio = array2[i].trim().substr(1).slice(0, -1);
+          etiquetas2.push(limpio);
+          coloR.push(colores[i]);
+        }
+
+        var myPieChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              
+              data: array1,
+              backgroundColor: coloR,
+
+               borderColor: 'rgba(200, 200, 200, 0.75)',
+               //hoverBackgroundColor: 'rgba(200, 200, 200, 1)',
+               hoverBorderColor: 'rgba(200, 200, 200, 1)',
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: etiquetas2,
+            
+            
+          },
+          options:{aspectRatio:4,maintaiAspectRatio:false,responsive:true}
+        });
+      </script>
+    
+
+
+  </div>
+</div>
+{% endblock %}

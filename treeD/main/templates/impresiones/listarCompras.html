@@ -5,7 +5,7 @@
 
 <h1 class="text-center">Mis Compras</h1>
 <div class="bottom-footer">
-  {% for c in compras %}
+  {% for c,o in compras.items %}
   <div class="container jumbotron">
     <div class="row">
       <div class="col-lg-4 my-auto text-center">
@@ -14,7 +14,11 @@
       <div class="col-lg-4 my-auto">
        <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.id}}</p>
        <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{c.fecha_compra}}</p>
-       <h5 class="text-center">BASURA:</h5><p class="text-center">{{c.opinion.opinion}}</p>
+       {% if o %}
+       <h5 class="text-center">Opinion:</h5><p class="text-center">{{o.0.opinion}}</p>
+       {% else %}
+       <h5 class="text-center">Opinion:</h5><p class="text-center">No tiene opiniones</p>
+       {% endif %}
       </div>
        <div class="col-lg-4 my-auto">
        <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precio_impresion}}€</p>
@@ -37,15 +41,15 @@
 
 <div class="container text-center">
   <ul class="pagination">
-    {% if compras.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{compras.previous_page_number }}">Previous</a></li>
+    {% if compra.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{compra.previous_page_number }}">Previous</a></li>
     {%else %}  
       <li class="page-item disabled">
         <span class="page-link">Previous</span>
       </li>
     {% endif %}
-    {% for num in compras.paginator.page_range %}
-    {% ifequal num compras.number %}
+    {% for num in compra.paginator.page_range %}
+    {% ifequal num compra.number %}
       <li class="page-item active">
         <span class="page-link">
           {{ num }}
@@ -56,9 +60,9 @@
       <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
     {% endifequal %} 
   {% endfor %}
-    {% if compras.has_next %}
+    {% if compra.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?page={{compras.next_page_number }}">Next</a>
+        <a class="page-link" href="?page={{compra.next_page_number }}">Next</a>
       </li>
     {%else%}
     <li class="page-item disabled">

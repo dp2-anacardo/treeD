@@ -134,7 +134,7 @@ class Opinion(models.Model):
     opinion = models.TextField(verbose_name='Opinion')
 
     def __str__(self):
-        return self.nota
+        return str(self.nota)
     
     class Meta:
         ordering = ('pk', )

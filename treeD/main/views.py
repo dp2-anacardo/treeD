@@ -236,11 +236,16 @@ def listar_compras_impresiones(request):
 
     try:
         usuario = usuario_logueado(request)
+        opiniones=[]
         compras = list(Compra.objects.all().filter(comprador=usuario))
+        for c in compras:
+            opinion= Opinion.objects.all().filter(compra=c)
+            opiniones.append(opinion)
+        diccionario = dict(zip(compras,opiniones))
         paginator = Paginator(compras, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        return render(request, 'impresiones/listarCompras.html', {'compras': page_obj})
+        return render(request, 'impresiones/listarCompras.html', {'compras': diccionario, 'compra':page_obj})
     except:
         return redirect('error_url')
 
@@ -642,18 +647,16 @@ def mostrar_perfil(request, pk):
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
         opiniones = Opinion.objects.filter(compra__vendedor=perfil)
-
-        return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': impresiones, 'opiniones': opiniones})
-
         paginator = Paginator(impresiones, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        paginator1 = Paginator(opiniones, 5)
+        page_number1 = request.GET.get('page')
+        page_obj1 = paginator.get_page(page_number1)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': page_obj, 'opiniones': opiniones})
+                                               'impresiones': page_obj, 'opiniones': page_obj1})
     except:
         return redirect('error_url')
-
 
 @login_required(login_url="/login/")
 def listar_presupuestos_enviados(request):

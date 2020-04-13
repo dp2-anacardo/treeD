@@ -183,11 +183,32 @@ class EditarPerfilForm(forms.ModelForm):
 
 
 class AñadirDirecPerfilForm(forms.Form):
-    direccion = forms.CharField(label="Direccion principal", widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}))
+    error_messages = {
+        'codigo_postal_error': ("El codigo postal debe tener 5 números"),
+    }
+    ciudad = forms.CharField(label="Ciudad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    localidad = forms.CharField(label="Localidad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    calle = forms.CharField(label="Calle o avenida", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}))
+    numero = forms.CharField(label="Portal y número", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}))
+    codigo_postal = forms.CharField(label="Código postal", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': '41008'}))
+
+    def clean_codigo_postal(self):
+        codigo_postal = self.cleaned_data.get('codigo_postal')
+
+        if not re.match("^[0-9]{5}$", codigo_postal):
+            raise forms.ValidationError(
+                self.error_messages['codigo_postal_error'],
+                code='codigo_postal_error',
+            )
+        return codigo_postal
 
 class GDPRForm(forms.Form):
-    checkbox = forms.ChoiceField(label="", required=True, widget=forms.CheckboxInput())
+    checkbox = forms.BooleanField(label="", required=True, widget=forms.CheckboxInput())
 
 class BuscadorForm(forms.Form):
 
@@ -363,14 +384,37 @@ class PerfilForm(forms.ModelForm):
 
 
 class DirecPerfilForm(forms.ModelForm):
+    error_messages = {
+        'codigo_postal_error': ("El código postal debe tener 5 números"),
+    }
+    
     class Meta:
         model = DirecPerfil
         fields = {
-            'direccion',
+            'ciudad',
+            'localidad',
+            'calle',
+            'numero',
+            'codigo_postal',
         }
         widgets = {
-            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'localidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'calle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '41008'}),
+
         }
+    
+    def clean_codigo_postal(self):
+        codigo_postal = self.cleaned_data.get('codigo_postal')
+
+        if not re.match("^[0-9]{5}$", codigo_postal):
+            raise forms.ValidationError(
+                self.error_messages['codigo_postal_error'],
+                code='codigo_postal_error',
+            )
+        return codigo_postal
 
 
 class UserForm(forms.ModelForm):

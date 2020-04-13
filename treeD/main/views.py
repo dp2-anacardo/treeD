@@ -147,17 +147,25 @@ def mostrar_direcciones_usuario_logueado(request):
 def añadir_direccion_usuario_logueado(request):
     usuario = User.objects.get(pk=request.user.id)
     perfil = Perfil.objects.get(usuario=usuario)
+    direcciones = DirecPerfil.objects.filter(perfil=perfil)
 
     if request.method == "POST":
         form = AñadirDirecPerfilForm(request.POST)
         if form.is_valid():
-            direc = form.cleaned_data.get("direccion")
-            dp = DirecPerfil(direccion=direc, perfil=perfil)
+            ciudad = form.cleaned_data.get("ciudad")
+            localidad = form.cleaned_data.get("localidad")
+            calle = form.cleaned_data.get("calle")
+            numero = form.cleaned_data.get("numero")
+            codigo_postal = form.cleaned_data.get("codigo_postal")
+            dp = DirecPerfil(ciudad=ciudad, localidad=localidad, calle=calle, numero=numero,
+            codigo_postal=codigo_postal, perfil=perfil)
             dp.save()
             return redirect("/mostrarDirecciones")
 
         else:
-            return redirect("/mostrarDirecciones")
+            return render(request, "mostrarDirecciones.html", {
+                "direcciones": direcciones,
+                "form": form})
 
     else:
         return redirect("/mostrarDirecciones")
@@ -285,7 +293,7 @@ def subir_imagenes_prueba_compra(request, pk):
 
 def crear_usuario(request):
 
-    try:
+    #try:
         if request.user.is_authenticated == True:
             return redirect('error_url')
 
@@ -295,7 +303,7 @@ def crear_usuario(request):
             form_imagen = ImagenForm(request.POST, request.FILES)
             form_direccion = DirecPerfilForm(request.POST)
             form_gdpr = GDPRForm(request.POST)
-            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid and form_gdpr:
+            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid() and form_gdpr.is_valid():
 
                 usuario = form_usuario.save()
                 perfil = form_perfil.save(commit=False)
@@ -330,8 +338,8 @@ def crear_usuario(request):
             'form_imagen': form_imagen,
             'form_gdpr': form_gdpr
         })
-    except:
-        return redirect('error_url')
+    #except:
+        #return redirect('error_url')
 
 
 @login_required(login_url="/login/")

@@ -195,13 +195,14 @@ def listar_compras_impresiones(request):
 
     try:
         usuario = usuario_logueado(request)
-        compras = list(Compra.objects.all().filter(comprador=usuario))
+        compras = Compra.objects.all().filter(comprador=usuario)
+        compras = compras.order_by('-fecha_compra')
         paginator = Paginator(compras, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/listarCompras.html', {'compras': page_obj})
     except:
-        return redirect('error_url')
+       return redirect('error_url')
 
 
 def listar_impresiones(request):
@@ -517,6 +518,7 @@ def listar_ventas_realizadas(request):
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
+        query = query.order_by('-fecha_compra')
         paginator = Paginator(query, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)

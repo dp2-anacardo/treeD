@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
 from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
 import operator
+from django.core.paginator import Paginator
 
 
 
@@ -880,5 +881,60 @@ def estadisticas_venta(request):
                     'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
                     'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
                     'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def compras_administrador(request):
+
+    try:
+        assert request.user.is_superuser == True
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'registration/compras.html',{'compras':page_obj})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pago_compra_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        precio= compra.precio_impresion - (compra.precio_impresion * 0.1)
+        paypal_dict = {
+            "business": compra.vendedor.email,
+            "amount": str(precio),
+            "item_name": compra.nombre_impresion,
+            "currency_code": "EUR",
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return": request.build_absolute_uri(reverse('realizarPago_url', args=[compra.id])),
+            "cancel_return": request.build_absolute_uri(reverse('compras_url')),
+        }
+        if settings.DEBUG == False:
+            formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+        else:
+            formPago = PayPalPaymentsForm(initial=paypal_dict)
+        return render(request, 'registration/pagoAdministrador.html',{'formPago':formPago, 'compra':compra, 'precio':precio})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pagado_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        compra.pagado = True
+        compra.save()
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request,'registration/compras.html',{'compras':page_obj})
     except:
         return redirect('error_url')

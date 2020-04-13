@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-center">Detalles de compra</h1>
+<div class="bottom-footer">
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-4">
+        <h5 class="text-center">Nombre:</h5><p class="text-center">{{compra.nombre_impresion}}</p>
+        <br>
+      </div>
+      <div class="col-4">
+        <h5 class="text-center">Vendedor:</h5><p class="text-center">{{compra.vendedor}}</p>
+        <br>
+        <h5 class="text-center">Comprador:</h5><p class="text-center">{{compra.comprador}}</p>
+        <br>
+        <h5 class="text-center">Descripción:</h5><p class="text-center">{{compra.desc_impresion}}</p>
+        <br>
+        <div class="text-center">{{formPago.render}}</div>
+      </div>
+      <div class="col-4">
+        <h5 class="text-center">Precio:</h5><p class="text-center">{{precio}} €</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

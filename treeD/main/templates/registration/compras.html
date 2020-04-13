@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Todas las compras</h1>
+<div class="bottom-footer">
+  {% for c in compras %}
+    {{c.nombre_impresion}}<br>
+  {% empty %}
+    <h1 class="text-center display-4">No hay compras nuevas</h1>
+  {% endfor %}
+</div>
+{% endblock %}
+

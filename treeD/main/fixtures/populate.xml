@@ -403,7 +403,7 @@
         <field type="CharField" name="desc_impresion">Figuras para adornar cuartos para los niños.</field>
         <field type="FloatField" name="precio_impresion">11.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
-        <field type="BooleanField" name="pagado">True</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>

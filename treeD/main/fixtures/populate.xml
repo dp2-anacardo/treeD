@@ -403,6 +403,7 @@
         <field type="CharField" name="desc_impresion">Figuras para adornar cuartos para los niños.</field>
         <field type="FloatField" name="precio_impresion">11.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
@@ -412,6 +413,7 @@
         <field type="CharField" name="desc_impresion">Gato de la suerte, la figura mueve la mano</field>
         <field type="FloatField" name="precio_impresion">16.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="73" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
@@ -421,6 +423,7 @@
         <field type="CharField" name="desc_impresion">Gato de la suerte, la figura mueve la mano</field>
         <field type="FloatField" name="precio_impresion">16.0</field>
         <field type="DateField" name="fecha_compra">2020-03-15</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="74" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -430,6 +433,7 @@
         <field type="CharField" name="desc_impresion">Replica del mítico Ford mustang GT para los niños</field>
         <field type="FloatField" name="precio_impresion">51.0</field>
         <field type="DateField" name="fecha_compra">2020-02-16</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="75" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -439,6 +443,7 @@
         <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
         <field type="FloatField" name="precio_impresion">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-16</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="76" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -448,6 +453,7 @@
         <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
         <field type="FloatField" name="precio_impresion">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-18</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="77" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -457,6 +463,7 @@
         <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
         <field type="FloatField" name="precio_impresion">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-17</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="78" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -466,6 +473,7 @@
         <field type="CharField" name="desc_impresion">Set de raqueta y pelota para jugar el ping pong</field>
         <field type="FloatField" name="precio_impresion">24.0</field>
         <field type="DateField" name="fecha_compra">2020-03-26</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="79" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">39</field>
@@ -475,6 +483,7 @@
         <field type="CharField" name="desc_impresion">Model para crear con resina un muñeco articulado</field>
         <field type="FloatField" name="precio_impresion">51.0</field>
         <field type="DateField" name="fecha_compra">2020-03-28</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <!--IMAGENES COMPRAS-->
     <object pk="27" model="main.imgCompra">

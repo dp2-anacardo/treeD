@@ -78,6 +78,46 @@
 </div>
     {% empty %}
     <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
-</div>
+
 {% endfor %}
+
+<div class="container text-center">
+  <ul class="pagination">
+    {% if query.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{query.previous_page_number }}">Previous</a></li>
+    {%else %}  
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>
+    {% endif %}
+    {% for num in query.paginator.page_range %}
+    {% ifequal num query.number %}
+      <li class="page-item active">
+        <span class="page-link">
+          {{ num }}
+          <span class="sr-only">(current)</span>
+        </span>
+      </li>
+    {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+    {% endifequal %} 
+  {% endfor %}
+    {% if query.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{query.next_page_number }}">Next</a>
+      </li>
+    {%else%}
+    <li class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    {% endif %}
+    
+  </ul>
+</div>
+
+
+</div>
+
+
+
 {% endblock %}

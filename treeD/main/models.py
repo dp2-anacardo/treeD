@@ -90,6 +90,7 @@ class Compra(models.Model):
     precio_impresion = models.FloatField(verbose_name='Precio de la impresión', null=True)
     direccion = models.ForeignKey('DirecPerfil', on_delete=models.SET_NULL, null=True)
     fecha_compra = models.DateField(verbose_name="Fecha de compra")
+    pagado = models.BooleanField(verbose_name='Pagado por administrador?')
 
     def __str__(self):
         return self.nombre_impresion + str(self.fecha_compra)

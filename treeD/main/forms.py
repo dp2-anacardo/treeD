@@ -207,6 +207,8 @@ class AñadirDirecPerfilForm(forms.Form):
             )
         return codigo_postal
 
+class GDPRForm(forms.Form):
+    checkbox = forms.BooleanField(label="", required=True, widget=forms.CheckboxInput())
 
 class BuscadorForm(forms.Form):
 

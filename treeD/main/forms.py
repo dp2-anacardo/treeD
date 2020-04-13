@@ -186,6 +186,8 @@ class AñadirDirecPerfilForm(forms.Form):
     direccion = forms.CharField(label="Direccion principal", widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}))
 
+class GDPRForm(forms.Form):
+    checkbox = forms.ChoiceField(label="", required=True, widget=forms.CheckboxInput())
 
 class BuscadorForm(forms.Form):
 

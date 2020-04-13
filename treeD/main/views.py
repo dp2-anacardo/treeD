@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, GDPRForm
 from django.core.paginator import Paginator
 import operator
 
@@ -293,7 +293,8 @@ def crear_usuario(request):
             form_perfil = PerfilForm(request.POST)
             form_imagen = ImagenForm(request.POST, request.FILES)
             form_direccion = DirecPerfilForm(request.POST)
-            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid:
+            form_gdpr = GDPRForm(request.POST)
+            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid and form_gdpr:
 
                 usuario = form_usuario.save()
                 perfil = form_perfil.save(commit=False)
@@ -319,12 +320,14 @@ def crear_usuario(request):
             form_perfil = PerfilForm()
             form_direccion = DirecPerfilForm()
             form_imagen = ImagenForm()
+            form_gdpr = GDPRForm()
 
         return render(request, 'registration/register.html', {
             'form_usuario': form_usuario,
             'form_perfil': form_perfil,
             'form_direccion': form_direccion,
-            'form_imagen': form_imagen
+            'form_imagen': form_imagen,
+            'form_gdpr': form_gdpr
         })
     except:
         return redirect('error_url')
@@ -907,3 +910,6 @@ def estadisticas_venta(request):
                     'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
     except:
         return redirect('error_url')
+
+def gdpr(request):
+    return render(request, 'terminosYCondiciones.html')

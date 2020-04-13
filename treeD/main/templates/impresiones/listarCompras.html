@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <h1 class="text-center">Mis Compras</h1>
 <div class="bottom-footer">
@@ -11,8 +12,9 @@
         <img src={{c.imgcompra_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark">
       </div>
       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.nombre_impresion}}</p>
+       <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.id}}</p>
        <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{c.fecha_compra}}</p>
+       <h5 class="text-center">BASURA:</h5><p class="text-center">{{c.opinion.opinion}}</p>
       </div>
        <div class="col-lg-4 my-auto">
        <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precio_impresion}}€</p>

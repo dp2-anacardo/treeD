@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from datetime import date
 import re
 
+
 class CrearOpinionForm(forms.ModelForm):
     class Meta:
         model = Opinion
@@ -16,7 +17,7 @@ class CrearOpinionForm(forms.ModelForm):
             'opinion',
         }
         widgets = {
-            'nota': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Nota'}),
+            'nota': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 5}),
             'opinion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Opinion'}),
         }
 

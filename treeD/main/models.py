@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from statistics import mean
+from math import ceil
 
 class ImgPrueba(models.Model):
     imagen = models.ImageField(upload_to='', verbose_name='Imagen')
@@ -81,7 +82,7 @@ class Perfil(models.Model):
             puntuaciones_l = []
             for element in puntuaciones:
                 puntuaciones_l.append(element['nota'])
-            media = mean(puntuaciones_l)
+            media = ceil(mean(puntuaciones_l))
         else:
             media = 0
 

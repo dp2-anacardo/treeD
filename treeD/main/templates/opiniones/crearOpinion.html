@@ -1,5 +1,101 @@
-<form action="/opinion/crearOpinion/{{ pk }}/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    .rating {
+  overflow: hidden;
+  display: table;
+  font-size: 20px;
+  color: #FFCA00;
+  font-style: normal;
+}
+
+.rating-star {
+  padding: 0 5px;
+  margin: 0;
+  cursor: pointer;
+  display: block;
+  float: right;
+}
+
+.rating-star:after {
+  position: relative;
+  font-family: FontAwesome;
+  content: '\f006';
+}
+
+.rating-star.checked~.rating-star:after,
+.rating-star.checked:after {
+  content: '\f005';
+}
+
+.rating:hover .rating-star:after {
+  content: '\f006';
+}
+
+.rating-star:hover~.rating-star:after,
+.rating-star:hover:after {
+  content: '\f005' !important;
+}
+</style>
+<div class="bottom-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+                <h1 class="display-4 text-center">Crear Opinión</h1>
+                <br>
+                <br>
+                {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    La nota debe ser entre 1 y 5
+                </div>
+                {% endif %}
+                <form action="/opinion/crearOpinion/{{ pk }}/" method="post">
+                    {% csrf_token %}
+                    <div class="text-center">Nota</div>
+                    <!-- Stars for difficulty_rating -->
+                    <input type="radio" name="nota" value="0" style="display:  none;" checked>
+                    <input type="radio" name="nota" value="1" style="display:  none;">
+                    <input type="radio" name="nota" value="2" style="display:  none;">
+                    <input type="radio" name="nota" value="3" style="display:  none;">
+                    <input type="radio" name="nota" value="4" style="display:  none;">
+                    <input type="radio" name="nota" value="5" style="display:  none;">
+                    <div class="rating mx-auto">
+                        <i class="rating-star" data-rating="5" data-target="nota"></i>
+                        <i class="rating-star" data-rating="4" data-target="nota"></i>
+                        <i class="rating-star" data-rating="3" data-target="nota"></i>
+                        <i class="rating-star" data-rating="2" data-target="nota"></i>
+                        <i class="rating-star" data-rating="1" data-target="nota"></i>
+                    </div>
+                    <br>
+                    
+                    <div class="text-center">Opinión</div>
+                    {{ form.opinion }}
+                    <br>
+                    <br>
+                    <div class="text-center">
+                        <button type='submit' class="btn btn-primary btn-dark">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.rating-star').on('click', function () {
+
+        $(this).parents('.rating').find('.rating-star').removeClass('checked');
+
+        $(this).addClass('checked');
+
+        var ratingValue = $(this).attr('data-rating');
+        var ratingTarget = $(this).attr('data-target');
+
+        $('input[name="' + ratingTarget + '"][value="' + ratingValue + '"]').prop('checked', true);
+    });
+</script>
+{% endblock %}

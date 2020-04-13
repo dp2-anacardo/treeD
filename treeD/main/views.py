@@ -33,6 +33,7 @@ def crear_opinion(request, pk):
         compra = Compra.objects.get(pk=pk)
         opinion = Opinion.objects.filter(puntuador=puntuador, compra=compra)
         assert not opinion
+        assert compra.comprador == puntuador
 
         if request.method == "POST":
             form = CrearOpinionForm(data=request.POST)
@@ -41,7 +42,7 @@ def crear_opinion(request, pk):
                 opinion.puntuador = puntuador
                 opinion.compra = compra
                 opinion.save()
-                return redirect("impresion/listarCompras/")
+                return redirect("/impresion/listarCompras/")
             else:
                 return render(request, "opiniones/crearOpinion.html", {
                     "form": form,
@@ -619,8 +620,9 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
+        opiniones = Opinion.objects.filter(compra__vendedor=perfil)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': impresiones})
+                                               'impresiones': impresiones, 'opiniones': opiniones})
 
     except:
         return redirect('error_url')

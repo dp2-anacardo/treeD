@@ -3,12 +3,16 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalEncryptedPaymentsForm, PayPalPaymentsForm
 from django.urls import reverse
-from datetime import date
+from datetime import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, GDPRForm
+from django.core.paginator import Paginator
+import operator
+
+
 
 
 @login_required(login_url="/login/")
@@ -193,7 +197,10 @@ def listar_compras_impresiones(request):
         usuario = usuario_logueado(request)
         compras = Compra.objects.all().filter(comprador=usuario)
         compras = compras.order_by('-fecha_compra')
-        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'impresiones/listarCompras.html', {'compras': page_obj})
     except:
        return redirect('error_url')
 
@@ -207,9 +214,12 @@ def listar_impresiones(request):
         impresiones_afiliados = list(
             Impresion.objects.all().filter(vendedor__es_afiliado=True))
         impresiones_afiliados.extend(impresiones_no_afiliados)
+        paginator = Paginator(impresiones_afiliados, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         categorias = Categoria.objects.all()
         return render(request, 'impresiones/listarImpresiones.html', {
-            'impresiones': impresiones_afiliados,
+            'impresiones': page_obj,
             'categorias': categorias,
             'form': form
         })
@@ -284,7 +294,8 @@ def crear_usuario(request):
             form_perfil = PerfilForm(request.POST)
             form_imagen = ImagenForm(request.POST, request.FILES)
             form_direccion = DirecPerfilForm(request.POST)
-            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid:
+            form_gdpr = GDPRForm(request.POST)
+            if form_usuario.is_valid() and form_perfil.is_valid() and form_imagen.is_valid() and form_direccion.is_valid and form_gdpr:
 
                 usuario = form_usuario.save()
                 perfil = form_perfil.save(commit=False)
@@ -310,12 +321,14 @@ def crear_usuario(request):
             form_perfil = PerfilForm()
             form_direccion = DirecPerfilForm()
             form_imagen = ImagenForm()
+            form_gdpr = GDPRForm()
 
         return render(request, 'registration/register.html', {
             'form_usuario': form_usuario,
             'form_perfil': form_perfil,
             'form_direccion': form_direccion,
-            'form_imagen': form_imagen
+            'form_imagen': form_imagen,
+            'form_gdpr': form_gdpr
         })
     except:
         return redirect('error_url')
@@ -412,13 +425,14 @@ def index(request):
 
 @login_required(login_url="/login/")
 def listar_impresiones_publicadas(request):
-    """
-    Funcion que lista las impresiones publicadas por un vendedor
-    """
+    
     if request.user.is_authenticated:
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Impresion.objects.filter(vendedor=perfil_user)
-        return render(request, "misPublicaciones.html", {"query": query})
+        paginator=Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "misPublicaciones.html", {"query": page_obj})
 
     return render(request, 'index.html')
 
@@ -444,7 +458,8 @@ def comprar_impresion_3d(request, pk, direccion):
             desc_impresion=impresion.descripcion,
             precio_impresion=impresion.precio,
             fecha_compra=fecha_actual,
-            direccion=direc
+            direccion=direc,
+            pagado=False
         )
         compra.save()
 
@@ -463,6 +478,7 @@ def comprar_impresion_3d(request, pk, direccion):
 def buscador_impresiones_3d(request):
 
     query = Impresion.objects.all()
+    
 
     if request.method == "POST":
         form = BuscadorForm(request.POST)
@@ -483,11 +499,17 @@ def buscador_impresiones_3d(request):
                 query = query.filter(precio__lte=precio_max)
 
             query = query.order_by('-vendedor__es_afiliado')
+            paginator = Paginator(query, 6)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
 
     else:
+        paginator = Paginator(query, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         form = BuscadorForm()
 
-    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": query})
+    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": page_obj})
 
 
 @login_required(login_url="/login/")
@@ -497,8 +519,10 @@ def listar_ventas_realizadas(request):
         perfil_user = Perfil.objects.get(usuario=request.user)
         query = Compra.objects.filter(vendedor=perfil_user)
         query = query.order_by('-fecha_compra')
-        return render(request, "impresiones/listarVentas.html", {"query": query})
-
+        paginator = Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "impresiones/listarVentas.html", {"query": page_obj})
     return render(request, 'index.html')
 
 
@@ -512,11 +536,17 @@ def buscar_usuarios(request):
             nombre = form.cleaned_data.get("nombre")
             query = query.filter(usuario__username__icontains=nombre)
             query = query.order_by('-es_afiliado')
-            return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+            paginator = Paginator(query, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
     else:
         form = BuscarUsuariosForm()
         query = query.order_by('-es_afiliado')
-        return render(request, "registration/listarUsuarios.html", {"form": form, "query": query})
+        paginator = Paginator(query, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
 
 
 def detalles_compra(request, pk):
@@ -575,9 +605,11 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
+        paginator = Paginator(impresiones, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': impresiones})
-
+                                               'impresiones': page_obj})
     except:
         return redirect('error_url')
 
@@ -586,10 +618,11 @@ def mostrar_perfil(request, pk):
 def listar_presupuestos_enviados(request):
     try:
         perfil = usuario_logueado(request)
-
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=perfil)
-
-        return render(request, 'presupuestos/enviados.html', {'presupuestos': presupuestos_enviados})
+        paginator = Paginator(presupuestos_enviados, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'presupuestos/enviados.html', {'presupuestos': page_obj})
 
     except:
         return redirect('error_url')
@@ -599,14 +632,13 @@ def listar_presupuestos_enviados(request):
 def listar_presupuestos_recibidos(request):
     try:
         perfil = usuario_logueado(request)
-
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=perfil)
-
-        return render(request, 'presupuestos/recibidos.html', {'presupuestos': presupuestos_recibidos})
-
+        paginator = Paginator(presupuestos_recibidos, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'presupuestos/recibidos.html', {'presupuestos': page_obj})
     except:
         return redirect('error_url')
-
 
 @login_required(login_url="/login/")
 def rechazar_presupuesto_interesado(request, pk):
@@ -733,7 +765,8 @@ def comprar_presupuesto(request, pk, direccion):
             desc_impresion=presupuesto.descripcion,
             precio_impresion=presupuesto.precio,
             fecha_compra=fecha_actual,
-            direccion=direc
+            direccion=direc,
+            pagado=False
         )
         compra.save()
         img = ImgImpresion.objects.get(pk=56)
@@ -833,3 +866,52 @@ def ver_respuesta_presupuesto(request, pk):
         return render(request, 'presupuestos/mostrarRespuesta.html', {'presupuesto': presupuesto})
     except:
         return redirect('error_url')
+
+def estadisticas_venta(request):
+
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+
+        num_ventas_totales=Compra.objects.filter(vendedor=usuario).count()
+        mes = datetime.now().month
+        num_ventas_mensuales=Compra.objects.filter(vendedor=usuario).filter(fecha_compra__month = mes).count()
+        productos= Compra.objects.filter(vendedor=usuario).filter(pagado=True)
+        num_ganancias_totales=0
+        for c in productos:
+            num_ganancias_totales = num_ganancias_totales + (c.precio_impresion - (0.1*c.precio_impresion))
+        productosMensuales= Compra.objects.filter(vendedor=usuario).filter(pagado=True).filter(fecha_compra__month = mes)
+        num_ganancias_mensuales=0
+        for c in productosMensuales:
+            num_ganancias_mensuales = num_ganancias_mensuales + (c.precio_impresion - (0.1*c.precio_impresion))
+        productosPendientesPago=Compra.objects.filter(vendedor=usuario).filter(pagado=False)
+        num_ganancias_pendientes=0
+        for c in productosPendientesPago:
+            num_ganancias_pendientes=num_ganancias_pendientes + (c.precio_impresion - (0.1*c.precio_impresion))
+        misImpresiones= Impresion.objects.filter(vendedor=usuario)
+        compras=[]
+        nombres = []
+        
+        for i in misImpresiones:
+            numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre_impresion=i.nombre).count()
+            compras.append(numeroCompras)
+        
+        diccionario = dict(zip(misImpresiones,compras))
+        top = sorted(diccionario.items(), key=operator.itemgetter(1), reverse=True)
+        
+        compras2=[]
+        for par in top:
+            if len(nombres) == 5:
+                break
+            nombres.append(par[0].nombre)
+            compras2.append(par[1])
+    
+        return render(request, 'registration/estadisticasVenta.html',{'VentasTotales':num_ventas_totales,
+                    'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
+                    'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
+                    'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
+    except:
+        return redirect('error_url')
+
+def gdpr(request):
+    return render(request, 'terminosYCondiciones.html')

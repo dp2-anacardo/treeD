@@ -155,6 +155,7 @@
         <field type="CharField" name="desc_impresion">Vendo varias impresiones de diversas series y pelis.</field>
         <field type="FloatField" name="precio_impresion">15.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
+        <field type="BooleanField" name="pagado">True</field>
     </object>
     <object pk="26" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
@@ -164,7 +165,8 @@
         <field type="CharField" name="desc_impresion">Gato de los que mueven la manita</field>
         <field type="FloatField" name="precio_impresion">20.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
-    </object>>
+        <field type="BooleanField" name="pagado">True</field>
+    </object>
     <!--IMAGENES COMPRAS-->
     <object pk="27" model="main.imgCompra">
         <field type="ImageField" name="imagen">image1.jpg</field>

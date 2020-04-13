@@ -60,11 +60,7 @@
           {% if user.perfil.id == perfil.id %}
           <h5>Direcciones:</h5>
           {% for d in direcciones %}
-          <p>{{d.ciudad}}</p>
-          <p>{{d.localidad}}</p>
-          <p>{{d.calle}}</p>
-          <p>{{d.numero}}</p>
-          <p>{{d.codigo_postal}}</p>
+          <p>{{d}}</p>
           {% endfor %}
           {% endif %}
 

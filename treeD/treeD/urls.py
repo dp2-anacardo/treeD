@@ -40,8 +40,8 @@ urlpatterns = [
     path('mostrarDirecciones/', views.mostrar_direcciones_usuario_logueado, name="editarDirecciones_url"),
     path('añadirDireccion/', views.añadir_direccion_usuario_logueado),
     path('eliminarDireccion/<int:pk>/', views.eliminar_direccion_usuario_logueado, name="eliminarDireccion_url"),
-    path('presupuesto/recibidos', views.listar_presupuestos_recibidos, name='presupuestosRecibidos_url'),
-    path('presupuesto/enviados', views.listar_presupuestos_enviados, name='presupuestosEnviados_url'),
+    path('presupuesto/recibidos/', views.listar_presupuestos_recibidos, name='presupuestosRecibidos_url'),
+    path('presupuesto/enviados/', views.listar_presupuestos_enviados, name='presupuestosEnviados_url'),
     path('presupuesto/rechazar/interesado/<int:pk>/', views.rechazar_presupuesto_interesado, name='rechazarPresInteresado_url'),
     path('presupuesto/rechazar/vendedor/<int:pk>/', views.rechazar_presupuesto_vendedor, name='rechazarPresVendedor_url'),
     path('login/', LoginView.as_view(), name="login_url"),
@@ -62,5 +62,7 @@ urlpatterns = [
     path('hazteAfiliado/', views.hazte_afiliado, name="hazteAfiliado_url"),
     path('usuarios/afiliarse/', views.subscribirse, name="subscripcion_url"),
     path('presupuesto/mostrarRespuesta/<int:pk>/', views.ver_respuesta_presupuesto, name="mostrarRespuesta_url"),
+    
+    path('usuarios/estadisticas/', views.estadisticas_venta, name="estadisticas_url"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

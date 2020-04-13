@@ -143,6 +143,7 @@ def mostrar_direcciones_usuario_logueado(request):
 def añadir_direccion_usuario_logueado(request):
     usuario = User.objects.get(pk=request.user.id)
     perfil = Perfil.objects.get(usuario=usuario)
+    direcciones = DirecPerfil.objects.filter(perfil=perfil)
 
     if request.method == "POST":
         form = AñadirDirecPerfilForm(request.POST)
@@ -158,7 +159,9 @@ def añadir_direccion_usuario_logueado(request):
             return redirect("/mostrarDirecciones")
 
         else:
-            return redirect("/mostrarDirecciones")
+            return render(request, "mostrarDirecciones.html", {
+                "direcciones": direcciones,
+                "form": form})
 
     else:
         return redirect("/mostrarDirecciones")

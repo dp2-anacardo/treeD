@@ -234,7 +234,7 @@ def error(request):
 @login_required(login_url="/login/")
 def listar_compras_impresiones(request):
 
-    try:
+    # try:
         usuario = usuario_logueado(request)
         opiniones=[]
         compras = list(Compra.objects.all().filter(comprador=usuario))
@@ -242,12 +242,12 @@ def listar_compras_impresiones(request):
             opinion= Opinion.objects.all().filter(compra=c)
             opiniones.append(opinion)
         diccionario = dict(zip(compras,opiniones))
-        paginator = Paginator(compras, 5)
+        paginator = Paginator(compras, 1)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/listarCompras.html', {'compras': diccionario, 'compra':page_obj})
-    except:
-        return redirect('error_url')
+    # except:
+    #     return redirect('error_url')
 
 
 def listar_impresiones(request):

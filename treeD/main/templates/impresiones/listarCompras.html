@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <h1 class="text-center">Mis Compras</h1>
 <div class="bottom-footer">
-  {% for c,o in compras.items %}
+  {% for c in compra %}
   <div class="container jumbotron">
     <div class="row">
       <div class="col-lg-4 my-auto text-center">
@@ -14,12 +15,11 @@
       <div class="col-lg-4 my-auto">
        <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.id}}</p>
        <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{c.fecha_compra}}</p>
-       {% if o %}
-       <h5 class="text-center">Opinion:</h5><p class="text-center">{{o.0.opinion}}</p>
-       {% else %}
-       <h5 class="text-center">Opinion:</h5><p class="text-center">No tiene opiniones</p>
-       {% endif %}
+       <h5 class="text-center">Opinion:</h5><p class="text-center">{{ compras|get_item:c }}</p>
       </div>
+      {% if compras|get_item:c %}
+        Hola, {{compras|get_item:c}}
+      {% endif%}
        <div class="col-lg-4 my-auto">
        <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precio_impresion}}€</p>
        <h5 class="text-center">Vendedor:</h5><p class="text-center">{{c.vendedor}}</p>

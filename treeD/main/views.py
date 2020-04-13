@@ -834,3 +834,6 @@ def ver_respuesta_presupuesto(request, pk):
         return render(request, 'presupuestos/mostrarRespuesta.html', {'presupuesto': presupuesto})
     except:
         return redirect('error_url')
+
+def gdpr(request):
+    return render(request, 'terminosYCondiciones.html')

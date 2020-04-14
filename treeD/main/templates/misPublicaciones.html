@@ -23,6 +23,7 @@
                         <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
                         <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
                         <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
+                        <button class="btn btn-dark m-auto" onclick="myFunction('{{i.id}}')">Eliminar</button>
                 </div>
             </div><br>
     </div>
@@ -31,4 +32,13 @@
   <h1 class="text-center display-4">No has publicado nada</h1>
   {% endfor %}
 </div>
+
+<script>
+    function myFunction(id) {
+        confirm("Confirmar eliminación de publicación");
+        return document.getElementById("myform").submit();
+    }
+</script>
+
+
 {% endblock %}

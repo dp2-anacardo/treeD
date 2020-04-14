@@ -99,23 +99,43 @@
     </object>
     <!--DIREC PERFIL-->
     <object pk="30" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Villanueva del Rey, C/Avenida de los ilustrados Nº5, 41409</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Sevilla</field>
+        <field type="CharField" name="calle">C/Santa María del Reposo</field>
+        <field type="CharField" name="numero">Nº16 BºC</field>
+        <field type="CharField" name="codigo_postal">41008</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
     </object>
     <object pk="31" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Benalmadena, C/Anacardo Nº2, 29639</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Lora del Río</field>
+        <field type="CharField" name="calle">C/Álvaro de Bazán</field>
+        <field type="CharField" name="numero">Nº4 1ºB</field>
+        <field type="CharField" name="codigo_postal">41440</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
     </object>
     <object pk="42" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Sevilla, C/Betis Nº16, 41010</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Sevilla</field>
+        <field type="CharField" name="calle">C/ÁBetis</field>
+        <field type="CharField" name="numero">Nº16</field>
+        <field type="CharField" name="codigo_postal">41010</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">39</field>
     </object>
     <object pk="43" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Madrid, C/Cervantes Nº12, 28231</field>
+        <field type="CharField" name="ciudad">Madrid</field>
+        <field type="CharField" name="localidad">Madrid</field>
+        <field type="CharField" name="calle">C/Cervantes</field>
+        <field type="CharField" name="numero">Nº12</field>
+        <field type="CharField" name="codigo_postal">28231</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">40</field>
     </object>
     <object pk="44" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Cordoba, C/Cruz conde Nº24, 14008</field>
+        <field type="CharField" name="ciudad">Córdoba</field>
+        <field type="CharField" name="localidad">Córdoba</field>
+        <field type="CharField" name="calle">C/Cruz Conde</field>
+        <field type="CharField" name="numero">Nº24</field>
+        <field type="CharField" name="codigo_postal">14008</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">41</field>
     </object>
     <!--CATEGORIAS-->

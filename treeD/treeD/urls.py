@@ -27,6 +27,7 @@ urlpatterns = [
     path('impresion/comprar/<int:pk>/<int:direccion>/', views.comprar_impresion_3d, name="comprarImpresion_url"),
     path('', views.index, name='index'),
     path('misPublicaciones/', views.listar_impresiones_publicadas),
+    path('gdpr/', views.gdpr),
     path('impresion/listarVentas/', views.listar_ventas_realizadas, name="listarVentas_url"),
     path('impresion/mostrarImpresion/<int:pk>/', views.mostrar_impresion, name="mostrarImpresion_url"),
     path('opinion/crearOpinion/<int:pk>/', views.crear_opinion, name="crearOpinion_url"),

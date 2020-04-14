@@ -270,20 +270,24 @@ class EditarPerfilTest(TestCase):
         user = User.objects.get(username="Ipatia")
         perfil = Perfil.objects.get(usuario=user)
         response = self.client.post('/añadirDireccion/', {
-            'direccion': 'C/Anacardo, Segundo piso de pistacho, Nº234',
+            'ciudad': 'Sevilla',
+            'localidad': 'Sevilla',
+            'calle': 'C/Anacardo',
+            'numero': 'Segundo piso de pistacho',
+            'codigo_postal': '41001',
         }, follow=True)
         direccion_added = DirecPerfil.objects.get(
-            direccion='C/Anacardo, Segundo piso de pistacho, Nº234')
+            calle='C/Anacardo')
         self.assertTemplateUsed(response, 'mostrarDirecciones.html')
-        self.assertEquals(direccion_added.direccion,
-                          'C/Anacardo, Segundo piso de pistacho, Nº234')
+        self.assertEquals(direccion_added.calle,
+                          'C/Anacardo')
         self.assertEquals(direccion_added.perfil, perfil)
 
         """ Eliminar direccion """
         response = self.client.get(
             '/eliminarDireccion/' + str(direccion_added.id) + '/')
         direccion = list(DirecPerfil.objects.filter(
-            direccion='C/Anacardo, Segundo piso de pistacho, Nº234'))
+            calle='C/Anacardo'))
         self.assertTrue(not direccion)
 
 

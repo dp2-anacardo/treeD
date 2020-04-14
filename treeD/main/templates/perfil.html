@@ -97,13 +97,13 @@
         <a href="{% url 'pedirPresupuesto_url' perfil.id %}" class="btn btn-dark m-auto">Pedir Presupuesto</a>
         {%endif%}
 
-        <br>
-        {% if user.perfil.id == perfil.id %}
-        <h5>Direcciones:</h5>
-        {% for d in direcciones %}
-        <p>{{d.direccion}}</p>
-        {% endfor %}
-        {% endif %}
+          <br>
+          {% if user.perfil.id == perfil.id %}
+          <h5>Direcciones:</h5>
+          {% for d in direcciones %}
+          <p>{{d}}</p>
+          {% endfor %}
+          {% endif %}
 
         <br>
 

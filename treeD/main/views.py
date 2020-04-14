@@ -512,7 +512,7 @@ def comprar_impresion_3d(request, pk, direccion):
 
         compras.append(compra)
 
-        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
+        return redirect('/impresion/listarCompras/')
 
     except:
         return redirect('error_url')
@@ -822,7 +822,7 @@ def comprar_presupuesto(request, pk, direccion):
         presupuesto.save()
         compras.append(compra)
 
-        return render(request, 'impresiones/listarCompras.html', {'compras': compras})
+        return redirect('/impresion/listarCompras/')
 
     except:
         return redirect('error_url')

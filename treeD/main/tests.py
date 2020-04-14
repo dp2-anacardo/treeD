@@ -656,9 +656,3 @@ class EstadisticasVenta(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/usuarios/estadisticas/')
         self.assertEqual(response.status_code, 200)
-        
-    def test_estadisticas_no_afiliado(self):
-        c = Client()
-        c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/usuarios/estadisticas/')
-        self.assertEqual(response.status_code, 302)

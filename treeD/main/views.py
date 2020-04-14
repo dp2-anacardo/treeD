@@ -920,7 +920,6 @@ def estadisticas_venta(request):
 
     try:
         usuario = usuario_logueado(request)
-        assert usuario.es_afiliado == True
 
         num_ventas_totales=Compra.objects.filter(vendedor=usuario).count()
         mes = datetime.now().month

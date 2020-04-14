@@ -913,6 +913,9 @@ def ver_respuesta_presupuesto(request, pk):
     except:
         return redirect('error_url')
 
+def gdpr(request):
+    return render(request, 'terminosYCondiciones.html')
+    
 def estadisticas_venta(request):
 
     try:
@@ -959,5 +962,3 @@ def estadisticas_venta(request):
     except:
         return redirect('error_url')
 
-def gdpr(request):
-    return render(request, 'terminosYCondiciones.html')

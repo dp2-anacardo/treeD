@@ -7,13 +7,42 @@ from datetime import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, GDPRForm
+from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm
 from django.core.paginator import Paginator
 import operator
 
+@login_required(login_url="/login/")
+def crear_opinion(request, pk):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        puntuador = Perfil.objects.get(usuario=user)
+        compra = Compra.objects.get(pk=pk)
+        opinion = Opinion.objects.filter(puntuador=puntuador, compra=compra)
+        assert not opinion
+        assert compra.comprador == puntuador
 
-
+        if request.method == "POST":
+            form = CrearOpinionForm(data=request.POST)
+            if form.is_valid():
+                opinion = form.save(commit=False)
+                opinion.puntuador = puntuador
+                opinion.compra = compra
+                opinion.save()
+                return redirect("/impresion/listarCompras/")
+            else:
+                return render(request, "opiniones/crearOpinion.html", {
+                    "form": form,
+                    "pk": pk
+                })
+        else:
+            form = CrearOpinionForm()
+            return render(request, "opiniones/crearOpinion.html", {
+                    "form": form,
+                    "pk": pk
+                })
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def pedir_presupuesto(request, pk):
@@ -203,12 +232,18 @@ def listar_compras_impresiones(request):
 
     try:
         usuario = usuario_logueado(request)
+        opiniones=[]
         compras = Compra.objects.all().filter(comprador=usuario)
         compras = compras.order_by('-fecha_compra')
+        compras = list(compras)
+        for c in compras:
+            opinion= Opinion.objects.all().filter(compra=c)
+            opiniones.append(opinion)
+        diccionario = dict(zip(compras,opiniones))
         paginator = Paginator(compras, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        return render(request, 'impresiones/listarCompras.html', {'compras': page_obj})
+        return render(request, 'impresiones/listarCompras.html', {'compras': diccionario, 'compra':page_obj})
     except:
        return redirect('error_url')
 
@@ -613,14 +648,17 @@ def mostrar_perfil(request, pk):
         perfil = Perfil.objects.get(pk=pk)
         direcciones = DirecPerfil.objects.all().filter(perfil=perfil)
         impresiones = Impresion.objects.all().filter(vendedor=perfil)
+        opiniones = Opinion.objects.filter(compra__vendedor=perfil)
         paginator = Paginator(impresiones, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        paginator1 = Paginator(opiniones, 5)
+        page_number1 = request.GET.get('page')
+        page_obj1 = paginator1.get_page(page_number1)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
-                                               'impresiones': page_obj})
+                                               'impresiones': page_obj, 'opiniones': page_obj1})
     except:
         return redirect('error_url')
-
 
 @login_required(login_url="/login/")
 def listar_presupuestos_enviados(request):

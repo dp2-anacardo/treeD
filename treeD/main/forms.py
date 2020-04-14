@@ -2,12 +2,32 @@
 """
 
 from django import forms
-from main.models import Perfil, DirecPerfil, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from datetime import date
 import re
 
+
+class CrearOpinionForm(forms.ModelForm):
+    class Meta:
+        model = Opinion
+        fields = {
+            'nota',
+            'opinion',
+        }
+        widgets = {
+            'nota': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 5}),
+            'opinion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Opinion'}),
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        nota = cleaned_data.get("nota")
+
+        if nota < 1 or nota > 5:
+            msg = "La nota debe estar entre 1 y 5"
+            raise ValidationError({'nota': [msg, ]})
 
 class DateInput(forms.DateInput):
     input_type = 'date'

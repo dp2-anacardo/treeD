@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="bottom-footer">
 <div class="container">
 <form action="" method="post">
@@ -18,7 +20,47 @@
 <div class="container jumbotron">
   <div class="row">
     <div class="col my-auto text-center">
-      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >      
+      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >
+      <br>
+      {% if c.puntuacion == 1 %}
+      <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 2 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          {% endif %}
+          {% if c.puntuacion == 3 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 4 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 5 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}     
     </div>
     <div class="col">
       <br>

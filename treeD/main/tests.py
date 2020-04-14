@@ -9,7 +9,7 @@ class OpinionTest(TestCase):
     fixtures = ["initialize.xml"]
 
     def test_ver_opiniones(self):
-        response = self.client.get('/opinion/listarOpiniones/3/')
+        response = self.client.get('/perfil/3/')
         opiniones = Opinion.objects.filter(compra__vendedor__pk=3)
         self.assertQuerysetEqual(
             response.context['opiniones'],

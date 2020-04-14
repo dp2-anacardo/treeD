@@ -12,18 +12,6 @@ from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPr
 import operator
 from django.core.paginator import Paginator
 
-def ver_opiniones(request, pk):
-    try:
-        vendedor = Perfil.objects.get(pk=pk)
-        opiniones = Opinion.objects.filter(compra__vendedor=vendedor)
-
-        return render(request, "opiniones/listOpinionesVendedor.html", {
-            "pk": pk,
-            "opiniones": opiniones
-        })
-    except:
-        return redirect('error_url')
-
 @login_required(login_url="/login/")
 def crear_opinion(request, pk):
     try:
@@ -234,7 +222,7 @@ def error(request):
 @login_required(login_url="/login/")
 def listar_compras_impresiones(request):
 
-    # try:
+    try:
         usuario = usuario_logueado(request)
         opiniones=[]
         compras = list(Compra.objects.all().filter(comprador=usuario))
@@ -242,12 +230,12 @@ def listar_compras_impresiones(request):
             opinion= Opinion.objects.all().filter(compra=c)
             opiniones.append(opinion)
         diccionario = dict(zip(compras,opiniones))
-        paginator = Paginator(compras, 1)
+        paginator = Paginator(compras, 5)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/listarCompras.html', {'compras': diccionario, 'compra':page_obj})
-    # except:
-    #     return redirect('error_url')
+    except:
+        return redirect('error_url')
 
 
 def listar_impresiones(request):
@@ -652,7 +640,7 @@ def mostrar_perfil(request, pk):
         page_obj = paginator.get_page(page_number)
         paginator1 = Paginator(opiniones, 5)
         page_number1 = request.GET.get('page')
-        page_obj1 = paginator.get_page(page_number1)
+        page_obj1 = paginator1.get_page(page_number1)
         return render(request, 'perfil.html', {'perfil': perfil, 'direcciones': direcciones,
                                                'impresiones': page_obj, 'opiniones': page_obj1})
     except:

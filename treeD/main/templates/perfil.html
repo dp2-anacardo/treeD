@@ -138,11 +138,11 @@
     <div class="container text-center">
       <ul class="pagination">
         {% if impresiones.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Previous</a>
+        <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Anterior</a>
         </li>
         {%else %}
         <li class="page-item disabled">
-          <span class="page-link">Previous</span>
+          <span class="page-link">Anterior</span>
         </li>
         {% endif %}
         {% for num in impresiones.paginator.page_range %}
@@ -159,11 +159,11 @@
         {% endfor %}
         {% if impresiones.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?page={{impresiones.next_page_number }}">Next</a>
+          <a class="page-link" href="?page={{impresiones.next_page_number }}">Siguiente</a>
         </li>
         {%else%}
         <li class="page-item disabled">
-          <span class="page-link">Next</span>
+          <span class="page-link">Siguiente</span>
         </li>
         {% endif %}
 
@@ -222,11 +222,11 @@
       <div class="container text-center">
         <ul class="pagination">
           {% if opiniones.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{opiniones.previous_page_number }}">Previous</a>
+          <li class="page-item"><a class="page-link" href="?page={{opiniones.previous_page_number }}">Anterior</a>
           </li>
           {%else %}
           <li class="page-item disabled">
-            <span class="page-link">Previous</span>
+            <span class="page-link">Anterior</span>
           </li>
           {% endif %}
           {% for num in opiniones.paginator.page_range %}
@@ -243,11 +243,11 @@
           {% endfor %}
           {% if opiniones.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{opiniones.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{opiniones.next_page_number }}">Siguiente</a>
           </li>
           {%else%}
           <li class="page-item disabled">
-            <span class="page-link">Next</span>
+            <span class="page-link">Siguiente</span>
           </li>
           {% endif %}
   

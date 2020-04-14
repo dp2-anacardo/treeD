@@ -3,40 +3,47 @@
 {% block content %}
 
 <div class="bottom-footer">
-    <h1 class="text-center"> Mis Impresiones</h1> <br> 
+    <h1 class="text-center"> Mis Impresiones</h1> <br>
     <div class="text-center">
         <h4 class="text-center d-inline">Nueva Publicación: </h4>
         <a href="{% url 'crearImpresion_url'%}" class="btn btn-dark m-auto d-inline">Crear</a><br> <br><br>
     </div>
-{% for i in query %}
+    {% for i in query %}
     <div class="container">
         <div class="jumbotron">
             <div class="row">
                 <div class="col-lg-4 my-auto text-center">
-                    <img src={{i.imgimpresion_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >
+                    <img src={{i.imgimpresion_set.all.0.imagen.url}} height="200" width="200"
+                        class="img-fluid border border-dark">
                 </div>
                 <div class="col-lg-4 my-auto">
-                    <h5 class="text-center">Nombre:</h5><p class="text-center">{{i.nombre}}</p>
-                    <h5 class="text-center">Precio:</h5><p class="text-center">{{i.precio}}</p> 
+                    <h5 class="text-center">Nombre:</h5>
+                    <p class="text-center">{{i.nombre}}</p>
+                    <h5 class="text-center">Precio:</h5>
+                    <p class="text-center">{{i.precio}}</p>
                 </div>
                 <div class="col-lg-4 my-auto text-center">
-                        <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
-                        <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
-                        <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
-                        <button class="btn btn-dark m-auto" onclick="myFunction('{{i.id}}')">Eliminar</button>
+                    <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
+                    <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
+                    <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
+                    <button class="btn btn-dark m-auto" onclick="myFunction('{{i.id}}')">Eliminar</button>
                 </div>
             </div><br>
+        </div>
     </div>
-</div>
-{% empty %}
-  <h1 class="text-center display-4">No has publicado nada</h1>
-  {% endfor %}
+    {% empty %}
+    <h1 class="text-center display-4">No has publicado nada</h1>
+    {% endfor %}
 </div>
 
 <script>
     function myFunction(id) {
-        confirm("Confirmar eliminación de publicación");
-        return document.getElementById("myform").submit();
+        var r = confirm("¿Está seguro que desea eliminar esta impresión?");
+        if (r == true) {
+            window.location.replace("/impresion/eliminarImpresion/"+id);
+        } else {
+            
+        }
     }
 </script>
 

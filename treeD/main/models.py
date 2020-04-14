@@ -1,5 +1,8 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from statistics import mean
+from math import ceil
 
 class ImgPrueba(models.Model):
     imagen = models.ImageField(upload_to='', verbose_name='Imagen')
@@ -32,11 +35,15 @@ class ImgImpresion(models.Model):
         ordering = ('pk',)
 
 class DirecPerfil(models.Model):
-    direccion = models.TextField(verbose_name='Dirección')
+    ciudad = models.TextField(verbose_name='Ciudad')
+    localidad = models.TextField(verbose_name='Localidad')
+    calle = models.TextField(verbose_name='Calle o avenida')
+    numero = models.TextField(verbose_name='número')
+    codigo_postal = models.TextField(verbose_name='Código postal')
     perfil = models.ForeignKey('Perfil', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.direccion
+        return self.ciudad + ', ' +self.localidad + ', ' +self.calle + ' ' +  self.numero
 
     class Meta:
         ordering = ('pk',)
@@ -71,6 +78,19 @@ class Perfil(models.Model):
     email = models.EmailField(verbose_name='Email')
     imagen = models.ImageField(upload_to='', verbose_name='Imagen', default='default.png')
     es_afiliado = models.BooleanField(verbose_name='Afiliado?')
+
+    @property
+    def puntuacion(self):
+        puntuaciones = Opinion.objects.filter(compra__vendedor=self).values('nota')
+        if puntuaciones:
+            puntuaciones_l = []
+            for element in puntuaciones:
+                puntuaciones_l.append(element['nota'])
+            media = ceil(mean(puntuaciones_l))
+        else:
+            media = 0
+
+        return media
     
     def __str__(self):
         return self.usuario.username
@@ -107,6 +127,18 @@ class Presupuesto(models.Model):
 
     def __str__(self):
         return self.peticion
+    
+    class Meta:
+        ordering = ('pk', )
+
+class Opinion(models.Model):
+    compra = models.ForeignKey(Compra, related_name='Compra', on_delete=models.CASCADE, null=False)
+    puntuador = models.ForeignKey(Perfil, related_name='Puntuador', on_delete=models.CASCADE, null=False)
+    nota = models.IntegerField(verbose_name='Nota', validators=[MinValueValidator(1), MaxValueValidator(5)])
+    opinion = models.TextField(verbose_name='Opinion')
+
+    def __str__(self):
+        return str(self.nota)
     
     class Meta:
         ordering = ('pk', )

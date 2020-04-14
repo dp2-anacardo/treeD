@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="bottom-footer">
 <div class="container">
 <form action="" method="post">
@@ -18,7 +20,47 @@
 <div class="container jumbotron">
   <div class="row">
     <div class="col my-auto text-center">
-      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >      
+      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >
+      <br>
+      {% if c.puntuacion == 1 %}
+      <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 2 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          {% endif %}
+          {% if c.puntuacion == 3 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 4 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}
+          {% if c.puntuacion == 5 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+          {% endif %}     
     </div>
     <div class="col">
       <br>
@@ -36,6 +78,46 @@
 </div>
     {% empty %}
     <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
-</div>
+
 {% endfor %}
+
+<div class="container text-center">
+  <ul class="pagination">
+    {% if query.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{query.previous_page_number }}">Previous</a></li>
+    {%else %}  
+      <li class="page-item disabled">
+        <span class="page-link">Previous</span>
+      </li>
+    {% endif %}
+    {% for num in query.paginator.page_range %}
+    {% ifequal num query.number %}
+      <li class="page-item active">
+        <span class="page-link">
+          {{ num }}
+          <span class="sr-only">(current)</span>
+        </span>
+      </li>
+    {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+    {% endifequal %} 
+  {% endfor %}
+    {% if query.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{query.next_page_number }}">Next</a>
+      </li>
+    {%else%}
+    <li class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    {% endif %}
+    
+  </ul>
+</div>
+
+
+</div>
+
+
+
 {% endblock %}

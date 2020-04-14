@@ -1,103 +1,257 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="bottom-footer">
-  <div class="container">
-    <h1 class="text-center">Mi Perfil</h1>
-    <div class="jumbotron">
-      <div class="row">
-        <div class="col-lg-6 text-center">
-          <br>
-          <img src={{perfil.imagen.url}} class="img-fluid border border-dark" height="200" width="200">
-          <br>
-          <br>
-          {% if user.perfil.id == perfil.id %}
-          <a href="{% url 'editarPerfil_url' %}" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
-          <a href="{% url 'editarDirecciones_url' %}" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
-          <a href="{% url 'editarPassword_url' %}" class="btn btn-dark m-auto">Editar Contraseña</a>
-          <div class="text-center">{{formAfiliado.render}}</div>
-          {% endif %}
+  <h1 class="text-center">Mi Perfil</h1>
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col-lg-6 text-center">
+        <br>
+        <img src={{perfil.imagen.url}} class="img-fluid border border-dark" height="200" width="200">
+        <br>
+        {% if perfil.puntuacion == 1 %}
+        <br>
+        <div class="mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
         </div>
-
-        <div class="col-lg-6 ">
+        {% endif %}
+        {% if perfil.puntuacion == 2 %}
+        <br>
+        <div class="mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        {% if perfil.puntuacion == 3 %}
+        <br>
+        <div class="mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        {% if perfil.puntuacion == 4 %}
+        <br>
+        <div class="mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        {% if perfil.puntuacion == 5 %}
+        <div class="mx-auto">
           <br>
-          <div><h5>Apodo: </h5> 
-          <p>{{perfil.usuario.username}} 
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        <br>
+        <br>
+        {% if user.perfil.id == perfil.id %}
+        <a href="{% url 'editarPerfil_url' %}" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
+        <a href="{% url 'editarDirecciones_url' %}" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
+        <a href="{% url 'editarPassword_url' %}" class="btn btn-dark m-auto">Editar Contraseña</a>
+        <div class="text-center">{{formAfiliado.render}}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-lg-6 ">
+        <br>
+        <div>
+          <h5>Apodo: </h5>
+          <p>{{perfil.usuario.username}}
             {%if perfil.es_afiliado%}
             <img src="{% static "tick.png" %}" height="20" width="20" class="float-left mr-2"></p>
-            {%endif%}
-          </div>
-
-          {% if user.perfil.id == perfil.id %}
-          <br>
-          <h5>Nombre:</h5>
-          <p>{{perfil.nombre}}</p>
-          {% endif %}
-
-          {% if user.perfil.id == perfil.id %}
-          <br>
-          <h5>Apellidos:</h5>
-          <p>{{perfil.apellidos}}</p>
-          {% endif %}
-
-          {% if user.perfil.id == perfil.id %}
-          <br>
-          <h5>Email:</h5>
-          <p>{{perfil.email}}</p>
-          {% endif %}
-
-          <br>
-          <h5>Descripción:</h5>
-          <p>{{perfil.descripcion}}</p>
-
-          {% if user != perfil.usuario %}
-          <br>
-          <a href="{% url 'pedirPresupuesto_url' perfil.id %}" class="btn btn-dark m-auto">Pedir Presupuesto</a>
           {%endif%}
+        </div>
+
+        {% if user.perfil.id == perfil.id %}
+        <br>
+        <h5>Nombre:</h5>
+        <p>{{perfil.nombre}}</p>
+        {% endif %}
+
+        {% if user.perfil.id == perfil.id %}
+        <br>
+        <h5>Apellidos:</h5>
+        <p>{{perfil.apellidos}}</p>
+        {% endif %}
+
+        {% if user.perfil.id == perfil.id %}
+        <br>
+        <h5>Email:</h5>
+        <p>{{perfil.email}}</p>
+        {% endif %}
+
+        <br>
+        <h5>Descripción:</h5>
+        <p>{{perfil.descripcion}}</p>
+
+        {% if user != perfil.usuario %}
+        <br>
+        <a href="{% url 'pedirPresupuesto_url' perfil.id %}" class="btn btn-dark m-auto">Pedir Presupuesto</a>
+        {%endif%}
 
           <br>
           {% if user.perfil.id == perfil.id %}
           <h5>Direcciones:</h5>
           {% for d in direcciones %}
-          <p>{{d.direccion}}</p>
+          <p>{{d}}</p>
           {% endfor %}
           {% endif %}
 
-          <br>
+        <br>
 
-        </div>
-      </div>
-    </div>
-
-    <h1 class="text-center">Impresiones</h1>
-    <div class="jumbotron">
-      <div class="row">
-        {% for i in impresiones %}
-        <div class="col-lg-4">
-          <div class="card mx-auto" style="width: 18rem;">
-            <img class="card-img-top" src={{i.imgimpresion_set.all.0.imagen.url}} height="190" width="286">
-            <div class="card-body">
-              <h5 class="card-title text-center">{{i.nombre}}</h5>
-              <div class="col text-center">
-                <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a>
-              </div>
-            </div>
-          </div>
-          <br>
-        </div>
-        {% if forloop.counter|divisibleby:3 %}
-      </div>
-      <div class="row">
-        {% endif %}
-        {% empty %}
-        <h3 class="text-center"> No se han encontrado resultados</h3>
-        {% endfor %}
       </div>
     </div>
   </div>
-</div>
-</div>
 
+  <h1 class="text-center">Impresiones</h1>
+  <div class="container jumbotron">
+    <div class="row">
+      {% for i in impresiones %}
+      <div class="col-lg-4">
+        <div class="card mx-auto" style="width: 18rem;">
+          <img class="card-img-top" src={{i.imgimpresion_set.all.0.imagen.url}} height="190" width="286">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{i.nombre}}</h5>
+            <div class="col text-center">
+              <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a>
+            </div>
+          </div>
+        </div>
+        <br>
+      </div>
+      {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row">
+      {% endif %}
+      {% empty %}
+      <h3 class="text-center mx-auto"> No se han encontrado resultados</h3>
+      {% endfor %}
+    </div>
+    <div class="container text-center">
+      <ul class="pagination">
+        {% if impresiones.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Previous</a>
+        </li>
+        {%else %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
+        {% for num in impresiones.paginator.page_range %}
+        {% ifequal num impresiones.number %}
+        <li class="page-item active">
+          <span class="page-link">
+            {{ num }}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endifequal %}
+        {% endfor %}
+        {% if impresiones.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{impresiones.next_page_number }}">Next</a>
+        </li>
+        {%else%}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+        {% endif %}
 
-{% endblock %}
+      </ul>
+    </div>
+    </div>
+
+    <h1 class="text-center">Opiniones</h1>
+      {% for o in opiniones %}
+      <div class="container jumbotron">
+        <div class="row">
+          <div class="col-lg-4 my-auto mx-auto">
+            <h5 class="text-center">Impresión:</h5>
+            <p class="text-center">{{o.compra.nombre_impresion}}</p>
+          </div>
+          <div class="col-lg-4 my-auto">
+            <h5 class="text-center">Nota:</h5>
+            <p class="text-center">
+              {% if o.nota == 1 %}
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+              {% endif %}
+              {% if o.nota == 2 %}
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+              {% endif %}
+              {% if o.nota == 3 %}
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+              {% endif %}
+              {% if o.nota == 4 %}
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+              {% endif %}
+              {% if o.nota == 5 %}
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+                <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+              {% endif %}</p>
+          </div>
+          <div class="col-lg-4 my-auto">
+            <h5 class="text-center">Opinión:</h5>
+            <p class="text-center">{{o.opinion}}</p>
+          </div>
+        </div>
+        <br>
+      </div>
+      {% empty %}
+      <h3 class="text-center">No se han encontrado resultados</h3>
+      {% endfor %}
+
+      <div class="container text-center">
+        <ul class="pagination">
+          {% if opiniones.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{opiniones.previous_page_number }}">Previous</a>
+          </li>
+          {%else %}
+          <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+          </li>
+          {% endif %}
+          {% for num in opiniones.paginator.page_range %}
+          {% ifequal num opiniones.number %}
+          <li class="page-item active">
+            <span class="page-link">
+              {{ num }}
+              <span class="sr-only">(current)</span>
+            </span>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+          {% endifequal %}
+          {% endfor %}
+          {% if opiniones.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{opiniones.next_page_number }}">Next</a>
+          </li>
+          {%else%}
+          <li class="page-item disabled">
+            <span class="page-link">Next</span>
+          </li>
+          {% endif %}
+  
+        </ul>
+      </div>
+
+  {% endblock %}

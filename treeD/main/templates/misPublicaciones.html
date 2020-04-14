@@ -20,12 +20,11 @@
                     <h5 class="text-center">Nombre:</h5>
                     <p class="text-center">{{i.nombre}}</p>
                     <h5 class="text-center">Precio:</h5>
-                    <p class="text-center">{{i.precio}}</p>
+                    <p class="text-center">{{i.precio}}€</p>
                 </div>
                 <div class="col-lg-4 my-auto text-center">
                     <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
                     <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
-                    <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
                     <button class="btn btn-dark m-auto" onclick="myFunction('{{i.id}}')">Eliminar</button>
                 </div>
             </div><br>

@@ -158,7 +158,7 @@ class EditarPerfilForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Apellidos'}))
     email = forms.CharField(label="Email", widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email'}))
-    email_paypal = forms.CharField(label="Email de Paypal", widget=forms.EmailInput(
+    email_paypal = forms.CharField(label="Email de Paypal", required=False, widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}))
     descripcion = forms.CharField(label="Descripción", required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))
@@ -406,6 +406,10 @@ class PerfilForm(forms.ModelForm):
                 code='apellidos_letters',
             )
         return apellidos
+    
+    def __init__(self, *args, **kwargs):
+        super(PerfilForm, self).__init__(*args, **kwargs)
+        self.fields['email_paypal'].required = False
 
 
 class DirecPerfilForm(forms.ModelForm):

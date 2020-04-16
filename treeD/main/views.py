@@ -906,7 +906,7 @@ def pago_compra_administrador(request, pk):
         assert compra.imgprueba_set.all() != None
         precio= compra.precio_impresion - (compra.precio_impresion * 0.1)
         paypal_dict = {
-            "business": compra.vendedor.email,
+            "business": compra.vendedor.email_paypal,
             "amount": str(precio),
             "item_name": compra.nombre_impresion,
             "currency_code": "EUR",

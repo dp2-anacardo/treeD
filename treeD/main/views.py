@@ -328,7 +328,7 @@ def subir_imagenes_prueba_compra(request, pk):
 
 def crear_usuario(request):
 
-    #try:
+    try:
         if request.user.is_authenticated == True:
             return redirect('error_url')
 
@@ -373,8 +373,8 @@ def crear_usuario(request):
             'form_imagen': form_imagen,
             'form_gdpr': form_gdpr
         })
-    #except:
-        #return redirect('error_url')
+    except:
+        return redirect('error_url')
 
 
 @login_required(login_url="/login/")

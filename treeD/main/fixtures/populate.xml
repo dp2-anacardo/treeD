@@ -58,6 +58,7 @@
         <field type="CharField" name="apellidos">Díaz</field>
         <field type="CharField" name="descripcion">Vendo impresiones 3D de cualquier tipo</field>
         <field type="EmailField" name="email">alvarodiaz@gmail.com</field>
+        <field type="EmailField" name="email_paypal">alvarodiaz_paypal@gmail.com</field>
         <field type="ImageField" name="imagen">perfil1.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
@@ -67,6 +68,7 @@
         <field type="CharField" name="apellidos">Cienfuegos</field>
         <field type="CharField" name="descripcion">Compro figuras 3D relacionadas con videoJuegos</field>
         <field type="EmailField" name="email">luiscienfuegos@gmail.com</field>
+        <field type="EmailField" name="email_paypal">luiscienfuegos@gmail.com</field>
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -76,6 +78,7 @@
         <field type="CharField" name="apellidos">Jiminez</field>
         <field type="CharField" name="descripcion">Comprador y vendedor habitual de piezas 3D de cualquier clase</field>
         <field type="EmailField" name="email">alejandroJZ@gmail.com</field>
+        <field type="EmailField" name="email_paypal">alejandroJZ@gmail.com</field>
         <field type="ImageField" name="imagen">perfil3.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -85,6 +88,7 @@
         <field type="CharField" name="apellidos">Martin</field>
         <field type="CharField" name="descripcion">Me encanta la impresion 3D, llevo varios años imprimiendo y me gustaria ganarme un dinero</field>
         <field type="EmailField" name="email">jesuleMartin@gmail.com</field>
+        <field type="EmailField" name="email_paypal">paypal_jesuleMartin@gmail.com</field>
         <field type="ImageField" name="imagen">perfil4.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
@@ -94,6 +98,7 @@
         <field type="CharField" name="apellidos">Cuesta</field>
         <field type="CharField" name="descripcion">Me interesa comprar piezas ya que no tengo impresora 3D</field>
         <field type="EmailField" name="email">jesuleMartin@gmail.com</field>
+        <field type="EmailField" name="email_paypal">paypal_jesuleMartin@gmail.com</field>
         <field type="ImageField" name="imagen">perfil5.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -117,7 +122,7 @@
     <object pk="42" model="main.direcPerfil">
         <field type="CharField" name="ciudad">Sevilla</field>
         <field type="CharField" name="localidad">Sevilla</field>
-        <field type="CharField" name="calle">C/ÁBetis</field>
+        <field type="CharField" name="calle">C/Betis</field>
         <field type="CharField" name="numero">Nº16</field>
         <field type="CharField" name="codigo_postal">41010</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">39</field>

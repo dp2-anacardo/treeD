@@ -34,6 +34,7 @@
         <field type="CharField" name="apellidos">Díaz</field>
         <field type="CharField" name="descripcion">Me llamo Álvaro y vendo impresiones 3D</field>
         <field type="EmailField" name="email">alvarodiaz@gmail.com</field>
+        <field type="EmailField" name="email_paypal">alvarodiaz@gmail_paypal.com</field>
         <field type="ImageField" name="imagen">perfil1.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
@@ -43,6 +44,7 @@
         <field type="CharField" name="apellidos">Cienfuegos</field>
         <field type="CharField" name="descripcion">Me llamo Luis y compro impresiones 3D</field>
         <field type="EmailField" name="email">luiscienfuegos@gmail.com</field>
+        <field type="EmailField" name="email_paypal">luiscienfuegos@gmail.com</field>
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>

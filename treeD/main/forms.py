@@ -157,7 +157,9 @@ class EditarPerfilForm(forms.ModelForm):
     apellidos = forms.CharField(label="Apellidos", widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Apellidos'}))
     email = forms.CharField(label="Email", widget=forms.EmailInput(
-        attrs={'class': 'form-control', 'placeholder': 'email'}))
+        attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    email_paypal = forms.CharField(label="Email de Paypal", widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}))
     descripcion = forms.CharField(label="Descripción", required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))
     imagen = forms.ImageField(
@@ -174,6 +176,7 @@ class EditarPerfilForm(forms.ModelForm):
             "descripcion",
             "imagen",
             "email",
+            "email_paypal",
         )
 
     def clean_nombre(self):
@@ -373,11 +376,13 @@ class PerfilForm(forms.ModelForm):
             'apellidos',
             'email',
             'descripcion',
+            'email_paypal',
         }
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre'}),
             'apellidos': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellidos'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'email_paypal': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}),
             'descripcion': forms.Textarea(
                 attrs={'class': 'form-control', 'placeholder': 'Descripción', 'rows': 4}),
         }

@@ -16,7 +16,11 @@
         <br>
         <h5 class="text-center">Descripción:</h5><p class="text-center">{{compra.desc_impresion}}</p>
         <br>
+        {% if compra.vendedor.email_paypal %}
         <div class="text-center">{{formPago.render}}</div>
+        {% else %}
+        <div class="text-center">El vendedor no ha registrado cuenta de PayPal. Consulte sus datos en: {{compra.vendedor.email}}</div>
+        {% endif %}
       </div>
       <div class="col-4">
         <h5 class="text-center">Precio:</h5><p class="text-center">{{precio}} €</p>

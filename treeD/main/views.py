@@ -1007,6 +1007,7 @@ def pagado_administrador(request, pk):
         assert request.user.is_superuser == True
         compra=Compra.objects.get(id=pk)
         assert compra.imgprueba_set.all() != None
+        assert compra.vendedor.email_paypal != ''
         compra.pagado = True
         compra.save()
         compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)

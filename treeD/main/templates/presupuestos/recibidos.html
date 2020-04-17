@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container">
-  <h2 class="text-left" style="float: left;"><a href="enviados">Enviados</a></h2>
+  <h2 class="text-left" style="float: left;"><a href="/presupuesto/enviados">Enviados</a></h2>
   <h2 class="text-right" stlye="float: right">Recibidos</h2>
 </div>
 <div class="bottom-footer">
@@ -51,5 +51,38 @@
   {% empty %}
   <h1 class="text-center display-4">No has recibido ningún presupuesto</h1>
   {% endfor %}
+  <div class="container text-center">
+    <ul class="pagination">
+      {% if presupuestos.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{presupuestos.previous_page_number }}">Anterior</a></li>
+      {%else %}  
+        <li class="page-item disabled">
+          <span class="page-link">Anterior</span>
+        </li>
+      {% endif %}
+      {% for num in presupuestos.paginator.page_range %}
+      {% ifequal num presupuestos.number %}
+        <li class="page-item active">
+          <span class="page-link">
+            {{ num }}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endifequal %} 
+    {% endfor %}
+      {% if presupuestos.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{presupuestos.next_page_number }}">Siguiente</a>
+        </li>
+      {%else%}
+      <li class="page-item disabled">
+        <span class="page-link">Siguiente</span>
+      </li>
+      {% endif %}
+      
+    </ul>
+  </div>
 </div>
 {% endblock %}

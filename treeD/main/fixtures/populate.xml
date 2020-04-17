@@ -58,6 +58,7 @@
         <field type="CharField" name="apellidos">Díaz</field>
         <field type="CharField" name="descripcion">Vendo impresiones 3D de cualquier tipo</field>
         <field type="EmailField" name="email">alvarodiaz@gmail.com</field>
+        <field type="EmailField" name="email_paypal">alvarodiaz_paypal@gmail.com</field>
         <field type="ImageField" name="imagen">perfil1.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
@@ -67,6 +68,7 @@
         <field type="CharField" name="apellidos">Cienfuegos</field>
         <field type="CharField" name="descripcion">Compro figuras 3D relacionadas con videoJuegos</field>
         <field type="EmailField" name="email">luiscienfuegos@gmail.com</field>
+        <field type="EmailField" name="email_paypal">luiscienfuegos@gmail.com</field>
         <field type="ImageField" name="imagen">perfil2.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -76,6 +78,7 @@
         <field type="CharField" name="apellidos">Jiminez</field>
         <field type="CharField" name="descripcion">Comprador y vendedor habitual de piezas 3D de cualquier clase</field>
         <field type="EmailField" name="email">alejandroJZ@gmail.com</field>
+        <field type="EmailField" name="email_paypal">alejandroJZ@gmail.com</field>
         <field type="ImageField" name="imagen">perfil3.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
@@ -85,6 +88,7 @@
         <field type="CharField" name="apellidos">Martin</field>
         <field type="CharField" name="descripcion">Me encanta la impresion 3D, llevo varios años imprimiendo y me gustaria ganarme un dinero</field>
         <field type="EmailField" name="email">jesuleMartin@gmail.com</field>
+        <field type="EmailField" name="email_paypal">paypal_jesuleMartin@gmail.com</field>
         <field type="ImageField" name="imagen">perfil4.jpg</field>
         <field type="BooleanField" name="es_afiliado">True</field>
     </object>
@@ -94,28 +98,49 @@
         <field type="CharField" name="apellidos">Cuesta</field>
         <field type="CharField" name="descripcion">Me interesa comprar piezas ya que no tengo impresora 3D</field>
         <field type="EmailField" name="email">jesuleMartin@gmail.com</field>
+        <field type="EmailField" name="email_paypal">paypal_jesuleMartin@gmail.com</field>
         <field type="ImageField" name="imagen">perfil5.jpg</field>
         <field type="BooleanField" name="es_afiliado">False</field>
     </object>
     <!--DIREC PERFIL-->
     <object pk="30" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Villanueva del Rey, C/Avenida de los ilustrados Nº5, 41409</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Sevilla</field>
+        <field type="CharField" name="calle">C/Santa María del Reposo</field>
+        <field type="CharField" name="numero">Nº16 BºC</field>
+        <field type="CharField" name="codigo_postal">41008</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">3</field>
     </object>
     <object pk="31" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Benalmadena, C/Anacardo Nº2, 29639</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Lora del Río</field>
+        <field type="CharField" name="calle">C/Álvaro de Bazán</field>
+        <field type="CharField" name="numero">Nº4 1ºB</field>
+        <field type="CharField" name="codigo_postal">41440</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">24</field>
     </object>
     <object pk="42" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Sevilla, C/Betis Nº16, 41010</field>
+        <field type="CharField" name="ciudad">Sevilla</field>
+        <field type="CharField" name="localidad">Sevilla</field>
+        <field type="CharField" name="calle">C/Betis</field>
+        <field type="CharField" name="numero">Nº16</field>
+        <field type="CharField" name="codigo_postal">41010</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">39</field>
     </object>
     <object pk="43" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Madrid, C/Cervantes Nº12, 28231</field>
+        <field type="CharField" name="ciudad">Madrid</field>
+        <field type="CharField" name="localidad">Madrid</field>
+        <field type="CharField" name="calle">C/Cervantes</field>
+        <field type="CharField" name="numero">Nº12</field>
+        <field type="CharField" name="codigo_postal">28231</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">40</field>
     </object>
     <object pk="44" model="main.direcPerfil">
-        <field type="CharField" name="direccion">Cordoba, C/Cruz conde Nº24, 14008</field>
+        <field type="CharField" name="ciudad">Córdoba</field>
+        <field type="CharField" name="localidad">Córdoba</field>
+        <field type="CharField" name="calle">C/Cruz Conde</field>
+        <field type="CharField" name="numero">Nº24</field>
+        <field type="CharField" name="codigo_postal">14008</field>
         <field to="main.perfil" name="perfil" rel="ManyToOneRel">41</field>
     </object>
     <!--CATEGORIAS-->
@@ -413,7 +438,7 @@
         <field type="CharField" name="desc_impresion">Gato de la suerte, la figura mueve la mano</field>
         <field type="FloatField" name="precio_impresion">16.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
-        <field type="BooleanField" name="pagado">True</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="73" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
@@ -433,7 +458,7 @@
         <field type="CharField" name="desc_impresion">Replica del mítico Ford mustang GT para los niños</field>
         <field type="FloatField" name="precio_impresion">51.0</field>
         <field type="DateField" name="fecha_compra">2020-02-16</field>
-        <field type="BooleanField" name="pagado">True</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="75" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -453,7 +478,7 @@
         <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
         <field type="FloatField" name="precio_impresion">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-18</field>
-        <field type="BooleanField" name="pagado">True</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="77" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
@@ -473,7 +498,7 @@
         <field type="CharField" name="desc_impresion">Set de raqueta y pelota para jugar el ping pong</field>
         <field type="FloatField" name="precio_impresion">24.0</field>
         <field type="DateField" name="fecha_compra">2020-03-26</field>
-        <field type="BooleanField" name="pagado">True</field>
+        <field type="BooleanField" name="pagado">False</field>
     </object>
     <object pk="79" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">39</field>
@@ -582,5 +607,30 @@
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">40</field> <!--IPATIA-->
         <field type="CharField" name="peticion">The Child aka Baby Yoda de STAR WARS</field>
         <field type="CharField" name="descripcion">Se trata de una figura articulada hecha en PVC que mide unos 16 cm de alto.</field>
+    </object>
+     <!--PUNTUACIONES-->
+    <object pk="92" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">25</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">24</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">3</field>
+        <field type="CharField" name="opinion">Me ha gustado el producto, pero podria haber llegado antes</field>
+    </object>
+    <object pk="93" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">26</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">24</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">4</field>
+        <field type="CharField" name="opinion">Me ha gustado el producto</field>
+    </object>
+    <object pk="94" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">77</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">24</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">5</field>
+        <field type="CharField" name="opinion">Excelente calidad</field>
+    </object>
+    <object pk="95" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">78</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">41</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">2</field>
+        <field type="CharField" name="opinion">El producto ha tardado mucho en llegar y la calidad es mejorable</field>
     </object>
 </django-objects>

@@ -1,36 +1,128 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <h1 class="text-center">Mis Compras</h1>
 <div class="bottom-footer">
-  {% for c in compras %}
+  {% for c in compra %}
   <div class="container jumbotron">
     <div class="row">
       <div class="col-lg-4 my-auto text-center">
         <img src={{c.imgcompra_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark">
+        <br>
+        {% if compras|get_item:c %}
+        {% for compra in compras|get_item:c %}
+        {% if compra.nota == 1 %}
+        <br>
+        <div class="rating mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        {% if compra.nota == 2 %}
+        <br>
+        <div class="rating mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          {% endif %}
+          {% if compra.nota == 3 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+          {% if compra.nota == 4 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+          {% if compra.nota == 5 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif%}
+        </div>
+        <div class="col-lg-4 my-auto">
+          <h5 class="text-center">Nombre:</h5>
+          <p class="text-center">{{c.nombre_impresion}}</p>
+          <h5 class="text-center">Fecha de compra:</h5>
+          <p class="text-center">{{c.fecha_compra}}</p>
+          <h5 class="text-center">Opinion:</h5>
+          <p class="text-center"> {% if compras|get_item:c %}
+            {% for compra in compras|get_item:c %}
+            {{compra.opinion}}
+            {% endfor %}
+            {% else %}
+            <a href="{% url 'crearOpinion_url' c.id %}" class="btn btn-dark m-auto">Deja tu opinión</a>
+            {% endif %}</p>
+        </div>
+        <div class="col-lg-4 my-auto">
+          <h5 class="text-center">Precio:</h5>
+          <p class="text-center">{{c.precio_impresion}}€</p>
+          <h5 class="text-center">Vendedor:</h5>
+          <p class="text-center">{{c.vendedor}}</p>
+          <h5 class="text-center">Estado:</h5>
+          <p class="text-center">
+            {% if c.imgprueba_set.first.imagen == None %}
+            PENDIENTE
+            {% else %}
+            ENVIADO
+            {%endif%}
+          </p>
+        </div>
       </div>
-      <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Nombre:</h5><p class="text-center">{{c.nombre_impresion}}</p>
-       <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{c.fecha_compra}}</p>
-      </div>
-       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Precio:</h5><p class="text-center">{{c.precio_impresion}}€</p>
-       <h5 class="text-center">Vendedor:</h5><p class="text-center">{{c.vendedor}}</p>
-       <h5 class="text-center">Estado:</h5><p class="text-center">    
-              {% if c.imgprueba_set.first.imagen == None %}
-                PENDIENTE
-              {% else %}
-                ENVIADO
-              {%endif%}
-        </p>
-      </div>
+      <br>
     </div>
-    <br>
+    {% empty %}
+    <h1 class="text-center display-4">No has realizado ninguna compra</h1>
+    {% endfor %}
   </div>
-  {% empty %}
-  <h1 class="text-center display-4">No has realizado ninguna compra</h1>
-  {% endfor %}
-</div>
-{% endblock %}
 
+  <div class="container text-center">
+    <ul class="pagination">
+      {% if compra.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{compra.previous_page_number }}">Anterior</a></li>
+      {%else %}
+      <li class="page-item disabled">
+        <span class="page-link">Anterior</span>
+      </li>
+      {% endif %}
+      {% for num in compra.paginator.page_range %}
+      {% ifequal num compra.number %}
+      <li class="page-item active">
+        <span class="page-link">
+          {{ num }}
+          <span class="sr-only">(current)</span>
+        </span>
+      </li>
+      {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endifequal %}
+      {% endfor %}
+      {% if compra.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{compra.next_page_number }}">Siguiente</a>
+      </li>
+      {%else%}
+      <li class="page-item disabled">
+        <span class="page-link">Siguiente</span>
+      </li>
+      {% endif %}
+
+    </ul>
+  </div>
+  {% endblock %}

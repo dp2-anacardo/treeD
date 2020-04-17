@@ -2,33 +2,80 @@
 {% load static %}
 {% block content %}
 
+<script>
+  function myFunction(id) {
+      var r = confirm("¿Está seguro que desea eliminar esta impresión?");
+      if (r == true) {
+          window.location.replace("/impresion/eliminarImpresion/"+id);
+      } else {
+          
+      }
+  }
+</script>
+
 <div class="bottom-footer">
-    <h1 class="text-center"> Mis Impresiones</h1> <br> 
+    <h1 class="text-center"> Mis Impresiones</h1> <br>
     <div class="text-center">
         <h4 class="text-center d-inline">Nueva Publicación: </h4>
         <a href="{% url 'crearImpresion_url'%}" class="btn btn-dark m-auto d-inline">Crear</a><br> <br><br>
     </div>
-{% for i in query %}
+    {% for i in query %}
     <div class="container">
         <div class="jumbotron">
             <div class="row">
                 <div class="col-lg-4 my-auto text-center">
-                    <img src={{i.imgimpresion_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >
+                    <img src={{i.imgimpresion_set.all.0.imagen.url}} height="200" width="200"
+                        class="img-fluid border border-dark">
                 </div>
                 <div class="col-lg-4 my-auto">
-                    <h5 class="text-center">Nombre:</h5><p class="text-center">{{i.nombre}}</p>
-                    <h5 class="text-center">Precio:</h5><p class="text-center">{{i.precio}}</p> 
+                    <h5 class="text-center">Nombre:</h5>
+                    <p class="text-center">{{i.nombre}}</p>
+                    <h5 class="text-center">Precio:</h5>
+                    <p class="text-center">{{i.precio}}€</p>
                 </div>
                 <div class="col-lg-4 my-auto text-center">
-                        <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
-                        <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
-                        <a href="{% url 'eliminarImpresion_url' i.id %}" class="btn btn-dark m-auto">Eliminar</a> <br> <br>
+                    <a href="{% url 'mostrarImpresion_url' i.id %}" class="btn btn-dark m-auto">Ver</a> <br> <br>
+                    <a href="{% url 'editarImpresion_url' i.id %}" class="btn btn-dark m-auto">Editar</a> <br> <br>
+                    <button class="btn btn-dark m-auto" onclick="myFunction('{{i.id}}')">Eliminar</button>
                 </div>
             </div><br>
+        </div>
     </div>
+    {% empty %}
+    <h1 class="text-center display-4">No has publicado nada</h1>
+    {% endfor %}
 </div>
-{% empty %}
-  <h1 class="text-center display-4">No has publicado nada</h1>
-  {% endfor %}
-</div>
+<div class="container text-center">
+    <ul class="pagination">
+      {% if query.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{query.previous_page_number }}">Anterior</a></li>
+      {%else %}  
+        <li class="page-item disabled">
+          <span class="page-link">Anterior</span>
+        </li>
+      {% endif %}
+      {% for num in query.paginator.page_range %}
+      {% ifequal num query.number %}
+        <li class="page-item active">
+          <span class="page-link">
+            {{ num }}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endifequal %} 
+    {% endfor %}
+      {% if query.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{query.next_page_number }}">Siguiente</a>
+        </li>
+      {%else%}
+      <li class="page-item disabled">
+        <span class="page-link">Siguiente</span>
+      </li>
+      {% endif %}
+      
+    </ul>
+  </div>
 {% endblock %}

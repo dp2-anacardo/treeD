@@ -1,21 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1 class="text-center">Detalles de compra</h1>
+<h1 class="text-center">Detalles de pago</h1>
 <div class="bottom-footer">
   <div class="container jumbotron">
     <div class="row">
       <div class="col-4">
-        <h5 class="text-center">Nombre:</h5><p class="text-center">{{compra.nombre_impresion}}</p>
-        <br>
+        <h5 class="text-center">ID de la compra:</h5><p class="text-center">{{compra.id}}</p>
+        <h5 class="text-center">Fecha de la compra:</h5><p class="text-center">{{compra.fecha_compra}}</p>
       </div>
       <div class="col-4">
         <h5 class="text-center">Vendedor:</h5><p class="text-center">{{compra.vendedor}}</p>
-        <br>
-        <h5 class="text-center">Comprador:</h5><p class="text-center">{{compra.comprador}}</p>
-        <br>
+        <h5 class="text-center">Precio de la impresión:</h5><p class="text-center">{{compra.precio_impresion}} €</p>
         <h5 class="text-center">Descripción:</h5><p class="text-center">{{compra.desc_impresion}}</p>
-        <br>
         {% if compra.vendedor.email_paypal %}
         <div class="text-center">{{formPago.render}}</div>
         {% else %}
@@ -23,7 +20,8 @@
         {% endif %}
       </div>
       <div class="col-4">
-        <h5 class="text-center">Precio:</h5><p class="text-center">{{precio}} €</p>
+        <h5 class="text-center">Comprador:</h5><p class="text-center">{{compra.comprador}}</p>
+        <h5 class="text-center">A pagar:</h5><p class="text-center">{{precio}} €</p>
       </div>
     </div>
   </div>

@@ -334,6 +334,15 @@ class ImagenesPruebaForm(forms.Form):
             validators=[validate_file_extension]
     )
 
+class CodigoForm(forms.Form):
+    codigo_envio = forms.CharField(label='Código de envío', required=True,
+    widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2', 'placeholder': 'Código de envío'}))
+
+    empresa_envio = forms.CharField(label='Empresa encargada del envío', required=True,
+    widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2', 
+    'placeholder': 'Correos, AliExpress'})
+    )
+
 
 class BuscarUsuariosForm(forms.Form):
 

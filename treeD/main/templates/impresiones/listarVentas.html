@@ -25,6 +25,12 @@
         <p class="text-center">{{v.precio_impresion}}€</p>
         <h5 class="text-center">Comprador:</h5>
         <p class="text-center">{{v.comprador}}</p>
+        {% if v.imgprueba_set.all.0 != None %}
+        <h5 class="text-center">Código de envío:</h5>
+        <p class="text-center">{{v.codigoenvio_set.all.0.codigo_envio}}</p>
+        <h5 class="text-center">Empresa encargada del envío:</h5>
+        <p class="text-center">{{v.codigoenvio_set.all.0.empresa_envio}}</p>
+        {% endif %}
       </div>
     </div>
   </div>

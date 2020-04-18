@@ -961,3 +961,12 @@ def estadisticas_venta(request):
     except:
         return redirect('error_url')
 
+@login_required(login_url="/login/")
+def info_cancelar_afiliado(request):
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+        return render(request, 'cancelarAfiliado.html')
+    except:
+        return redirect('error_url')
+

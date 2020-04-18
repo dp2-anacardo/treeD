@@ -122,6 +122,8 @@ class Presupuesto(models.Model):
     descripcion = models.TextField(verbose_name='Descripcion')
     precio = models.FloatField(verbose_name='Precio', null=True)
     notas = models.TextField(verbose_name='Notas', null=True)
+    tamaño = models.IntegerField(verbose_name='Tamaño', null=True)
+    material = models.TextField(verbose_name='Material', null=True)
     fecha_envio = models.DateField(verbose_name="Fecha de envio", null=True)
     resp_interesado = models.BooleanField(verbose_name='Respuesta del Interesado', null=True)
     resp_vendedor = models.BooleanField(verbose_name='Respuesta del Vendedor', null=True)

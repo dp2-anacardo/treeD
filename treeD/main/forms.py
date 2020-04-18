@@ -41,11 +41,19 @@ def validate_file_extension(value):
         raise ValidationError('Los archivos deben ser imagenes .jpg, .png, .jpeg o .bmp')
 
 class PedirPresupuestoForm(forms.ModelForm):
+
+    tamaño = forms.IntegerField(label="Tamaño", required=False, widget=forms.NumberInput(
+        attrs={'class': 'form-control', 'placeholder': 'Tamaño'}))
+    material = forms.CharField(label="Material", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Material'}))
+
     class Meta:
         model = Presupuesto
         fields = {
             'peticion',
             'descripcion',
+            'tamaño',
+            'material'
         }
         widgets = {
             'peticion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Peticion'}),
@@ -54,7 +62,7 @@ class PedirPresupuestoForm(forms.ModelForm):
 
 
 class ResponderPresupuestoForm(forms.ModelForm):
-    fecha_envio = forms.DateField(
+    fecha_envio = forms.DateField(required=False,
         widget=DateInput(attrs={'class': 'form-control',
                                 'placeholder': 'Fecha de envio'})
     )
@@ -76,6 +84,9 @@ class ResponderPresupuestoForm(forms.ModelForm):
         precio = cleaned_data.get("precio")
         fecha_envio = cleaned_data.get("fecha_envio")
         today = date.today()
+
+        if not fecha_envio:
+            raise ValidationError((""), code='invalid')
 
         if precio <= 0:
             msg = "El precio debe ser mayor que 0"
@@ -158,7 +169,7 @@ class EditarPerfilForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Apellidos'}))
     email = forms.CharField(label="Email", widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email'}))
-    email_paypal = forms.CharField(label="Email de Paypal", required=False, widget=forms.EmailInput(
+    email_paypal = forms.CharField(label="Email de Paypal", widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}))
     descripcion = forms.CharField(label="Descripción", required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))

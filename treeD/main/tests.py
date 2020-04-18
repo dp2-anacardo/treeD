@@ -673,9 +673,3 @@ class PagosAdministrador(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/administrador/compras/')
         self.assertEqual(response.status_code, 302)
-
-    def test_pago_administrador_no_valido(self):
-        c = Client()
-        c.login(username='administrator', password='administrator')
-        response = c.get('/administrador/pagoCompras/25/')
-        self.assertEqual(response.status_code, 302)

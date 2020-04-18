@@ -11,6 +11,7 @@ from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgIm
 from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm
 from django.core.paginator import Paginator
 import operator
+from django.core.paginator import Paginator
 
 @login_required(login_url="/login/")
 def crear_opinion(request, pk):
@@ -290,8 +291,13 @@ def mostrar_impresion(request, pk):
             comprar = False
         categorias = impresion.categorias.all()
         imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        otras_impresiones = Impresion.objects.filter(vendedor=impresion.vendedor).exclude(pk=pk)
+        paginator = Paginator(otras_impresiones, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/mostrarImpresion.html', {
             'impresion': impresion,
+            'otras_impresiones': page_obj,
             'imagenes': imagenes_impresion,
             'categorias': categorias,
             'comprar': comprar
@@ -962,6 +968,60 @@ def estadisticas_venta(request):
         return redirect('error_url')
 
 @login_required(login_url="/login/")
+def compras_administrador(request):
+    
+    try:
+        assert request.user.is_superuser == True
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'registration/compras.html',{'compras':page_obj})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pago_compra_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        precio= compra.precio_impresion - (compra.precio_impresion * 0.1)
+        paypal_dict = {
+            "business": compra.vendedor.email_paypal,
+            "amount": str(precio),
+            "item_name": compra.nombre_impresion,
+            "currency_code": "EUR",
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return": request.build_absolute_uri(reverse('realizarPago_url', args=[compra.id])),
+            "cancel_return": request.build_absolute_uri(reverse('compras_url')),
+        }
+        if settings.DEBUG == False:
+            formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+        else:
+            formPago = PayPalPaymentsForm(initial=paypal_dict)
+        return render(request, 'registration/pagoAdministrador.html',{'formPago':formPago, 'compra':compra, 'precio':precio})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pagado_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        assert compra.vendedor.email_paypal != ''
+        compra.pagado = True
+        compra.save()
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request,'registration/compras.html',{'compras':page_obj})
+    except:
+        return redirect('error_url')
 def info_cancelar_afiliado(request):
     try:
         usuario = usuario_logueado(request)

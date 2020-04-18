@@ -63,6 +63,7 @@ urlpatterns = [
     path('hazteAfiliado/', views.hazte_afiliado, name="hazteAfiliado_url"),
     path('usuarios/afiliarse/', views.subscribirse, name="subscripcion_url"),
     path('presupuesto/mostrarRespuesta/<int:pk>/', views.ver_respuesta_presupuesto, name="mostrarRespuesta_url"),
+    path('cancelarAfiliado/',views.info_cancelar_afiliado, name="cancelarAfiliado_url"),
     path('usuarios/estadisticas/', views.estadisticas_venta, name="estadisticas_url"),
 
     path('administrador/compras/', views.compras_administrador, name="compras_url"),

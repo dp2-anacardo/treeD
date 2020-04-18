@@ -1017,3 +1017,11 @@ def pagado_administrador(request, pk):
         return render(request,'registration/compras.html',{'compras':page_obj})
     except:
         return redirect('error_url')
+def info_cancelar_afiliado(request):
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+        return render(request, 'cancelarAfiliado.html')
+    except:
+        return redirect('error_url')
+

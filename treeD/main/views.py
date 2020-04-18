@@ -1002,7 +1002,7 @@ def compras_administrador(request):
 @login_required(login_url="/login/")
 def pago_compra_administrador(request, pk):
 
-    # try:
+    try:
         assert request.user.is_superuser == True
         compra=Compra.objects.get(id=pk)
         assert compra.imgprueba_set.all() != None
@@ -1021,8 +1021,8 @@ def pago_compra_administrador(request, pk):
         else:
             formPago = PayPalPaymentsForm(initial=paypal_dict)
         return render(request, 'registration/pagoAdministrador.html',{'formPago':formPago, 'compra':compra, 'precio':precio})
-    # except:
-    #     return redirect('error_url')
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def pagado_administrador(request, pk):

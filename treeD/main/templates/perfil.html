@@ -56,6 +56,11 @@
         <a href="{% url 'editarPerfil_url' %}" class="btn btn-dark m-auto">Editar Perfil</a> <br> <br> <br>
         <a href="{% url 'editarDirecciones_url' %}" class="btn btn-dark m-auto">Editar Direcciones</a><br> <br> <br>
         <a href="{% url 'editarPassword_url' %}" class="btn btn-dark m-auto">Editar Contraseña</a>
+        {% if user.perfil.es_afiliado %}
+        <br> <br> <br>
+        <a href="{% url 'cancelarAfiliado_url' %}" class="btn btn-dark m-auto">Cancelar Suscripcion</a>
+
+        {% endif %}
         <div class="text-center">{{formAfiliado.render}}</div>
         {% endif %}
       </div>

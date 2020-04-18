@@ -969,7 +969,7 @@ def estadisticas_venta(request):
 
 @login_required(login_url="/login/")
 def compras_administrador(request):
-
+    
     try:
         assert request.user.is_superuser == True
         compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
@@ -1022,3 +1022,11 @@ def pagado_administrador(request, pk):
         return render(request,'registration/compras.html',{'compras':page_obj})
     except:
         return redirect('error_url')
+def info_cancelar_afiliado(request):
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+        return render(request, 'cancelarAfiliado.html')
+    except:
+        return redirect('error_url')
+

@@ -24,7 +24,11 @@
         <h5 class="text-center">Precio:</h5>
         <p class="text-center">{{v.precio_impresion}}€</p>
         <h5 class="text-center">Comprador:</h5>
-        <p class="text-center">{{v.comprador}}</p>
+        <p class="text-center">
+        {%if v.comprador.es_afiliado%}
+          <img src="{% static "tick.png" %}" height="20" width="20" >
+        {%endif%}
+        {{v.comprador}}</p>
       </div>
     </div>
   </div>

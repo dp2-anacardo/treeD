@@ -307,8 +307,13 @@ def mostrar_impresion(request, pk):
             comprar = False
         categorias = impresion.categorias.all()
         imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        otras_impresiones = Impresion.objects.filter(vendedor=impresion.vendedor).exclude(pk=pk)
+        paginator = Paginator(otras_impresiones, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/mostrarImpresion.html', {
             'impresion': impresion,
+            'otras_impresiones': page_obj,
             'imagenes': imagenes_impresion,
             'categorias': categorias,
             'comprar': comprar
@@ -988,7 +993,7 @@ def estadisticas_venta(request):
 
 @login_required(login_url="/login/")
 def compras_administrador(request):
-
+    
     try:
         assert request.user.is_superuser == True
         compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)

@@ -102,15 +102,17 @@ class Perfil(models.Model):
 class Compra(models.Model):
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null=True)
     vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null=True)
-    nombre_impresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
-    desc_impresion = models.TextField(verbose_name='Descripción de la impresión', blank=True)
-    precio_impresion = models.FloatField(verbose_name='Precio de la impresión', null=True)
+    nombre = models.TextField(verbose_name='Nombre de la impresión', blank=True)
+    descripcion = models.TextField(verbose_name='Descripción de la impresión', blank=True)
+    precio = models.FloatField(verbose_name='Precio de la impresión', null=True)
     direccion = models.ForeignKey('DirecPerfil', on_delete=models.SET_NULL, null=True)
+    tamaño = models.IntegerField(verbose_name='Tamaño', null=True)
+    material = models.TextField(verbose_name='Material', null=True)
     fecha_compra = models.DateField(verbose_name="Fecha de compra")
     pagado = models.BooleanField(verbose_name='Pagado por administrador?')
 
     def __str__(self):
-        return self.nombre_impresion + str(self.fecha_compra)
+        return self.nombre + str(self.fecha_compra)
 
     class Meta:
         ordering = ('pk', 'fecha_compra', )

@@ -210,7 +210,8 @@ class EditarPerfilTest(TestCase):
             "nombre": 'Manuel',
             "apellidos": "Roldan",
             "descripcion": "Hola soy ManuErCaximba",
-            "email": "caximba@gmail.com"
+            "email": "caximba@gmail.com",
+            "email_paypal": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
@@ -384,7 +385,7 @@ class ComprarImpresionesTest(TestCase):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/comprar/17/31/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_comprar_impresion_vendedor(self):
         c = Client()
@@ -605,7 +606,7 @@ class AceptarPresupuestosTest(TestCase):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/presupuesto/comprar/32/31/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_comprar_presupuesto_vendedor(self):
         c = Client()

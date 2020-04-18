@@ -86,9 +86,14 @@
         <br>
         <h5>Email:</h5>
         <p>{{perfil.email}}</p>
+        <br>
+        {% if user.perfil.email_paypal != None %}
+        <h5>Email de Paypal:</h5>
+        <p>{{perfil.email_paypal}}</p>
+        <br>
+        {% endif %}
         {% endif %}
 
-        <br>
         <h5>Descripción:</h5>
         <p>{{perfil.descripcion}}</p>
 

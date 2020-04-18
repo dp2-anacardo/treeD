@@ -9,7 +9,7 @@ class ImgPrueba(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
+        return self.compra.nombre + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)
@@ -19,7 +19,7 @@ class ImgCompra(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
+        return self.compra.nombre + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)

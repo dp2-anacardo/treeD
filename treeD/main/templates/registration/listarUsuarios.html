@@ -88,7 +88,7 @@
 
     {% endfor %}
 
-    {%if query.count == 0%}
+    {%if query.count != 0%}
     <div class="container text-center">
       <ul class="pagination">
         {% if query.has_previous %}

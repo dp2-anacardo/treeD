@@ -81,7 +81,7 @@
   </div>
 </div>
 
-{%if impresiones.count == 0%}
+{%if impresiones.count != 0%}
 <div class="container text-center">
   <ul class="pagination">
     {% if impresiones.has_previous %}

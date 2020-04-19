@@ -92,7 +92,7 @@
         <h5>Email:</h5>
         <p>{{perfil.email}}</p>
         <br>
-        {% if user.perfil.email_paypal != None %}
+        {% if user.perfil.email_paypal != None and user.perfil.email_paypal != '' %}
         <h5>Email de Paypal:</h5>
         <p>{{perfil.email_paypal}}</p>
         <br>

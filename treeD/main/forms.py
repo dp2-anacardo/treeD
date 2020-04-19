@@ -60,6 +60,15 @@ class PedirPresupuestoForm(forms.ModelForm):
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripcion'}),
         }
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        tamaño = cleaned_data.get("tamaño")
+        if tamaño !=None and tamaño !="":
+            print("WE ARE IN BOYS")
+            if not re.match("^(\d+) x (\d+)*$", tamaño):
+                msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+                raise ValidationError({'tamaño': [msg, ]})
+
 
 class ResponderPresupuestoForm(forms.ModelForm):
     fecha_envio = forms.DateField(required=False,

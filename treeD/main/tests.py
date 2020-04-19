@@ -657,3 +657,19 @@ class EstadisticasVenta(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/usuarios/estadisticas/')
         self.assertEqual(response.status_code, 200)
+        
+class PagosAdministrador(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_listar_compras_valido(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_listar_compras_no_valido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 302)

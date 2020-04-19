@@ -12,13 +12,13 @@
     <div class="jumbotron">
     <div class="row">
     <div class="col-lg-6">
-      <h5 class="display-4 ml-5">Título</h5><p class="lead ml-5">{{presupuesto.peticion}}</p>
-      <h5 class="display-4 ml-5">Descripción</h5><p class="lead ml-5 ">{{presupuesto.descripcion}}</p>
+      <h5 class="display-4 ml-5">Título</h5><p class="lead ml-5 text-break">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 ml-5">Descripción</h5><p class="lead ml-5 text-break">{{presupuesto.descripcion}}</p>
       {% if presupuesto.tamaño != None and presupuesto.tamaño != "" %}
-      <h5 class="display-4 ml-5">Tamaño</h5><p class="lead ml-5 ">{{presupuesto.tamaño}}</p>
+      <h5 class="display-4 ml-5">Tamaño</h5><p class="lead ml-5 text-break">{{presupuesto.tamaño}}</p>
       {% endif %}
       {% if presupuesto.material != None and presupuesto.material != ""%}
-      <h5 class="display-4 ml-5">Material</h5><p class="lead ml-5 ">{{presupuesto.material}}</p>
+      <h5 class="display-4 ml-5">Material</h5><p class="lead ml-5 text-break">{{presupuesto.material}}</p>
       {% endif %}
     </div>
     
@@ -46,13 +46,13 @@
     <br>
     <div class="jumbotron">
     <div class="text-center">
-      <h5 class="display-4 ">Título</h5><p class="lead">{{presupuesto.peticion}}</p>
-      <h5 class="display-4 ">Descripción</h5><p class="lead">{{presupuesto.descripcion}}</p>
+      <h5 class="display-4 ">Título</h5><p class="lead text-break">{{presupuesto.peticion}}</p>
+      <h5 class="display-4 ">Descripción</h5><p class="lead text-break">{{presupuesto.descripcion}}</p>
       {% if presupuesto.tamaño != None and presupuesto.tamaño != ""%}
-      <h5 class="display-4 ">Tamaño</h5><p class="lead ">{{presupuesto.tamaño}}</p>
+      <h5 class="display-4 ">Tamaño</h5><p class="lead text-break">{{presupuesto.tamaño}}</p>
       {% endif %}
       {% if presupuesto.material != None and presupuesto.material != "" %}
-      <h5 class="display-4 ">Material</h5><p class="lead">{{presupuesto.material}}</p>
+      <h5 class="display-4 ">Material</h5><p class="lead text-break">{{presupuesto.material}}</p>
       {% endif %}
   </div>
 </div>

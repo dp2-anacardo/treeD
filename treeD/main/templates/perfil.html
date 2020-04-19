@@ -78,13 +78,13 @@
         {% if user.perfil.id == perfil.id %}
         <br>
         <h5>Nombre:</h5>
-        <p>{{perfil.nombre}}</p>
+        <p class="text-break">{{perfil.nombre}}</p>
         {% endif %}
 
         {% if user.perfil.id == perfil.id %}
         <br>
         <h5>Apellidos:</h5>
-        <p>{{perfil.apellidos}}</p>
+        <p class="text-break">{{perfil.apellidos}}</p>
         {% endif %}
 
         {% if user.perfil.id == perfil.id %}
@@ -100,7 +100,7 @@
         {% endif %}
 
         <h5>Descripción:</h5>
-        <p>{{perfil.descripcion}}</p>
+        <p class="text-break">{{perfil.descripcion}}</p>
 
         {% if user != perfil.usuario %}
         <br>

@@ -34,6 +34,7 @@
   {% endfor %}
 </div>
 
+{%if compras.count == 0%}
 <div class="container text-center">
   <ul class="pagination">
     {% if compras.has_previous %}
@@ -67,4 +68,5 @@
 
   </ul>
 </div>
+{%endif%}
 {% endblock %}

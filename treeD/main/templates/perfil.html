@@ -145,6 +145,8 @@
       <h3 class="text-center mx-auto"> No se han encontrado resultados</h3>
       {% endfor %}
     </div>
+
+    {%if impresiones.count == 0%}
     <div class="container text-center">
       <ul class="pagination">
         {% if impresiones.has_previous %}
@@ -179,6 +181,7 @@
 
       </ul>
     </div>
+    {%endif%}
     </div>
 
     <h1 class="text-center">Opiniones</h1>
@@ -229,6 +232,7 @@
       <h3 class="text-center">No se han encontrado resultados</h3>
       {% endfor %}
 
+      {%if opiniones.count == 0%}
       <div class="container text-center">
         <ul class="pagination">
           {% if opiniones.has_previous %}
@@ -260,8 +264,8 @@
             <span class="page-link">Siguiente</span>
           </li>
           {% endif %}
-  
+      
         </ul>
       </div>
-
+      {%endif%}
   {% endblock %}

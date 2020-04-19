@@ -424,9 +424,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Varias figuras</field>
-        <field type="CharField" name="desc_impresion">Figuras para adornar cuartos para los niños.</field>
-        <field type="FloatField" name="precio_impresion">11.0</field>
+        <field type="CharField" name="nombre">Varias figuras</field>
+        <field type="CharField" name="descripcion">Figuras para adornar cuartos para los niños.</field>
+        <field type="FloatField" name="precio">11.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -434,9 +434,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Gato estilo chino</field>
-        <field type="CharField" name="desc_impresion">Gato de la suerte, la figura mueve la mano</field>
-        <field type="FloatField" name="precio_impresion">16.0</field>
+        <field type="CharField" name="nombre">Gato estilo chino</field>
+        <field type="CharField" name="descripcion">Gato de la suerte, la figura mueve la mano</field>
+        <field type="FloatField" name="precio">16.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -444,9 +444,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">39</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">42</field>
-        <field type="CharField" name="nombre_impresion">Gato estilo chino</field>
-        <field type="CharField" name="desc_impresion">Gato de la suerte, la figura mueve la mano</field>
-        <field type="FloatField" name="precio_impresion">16.0</field>
+        <field type="CharField" name="nombre">Gato estilo chino</field>
+        <field type="CharField" name="descripcion">Gato de la suerte, la figura mueve la mano</field>
+        <field type="FloatField" name="precio">16.0</field>
         <field type="DateField" name="fecha_compra">2020-03-15</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -454,9 +454,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Réplica de un Ford mustang GT</field>
-        <field type="CharField" name="desc_impresion">Replica del mítico Ford mustang GT para los niños</field>
-        <field type="FloatField" name="precio_impresion">51.0</field>
+        <field type="CharField" name="nombre">Réplica de un Ford mustang GT</field>
+        <field type="CharField" name="descripcion">Replica del mítico Ford mustang GT para los niños</field>
+        <field type="FloatField" name="precio">51.0</field>
         <field type="DateField" name="fecha_compra">2020-02-16</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -464,9 +464,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
-        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
-        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
-        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="CharField" name="nombre">Pantallas protectoras</field>
+        <field type="CharField" name="descripcion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-16</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -474,9 +474,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">39</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">42</field>
-        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
-        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
-        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="CharField" name="nombre">Pantallas protectoras</field>
+        <field type="CharField" name="descripcion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-18</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -484,9 +484,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Pantallas protectoras</field>
-        <field type="CharField" name="desc_impresion">Se fabrica pantallas protectoras para combatir el covid-19</field>
-        <field type="FloatField" name="precio_impresion">26.0</field>
+        <field type="CharField" name="nombre">Pantallas protectoras</field>
+        <field type="CharField" name="descripcion">Se fabrica pantallas protectoras para combatir el covid-19</field>
+        <field type="FloatField" name="precio">26.0</field>
         <field type="DateField" name="fecha_compra">2020-03-17</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -494,9 +494,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">40</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
-        <field type="CharField" name="nombre_impresion">Set raquetas y pelota de ping pong</field>
-        <field type="CharField" name="desc_impresion">Set de raqueta y pelota para jugar el ping pong</field>
-        <field type="FloatField" name="precio_impresion">24.0</field>
+        <field type="CharField" name="nombre">Set raquetas y pelota de ping pong</field>
+        <field type="CharField" name="descripcion">Set de raqueta y pelota para jugar el ping pong</field>
+        <field type="FloatField" name="precio">24.0</field>
         <field type="DateField" name="fecha_compra">2020-03-26</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -504,9 +504,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">39</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
-        <field type="CharField" name="nombre_impresion">Molde muñeco articulado</field>
-        <field type="CharField" name="desc_impresion">Model para crear con resina un muñeco articulado</field>
-        <field type="FloatField" name="precio_impresion">51.0</field>
+        <field type="CharField" name="nombre">Molde muñeco articulado</field>
+        <field type="CharField" name="descripcion">Model para crear con resina un muñeco articulado</field>
+        <field type="FloatField" name="precio">51.0</field>
         <field type="DateField" name="fecha_compra">2020-03-28</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>

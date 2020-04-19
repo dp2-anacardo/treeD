@@ -111,7 +111,7 @@
     </div>
   </div>
 
-  {%if otras_impresiones.count == 0%}
+  {%if otras_impresiones.count != 0%}
   <div class="container text-center">
     <ul class="pagination">
       {% if otras_impresiones.has_previous %}

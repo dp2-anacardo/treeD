@@ -527,9 +527,11 @@ def comprar_impresion_3d(request, pk, direccion):
         compra = Compra(
             comprador=comprador,
             vendedor=impresion.vendedor,
-            nombre_impresion=impresion.nombre,
-            desc_impresion=impresion.descripcion,
-            precio_impresion=impresion.precio,
+            nombre=impresion.nombre,
+            descripcion=impresion.descripcion,
+            precio=impresion.precio,
+            tamaño=None,
+            material=None,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False
@@ -843,9 +845,11 @@ def comprar_presupuesto(request, pk, direccion):
         compra = Compra(
             comprador=comprador,
             vendedor=presupuesto.vendedor,
-            nombre_impresion=presupuesto.peticion,
-            desc_impresion=presupuesto.descripcion,
-            precio_impresion=presupuesto.precio,
+            nombre=presupuesto.peticion,
+            descripcion=presupuesto.descripcion,
+            precio=presupuesto.precio,
+            tamaño=presupuesto.tamaño,
+            material=presupuesto.material,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False
@@ -963,21 +967,21 @@ def estadisticas_venta(request):
         productos= Compra.objects.filter(vendedor=usuario).filter(pagado=True)
         num_ganancias_totales=0
         for c in productos:
-            num_ganancias_totales = num_ganancias_totales + (c.precio_impresion - (0.1*c.precio_impresion))
+            num_ganancias_totales = num_ganancias_totales + (c.precio - (0.1*c.precio))
         productosMensuales= Compra.objects.filter(vendedor=usuario).filter(pagado=True).filter(fecha_compra__month = mes)
         num_ganancias_mensuales=0
         for c in productosMensuales:
-            num_ganancias_mensuales = num_ganancias_mensuales + (c.precio_impresion - (0.1*c.precio_impresion))
+            num_ganancias_mensuales = num_ganancias_mensuales + (c.precio - (0.1*c.precio))
         productosPendientesPago=Compra.objects.filter(vendedor=usuario).filter(pagado=False)
         num_ganancias_pendientes=0
         for c in productosPendientesPago:
-            num_ganancias_pendientes=num_ganancias_pendientes + (c.precio_impresion - (0.1*c.precio_impresion))
+            num_ganancias_pendientes=num_ganancias_pendientes + (c.precio - (0.1*c.precio))
         misImpresiones= Impresion.objects.filter(vendedor=usuario)
         compras=[]
         nombres = []
         
         for i in misImpresiones:
-            numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre_impresion=i.nombre).count()
+            numeroCompras= Compra.objects.filter(vendedor=usuario).filter(nombre=i.nombre).count()
             compras.append(numeroCompras)
         
         diccionario = dict(zip(misImpresiones,compras))

@@ -161,9 +161,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Impresiones varias</field>
-        <field type="CharField" name="desc_impresion">Vendo varias impresiones de diversas series y pelis.</field>
-        <field type="FloatField" name="precio_impresion">15.0</field>
+        <field type="CharField" name="nombre">Impresiones varias</field>
+        <field type="CharField" name="descripcion">Vendo varias impresiones de diversas series y pelis.</field>
+        <field type="FloatField" name="precio">15.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
@@ -171,9 +171,9 @@
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">3</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">24</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
-        <field type="CharField" name="nombre_impresion">Gato gordo</field>
-        <field type="CharField" name="desc_impresion">Gato de los que mueven la manita</field>
-        <field type="FloatField" name="precio_impresion">20.0</field>
+        <field type="CharField" name="nombre">Gato gordo</field>
+        <field type="CharField" name="descripcion">Gato de los que mueven la manita</field>
+        <field type="FloatField" name="precio">20.0</field>
         <field type="DateField" name="fecha_compra">2020-03-05</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>

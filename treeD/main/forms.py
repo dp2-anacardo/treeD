@@ -41,20 +41,37 @@ def validate_file_extension(value):
         raise ValidationError('Los archivos deben ser imagenes .jpg, .png, .jpeg o .bmp')
 
 class PedirPresupuestoForm(forms.ModelForm):
+
+    tamaño = forms.CharField(label="Tamaño", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Altura x Anchura'}))
+    material = forms.CharField(label="Material", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Material'}))
+
     class Meta:
         model = Presupuesto
         fields = {
             'peticion',
             'descripcion',
+            'tamaño',
+            'material'
         }
         widgets = {
             'peticion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Peticion'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripcion'}),
         }
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        tamaño = cleaned_data.get("tamaño")
+        if tamaño !=None and tamaño !="":
+            print("WE ARE IN BOYS")
+            if not re.match("^(\d+) x (\d+)*$", tamaño):
+                msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+                raise ValidationError({'tamaño': [msg, ]})
+
 
 class ResponderPresupuestoForm(forms.ModelForm):
-    fecha_envio = forms.DateField(
+    fecha_envio = forms.DateField(required=False,
         widget=DateInput(attrs={'class': 'form-control',
                                 'placeholder': 'Fecha de envio'})
     )
@@ -76,6 +93,9 @@ class ResponderPresupuestoForm(forms.ModelForm):
         precio = cleaned_data.get("precio")
         fecha_envio = cleaned_data.get("fecha_envio")
         today = date.today()
+
+        if not fecha_envio:
+            raise ValidationError((""), code='invalid')
 
         if precio <= 0:
             msg = "El precio debe ser mayor que 0"
@@ -158,7 +178,7 @@ class EditarPerfilForm(forms.ModelForm):
         attrs={'class': 'form-control', 'placeholder': 'Apellidos'}))
     email = forms.CharField(label="Email", widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email'}))
-    email_paypal = forms.CharField(label="Email de Paypal", required=False, widget=forms.EmailInput(
+    email_paypal = forms.CharField(label="Email de Paypal", widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}))
     descripcion = forms.CharField(label="Descripción", required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))
@@ -338,11 +358,11 @@ class ImagenesPruebaForm(forms.Form):
     )
 
 class CodigoForm(forms.Form):
-    codigo_envio = forms.CharField(label='Código de envío', required=True,
-    widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2', 'placeholder': 'Código de envío'}))
+    codigo_envio = forms.CharField(label='Código de envío', required=False,
+    widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 'placeholder': 'Código de envío'}))
 
     empresa_envio = forms.CharField(label='Empresa encargada del envío', required=True,
-    widget=forms.TextInput(attrs={'class': 'form-control w-50 mr-2', 
+    widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 
     'placeholder': 'Correos, AliExpress'})
     )
 

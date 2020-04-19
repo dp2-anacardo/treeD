@@ -9,13 +9,13 @@ class ImgPrueba(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
+        return self.compra.nombre + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)
 
 class CodigoEnvio(models.Model):
-    codigo_envio = models.TextField(verbose_name='Código de envío')
+    codigo_envio = models.TextField(verbose_name='Código de envío',null=True)
     empresa_envio = models.TextField(verbose_name='Empresa del envío')
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
@@ -30,7 +30,7 @@ class ImgCompra(models.Model):
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.compra.nombre_impresion + str(self.compra.fecha_compra)
+        return self.compra.nombre + str(self.compra.fecha_compra)
 
     class Meta:
         ordering = ('pk',)
@@ -113,15 +113,17 @@ class Perfil(models.Model):
 class Compra(models.Model):
     comprador = models.ForeignKey(Perfil, related_name='comprador', on_delete=models.SET_NULL, null=True)
     vendedor = models.ForeignKey(Perfil, related_name='vendedor', on_delete=models.SET_NULL, null=True)
-    nombre_impresion = models.TextField(verbose_name='Nombre de la impresión', blank=True)
-    desc_impresion = models.TextField(verbose_name='Descripción de la impresión', blank=True)
-    precio_impresion = models.FloatField(verbose_name='Precio de la impresión', null=True)
+    nombre = models.TextField(verbose_name='Nombre de la impresión', blank=True)
+    descripcion = models.TextField(verbose_name='Descripción de la impresión', blank=True)
+    precio = models.FloatField(verbose_name='Precio de la impresión', null=True)
     direccion = models.ForeignKey('DirecPerfil', on_delete=models.SET_NULL, null=True)
+    tamaño = models.TextField(verbose_name='Tamaño', null=True)
+    material = models.TextField(verbose_name='Material', null=True)
     fecha_compra = models.DateField(verbose_name="Fecha de compra")
     pagado = models.BooleanField(verbose_name='Pagado por administrador?')
 
     def __str__(self):
-        return self.nombre_impresion + str(self.fecha_compra)
+        return self.nombre + str(self.fecha_compra)
 
     class Meta:
         ordering = ('pk', 'fecha_compra', )
@@ -133,6 +135,8 @@ class Presupuesto(models.Model):
     descripcion = models.TextField(verbose_name='Descripcion')
     precio = models.FloatField(verbose_name='Precio', null=True)
     notas = models.TextField(verbose_name='Notas', null=True)
+    tamaño = models.TextField(verbose_name='Tamaño', null=True)
+    material = models.TextField(verbose_name='Material', null=True)
     fecha_envio = models.DateField(verbose_name="Fecha de envio", null=True)
     resp_interesado = models.BooleanField(verbose_name='Respuesta del Interesado', null=True)
     resp_vendedor = models.BooleanField(verbose_name='Respuesta del Vendedor', null=True)

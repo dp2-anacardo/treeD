@@ -58,7 +58,7 @@
         </div>
         <div class="col-lg-4 my-auto">
           <h5 class="text-center">Nombre:</h5>
-          <p class="text-center">{{c.nombre_impresion}}</p>
+          <p class="text-center">{{c.nombre}}</p>
           <h5 class="text-center">Fecha de compra:</h5>
           <p class="text-center">{{c.fecha_compra}}</p>
           <h5 class="text-center">Opinion:</h5>
@@ -72,7 +72,7 @@
         </div>
         <div class="col-lg-4 my-auto">
           <h5 class="text-center">Precio:</h5>
-          <p class="text-center">{{c.precio_impresion}}€</p>
+          <p class="text-center">{{c.precio}}€</p>
           <h5 class="text-center">Vendedor:</h5>
           <p class="text-center">
           {%if c.vendedor.es_afiliado%}
@@ -86,7 +86,12 @@
             {% else %}
             ENVIADO
             {%endif%}
+          
           </p>
+          {% if c.codigoenvio_set.all.0.codigo_envio != None and c.codigoenvio_set.all.0.codigo_envio != "" %}
+        <h5 class="text-center">Código de seguimiento:</h5>
+        <p class="text-center">{{c.codigoenvio_set.all.0.codigo_envio}}</p>
+        {% endif %}
         </div>
       </div>
       <br>

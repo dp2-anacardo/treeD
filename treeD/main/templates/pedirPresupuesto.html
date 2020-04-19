@@ -9,12 +9,25 @@
                 <h1 class="display-4 text-center">Presupuesto</h1>
                 <br>
                 <br>
+                {% if form.errors %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
                 <form action="/pedirPresupuesto/{{ pk }}/" method="post">
                     {% csrf_token %}
                     <div class="text-center">Petición</div>
                     {{ form.peticion }} <br>
                     <div class="text-center">Descripción</div>
                     {{ form.descripcion }}
+                    <div class="text-center">Tamaño en cm (Opcional)</div>
+                    {{ form.tamaño }}
+                    <div class="text-center">Material (Opcional)</div>
+                    {{ form.material }}
                     <br>
                     <br>
                     <div class="text-center">

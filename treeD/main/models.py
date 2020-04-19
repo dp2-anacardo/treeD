@@ -14,6 +14,17 @@ class ImgPrueba(models.Model):
     class Meta:
         ordering = ('pk',)
 
+class CodigoEnvio(models.Model):
+    codigo_envio = models.TextField(verbose_name='Código de envío')
+    empresa_envio = models.TextField(verbose_name='Empresa del envío')
+    compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.empresa_envio + " " + self.codigo_envio
+
+    class Meta:
+        ordering = ('pk',)
+
 class ImgCompra(models.Model):
     imagen = models.ImageField(upload_to='', verbose_name='Imagen')
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)

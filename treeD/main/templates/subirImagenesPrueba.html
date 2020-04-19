@@ -14,13 +14,27 @@
                   {% endfor %}
                   {% endfor %}
                   {% endif %}
+                  {% if form_codigo %}
+                  {% for field in form_codigo %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                        {{ error}}
+                      </div>
+                  {% endfor %}
+                  {% endfor %}
+                  {% endif %}
             <p class="lead">Se recomienda subir como prueba de que el envio ha sido realizado una imagen del recibo del envío.</p>
             <form action="" method="post" enctype="multipart/form-data" id="upload-image-form">
                 {% csrf_token %}
                 <div class="text-center">
-
+                    <div class="text-center">Prueba de envío</div>
                     {{ form.imagen }}
-
+                    <br>
+                    <div class="text-center">Código de envío</div>
+                    {{ form_codigo.codigo_envio }}
+                    <br>
+                    <div class="text-center">Empresa encargada del envío</div>
+                    {{ form_codigo.empresa_envio }}
                     <br>
                     <button type='submit' class="btn btn-primary btn-dark">Subir</button>
                 </div>

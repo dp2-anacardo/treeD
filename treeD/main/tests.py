@@ -56,7 +56,7 @@ class ImgPruebaTest(TestCase):
             img_prueba = list(ImgPrueba.objects.filter(compra=compra))
             self.assertTrue(not img_prueba)
             self.client.post("/compra/subirImagenes/25/", {
-                "imagen": imagen
+                "imagen": imagen, "codigo_envio":"12345", "empresa_envio":"AliExpress"
             }, follow=True)
             img_prueba = ImgPrueba.objects.get(compra=compra)
             self.assertTrue(img_prueba)
@@ -657,3 +657,19 @@ class EstadisticasVenta(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/usuarios/estadisticas/')
         self.assertEqual(response.status_code, 200)
+        
+class PagosAdministrador(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_listar_compras_valido(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_listar_compras_no_valido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 302)

@@ -16,7 +16,11 @@
       </div>
       <div class="col my-auto">
         <h5 class="text-center">Interesado:</h5>
-        <p class="text-center">{{p.interesado}}</p>
+        <p class="text-center">
+        {%if p.interesado.es_afiliado%}
+          <img src="{% static "tick.png" %}" height="20" width="20" >
+        {%endif%}
+          {{p.interesado}}</p>
       </div>
       <div class="col my-auto">
         <h5 class="text-center">Respuesta del vendedor:</h5>

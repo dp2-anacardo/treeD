@@ -7,10 +7,11 @@ from datetime import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm
+from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion, CodigoEnvio
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm, CodigoForm
 from django.core.paginator import Paginator
 import operator
+from django.core.paginator import Paginator
 
 @login_required(login_url="/login/")
 def crear_opinion(request, pk):
@@ -109,118 +110,134 @@ def responder_presupuesto(request, pk):
 
 @login_required(login_url="/login/")
 def editar_usuario_logueado(request):
-    usuario = User.objects.get(pk=request.user.id)
-    perfil = Perfil.objects.get(usuario=usuario)
+    try:
+        usuario = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=usuario)
 
-    if request.method == "POST":
-        form_1 = EditarUsernameForm(data=request.POST, instance=usuario)
-        form_2 = EditarPerfilForm(
-            data=request.POST, files=request.FILES, instance=perfil)
-        if form_1.is_valid() and form_2.is_valid():
-            form_1.save()
-            form_2.save()
-            return redirect("/perfil/"+str(usuario.perfil.id))
+        if request.method == "POST":
+            form_1 = EditarUsernameForm(data=request.POST, instance=usuario)
+            form_2 = EditarPerfilForm(
+                data=request.POST, files=request.FILES, instance=perfil)
+            if form_1.is_valid() and form_2.is_valid():
+                form_1.save()
+                form_2.save()
+                return redirect("/perfil/"+str(usuario.perfil.id))
+
+            else:
+                return render(request, "editarPerfil.html", {
+                    "form_1": form_1,
+                    "form_2": form_2,
+                })
 
         else:
+            form_1 = EditarUsernameForm(instance=usuario)
+            form_2 = EditarPerfilForm(instance=perfil)
             return render(request, "editarPerfil.html", {
                 "form_1": form_1,
-                "form_2": form_2,
+                "form_2": form_2
             })
-
-    else:
-        form_1 = EditarUsernameForm(instance=usuario)
-        form_2 = EditarPerfilForm(instance=perfil)
-        return render(request, "editarPerfil.html", {
-            "form_1": form_1,
-            "form_2": form_2
-        })
+    except:
+        return redirect('error_url')
 
 
 @login_required(login_url="/login/")
 def editar_pw_usuario_logueado(request):
-    usuario = User.objects.get(pk=request.user.id)
+    try:
+        usuario = User.objects.get(pk=request.user.id)
 
-    if request.method == "POST":
-        form = EditarPasswordForm(data=request.POST)
-        if form.is_valid():
-            password = form.cleaned_data.get("password")
-            usuario.set_password(password)
-            usuario.save()
-            return redirect("/login")
+        if request.method == "POST":
+            form = EditarPasswordForm(data=request.POST)
+            if form.is_valid():
+                password = form.cleaned_data.get("password")
+                usuario.set_password(password)
+                usuario.save()
+                return redirect("/login")
+
+            else:
+                return render(request, "editarPassword.html", {
+                    "form": form
+                })
 
         else:
+            form = EditarPasswordForm()
             return render(request, "editarPassword.html", {
                 "form": form
             })
-
-    else:
-        form = EditarPasswordForm()
-        return render(request, "editarPassword.html", {
-            "form": form
-        })
-
+    except:
+        return redirect('error_url')
 
 @login_required(login_url="/login/")
 def mostrar_direcciones_usuario_logueado(request):
-    usuario = User.objects.get(pk=request.user.id)
-    perfil = Perfil.objects.get(usuario=usuario)
-    direcciones = DirecPerfil.objects.filter(perfil=perfil)
-    form = AñadirDirecPerfilForm()
-    return render(request, "mostrarDirecciones.html", {
-        "direcciones": direcciones,
-        "form": form
-    })
+    try:
+        usuario = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=usuario)
+        direcciones = DirecPerfil.objects.filter(perfil=perfil)
+        form = AñadirDirecPerfilForm()
+        return render(request, "mostrarDirecciones.html", {
+            "direcciones": direcciones,
+            "form": form
+        })
+    except:
+        return redirect('error_url')
 
 
 @login_required(login_url="/login/")
 def añadir_direccion_usuario_logueado(request):
-    usuario = User.objects.get(pk=request.user.id)
-    perfil = Perfil.objects.get(usuario=usuario)
-    direcciones = DirecPerfil.objects.filter(perfil=perfil)
+    try:
+        usuario = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=usuario)
+        direcciones = DirecPerfil.objects.filter(perfil=perfil)
 
-    if request.method == "POST":
-        form = AñadirDirecPerfilForm(request.POST)
-        if form.is_valid():
-            ciudad = form.cleaned_data.get("ciudad")
-            localidad = form.cleaned_data.get("localidad")
-            calle = form.cleaned_data.get("calle")
-            numero = form.cleaned_data.get("numero")
-            codigo_postal = form.cleaned_data.get("codigo_postal")
-            dp = DirecPerfil(ciudad=ciudad, localidad=localidad, calle=calle, numero=numero,
-            codigo_postal=codigo_postal, perfil=perfil)
-            dp.save()
-            return redirect("/mostrarDirecciones")
+        if request.method == "POST":
+            form = AñadirDirecPerfilForm(request.POST)
+            if form.is_valid():
+                ciudad = form.cleaned_data.get("ciudad")
+                localidad = form.cleaned_data.get("localidad")
+                calle = form.cleaned_data.get("calle")
+                numero = form.cleaned_data.get("numero")
+                codigo_postal = form.cleaned_data.get("codigo_postal")
+                dp = DirecPerfil(ciudad=ciudad, localidad=localidad, calle=calle, numero=numero,
+                codigo_postal=codigo_postal, perfil=perfil)
+                dp.save()
+                return redirect("/mostrarDirecciones")
+
+            else:
+                return render(request, "mostrarDirecciones.html", {
+                    "direcciones": direcciones,
+                    "form": form})
 
         else:
-            return render(request, "mostrarDirecciones.html", {
-                "direcciones": direcciones,
-                "form": form})
-
-    else:
-        return redirect("/mostrarDirecciones")
+            return redirect("/mostrarDirecciones")
+    except:
+        return redirect('error_url')
 
 
 @login_required(login_url="/login/")
 def eliminar_direccion_usuario_logueado(request, pk):
-    usuario = User.objects.get(pk=request.user.id)
-    perfil = Perfil.objects.get(usuario=usuario)
-
     try:
-        direc = DirecPerfil.objects.get(pk=pk)
-        if direc.perfil != perfil:
+        usuario = User.objects.get(pk=request.user.id)
+        perfil = Perfil.objects.get(usuario=usuario)
+
+        try:
+            direc = DirecPerfil.objects.get(pk=pk)
+            if direc.perfil != perfil:
+                return redirect('error_url')
+            direc.delete()
+            return redirect('/mostrarDirecciones')
+        except:
             return redirect('error_url')
-        direc.delete()
-        return redirect('/mostrarDirecciones')
     except:
         return redirect('error_url')
 
 
 def usuario_logueado(request):
-
-    id_user = request.user.id
-    user_actual = get_object_or_404(User, pk=id_user)
-    usuario_actual = Perfil.objects.get(usuario=user_actual)
-    return usuario_actual
+    try:
+        id_user = request.user.id
+        user_actual = get_object_or_404(User, pk=id_user)
+        usuario_actual = Perfil.objects.get(usuario=user_actual)
+        return usuario_actual
+    except:
+        return redirect('error_url')
 
 
 def error(request):
@@ -290,8 +307,13 @@ def mostrar_impresion(request, pk):
             comprar = False
         categorias = impresion.categorias.all()
         imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
+        otras_impresiones = Impresion.objects.filter(vendedor=impresion.vendedor).exclude(pk=pk)
+        paginator = Paginator(otras_impresiones, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         return render(request, 'impresiones/mostrarImpresion.html', {
             'impresion': impresion,
+            'otras_impresiones': page_obj,
             'imagenes': imagenes_impresion,
             'categorias': categorias,
             'comprar': comprar
@@ -312,16 +334,22 @@ def subir_imagenes_prueba_compra(request, pk):
 
         if request.method == "POST":
             form = ImagenesPruebaForm(request.POST, request.FILES)
+            form_codigo = CodigoForm(request.POST)
             files = request.FILES.getlist('imagen')
-            if form.is_valid():
+            if form.is_valid() and form_codigo.is_valid():
                 for i in files:
                     img_prueba = ImgPrueba(imagen=i, compra=compra)
                     img_prueba.save()
+                codigo_envio = form_codigo.cleaned_data['codigo_envio']
+                empresa_envio = form_codigo.cleaned_data['empresa_envio']
+                envio = CodigoEnvio(compra=compra, codigo_envio=codigo_envio, empresa_envio=empresa_envio)
+                envio.save()
                 return redirect('/impresion/listarVentas')
-            return render(request, 'subirImagenesPrueba.html', {'form': form})
+            return render(request, 'subirImagenesPrueba.html', {'form': form, 'form_codigo': form_codigo})
         else:
             form = ImagenesPruebaForm()
-            return render(request, 'subirImagenesPrueba.html', {'form': form})
+            form_codigo = CodigoForm()
+            return render(request, 'subirImagenesPrueba.html', {'form': form, 'form_codigo': form_codigo})
     except:
         return redirect('error_url')
 
@@ -468,16 +496,18 @@ def index(request):
 
 @login_required(login_url="/login/")
 def listar_impresiones_publicadas(request):
-    
-    if request.user.is_authenticated:
-        perfil_user = Perfil.objects.get(usuario=request.user)
-        query = Impresion.objects.filter(vendedor=perfil_user)
-        paginator=Paginator(query, 5)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, "misPublicaciones.html", {"query": page_obj})
+    try:
+        if request.user.is_authenticated:
+            perfil_user = Perfil.objects.get(usuario=request.user)
+            query = Impresion.objects.filter(vendedor=perfil_user)
+            paginator=Paginator(query, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, "misPublicaciones.html", {"query": page_obj})
 
-    return render(request, 'index.html')
+        return render(request, 'index.html')
+    except:
+        return redirect('error_url')
 
 
 @csrf_exempt
@@ -521,77 +551,83 @@ def comprar_impresion_3d(request, pk, direccion):
 
 
 def buscador_impresiones_3d(request):
+    try:
+        query = Impresion.objects.all()
+        
 
-    query = Impresion.objects.all()
-    
+        if request.method == "POST":
+            form = BuscadorForm(request.POST)
+            if form.is_valid():
+                nombre = form.cleaned_data.get("nombre")
+                categorias = form.cleaned_data.get("categorias")
+                precio_min = form.cleaned_data.get("precio_min")
+                precio_max = form.cleaned_data.get("precio_max")
 
-    if request.method == "POST":
-        form = BuscadorForm(request.POST)
-        if form.is_valid():
-            nombre = form.cleaned_data.get("nombre")
-            categorias = form.cleaned_data.get("categorias")
-            precio_min = form.cleaned_data.get("precio_min")
-            precio_max = form.cleaned_data.get("precio_max")
+                if nombre != '':
+                    query = query.filter(nombre__icontains=nombre)
+                if categorias:
+                    for id_ in categorias:
+                        query = query.filter(categorias__in=[id_]).distinct()
+                if precio_min is not None:
+                    query = query.filter(precio__gte=precio_min)
+                if precio_max is not None:
+                    query = query.filter(precio__lte=precio_max)
 
-            if nombre != '':
-                query = query.filter(nombre__icontains=nombre)
-            if categorias:
-                for id_ in categorias:
-                    query = query.filter(categorias__in=[id_]).distinct()
-            if precio_min is not None:
-                query = query.filter(precio__gte=precio_min)
-            if precio_max is not None:
-                query = query.filter(precio__lte=precio_max)
+                query = query.order_by('-vendedor__es_afiliado')
+                paginator = Paginator(query, 6)
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
 
-            query = query.order_by('-vendedor__es_afiliado')
+        else:
             paginator = Paginator(query, 6)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
+            form = BuscadorForm()
 
-    else:
-        paginator = Paginator(query, 6)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        form = BuscadorForm()
-
-    return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": page_obj})
+        return render(request, "impresiones/listarImpresiones.html", {"form": form, "impresiones": page_obj})
+    except:
+        return redirect('error_url')
 
 
 @login_required(login_url="/login/")
 def listar_ventas_realizadas(request):
-
-    if request.user.is_authenticated:
-        perfil_user = Perfil.objects.get(usuario=request.user)
-        query = Compra.objects.filter(vendedor=perfil_user)
-        query = query.order_by('-fecha_compra')
-        paginator = Paginator(query, 5)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, "impresiones/listarVentas.html", {"query": page_obj})
-    return render(request, 'index.html')
+    try:
+        if request.user.is_authenticated:
+            perfil_user = Perfil.objects.get(usuario=request.user)
+            query = Compra.objects.filter(vendedor=perfil_user)
+            query = query.order_by('-fecha_compra')
+            paginator = Paginator(query, 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, "impresiones/listarVentas.html", {"query": page_obj})
+        return render(request, 'index.html')
+    except:
+        return redirect('error_url')
 
 
 def buscar_usuarios(request):
+    try:
+        query = Perfil.objects.all().exclude(impresion__isnull=True)
 
-    query = Perfil.objects.all().exclude(impresion__isnull=True)
-
-    if request.method == "POST":
-        form = BuscarUsuariosForm(request.POST)
-        if form.is_valid():
-            nombre = form.cleaned_data.get("nombre")
-            query = query.filter(usuario__username__icontains=nombre)
+        if request.method == "POST":
+            form = BuscarUsuariosForm(request.POST)
+            if form.is_valid():
+                nombre = form.cleaned_data.get("nombre")
+                query = query.filter(usuario__username__icontains=nombre)
+                query = query.order_by('-es_afiliado')
+                paginator = Paginator(query, 5)
+                page_number = request.GET.get('page')
+                page_obj = paginator.get_page(page_number)
+                return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
+        else:
+            form = BuscarUsuariosForm()
             query = query.order_by('-es_afiliado')
             paginator = Paginator(query, 5)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
             return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
-    else:
-        form = BuscarUsuariosForm()
-        query = query.order_by('-es_afiliado')
-        paginator = Paginator(query, 5)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, "registration/listarUsuarios.html", {"form": form, "query": page_obj})
+    except:
+        return redirect('error_url')
 
 
 def detalles_compra(request, pk):
@@ -962,6 +998,69 @@ def estadisticas_venta(request):
                     'VentasMensuales':num_ventas_mensuales, 'GananciasTotales':num_ganancias_totales,
                     'GananciasMensuales':num_ganancias_mensuales,'ProductosPendientesPago':productosPendientesPago,
                     'GananciasPendientes':num_ganancias_pendientes, 'misImpresiones':nombres,'numeroCompras':compras2})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def compras_administrador(request):
+    
+    try:
+        assert request.user.is_superuser == True
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'registration/compras.html',{'compras':page_obj})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pago_compra_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        precio= compra.precio_impresion - (compra.precio_impresion * 0.1)
+        paypal_dict = {
+            "business": compra.vendedor.email_paypal,
+            "amount": str(precio),
+            "item_name": compra.nombre_impresion,
+            "currency_code": "EUR",
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return": request.build_absolute_uri(reverse('realizarPago_url', args=[compra.id])),
+            "cancel_return": request.build_absolute_uri(reverse('compras_url')),
+        }
+        if settings.DEBUG == False:
+            formPago = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+        else:
+            formPago = PayPalPaymentsForm(initial=paypal_dict)
+        return render(request, 'registration/pagoAdministrador.html',{'formPago':formPago, 'compra':compra, 'precio':precio})
+    except:
+        return redirect('error_url')
+
+@login_required(login_url="/login/")
+def pagado_administrador(request, pk):
+
+    try:
+        assert request.user.is_superuser == True
+        compra=Compra.objects.get(id=pk)
+        assert compra.imgprueba_set.all() != None
+        assert compra.vendedor.email_paypal != ''
+        compra.pagado = True
+        compra.save()
+        compras=Compra.objects.all().filter(pagado=False).exclude(imgprueba__isnull=True)
+        paginator = Paginator(compras, 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request,'registration/compras.html',{'compras':page_obj})
+    except:
+        return redirect('error_url')
+def info_cancelar_afiliado(request):
+    try:
+        usuario = usuario_logueado(request)
+        assert usuario.es_afiliado == True
+        return render(request, 'cancelarAfiliado.html')
     except:
         return redirect('error_url')
 

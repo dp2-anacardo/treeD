@@ -56,7 +56,7 @@ class ImgPruebaTest(TestCase):
             img_prueba = list(ImgPrueba.objects.filter(compra=compra))
             self.assertTrue(not img_prueba)
             self.client.post("/compra/subirImagenes/25/", {
-                "imagen": imagen
+                "imagen": imagen, "codigo_envio":"12345", "empresa_envio":"AliExpress"
             }, follow=True)
             img_prueba = ImgPrueba.objects.get(compra=compra)
             self.assertTrue(img_prueba)

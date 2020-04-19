@@ -7,8 +7,8 @@ from datetime import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
-from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm
+from main.models import Perfil, DirecPerfil, Compra, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion, CodigoEnvio
+from main.forms import AñadirDirecPerfilForm, PedirPresupuestoForm, ResponderPresupuestoForm, EditarUsernameForm, EditarPasswordForm, EditarPerfilForm, BuscadorForm, ImpresionForm, CargarImagenForm, ImagenesPruebaForm, BuscarUsuariosForm, DireccionForm, ImagenForm, PerfilForm, DirecPerfilForm, UserForm, CrearOpinionForm, GDPRForm, CodigoForm
 from django.core.paginator import Paginator
 import operator
 from django.core.paginator import Paginator
@@ -334,16 +334,22 @@ def subir_imagenes_prueba_compra(request, pk):
 
         if request.method == "POST":
             form = ImagenesPruebaForm(request.POST, request.FILES)
+            form_codigo = CodigoForm(request.POST)
             files = request.FILES.getlist('imagen')
-            if form.is_valid():
+            if form.is_valid() and form_codigo.is_valid():
                 for i in files:
                     img_prueba = ImgPrueba(imagen=i, compra=compra)
                     img_prueba.save()
+                codigo_envio = form_codigo.cleaned_data['codigo_envio']
+                empresa_envio = form_codigo.cleaned_data['empresa_envio']
+                envio = CodigoEnvio(compra=compra, codigo_envio=codigo_envio, empresa_envio=empresa_envio)
+                envio.save()
                 return redirect('/impresion/listarVentas')
-            return render(request, 'subirImagenesPrueba.html', {'form': form})
+            return render(request, 'subirImagenesPrueba.html', {'form': form, 'form_codigo': form_codigo})
         else:
             form = ImagenesPruebaForm()
-            return render(request, 'subirImagenesPrueba.html', {'form': form})
+            form_codigo = CodigoForm()
+            return render(request, 'subirImagenesPrueba.html', {'form': form, 'form_codigo': form_codigo})
     except:
         return redirect('error_url')
 

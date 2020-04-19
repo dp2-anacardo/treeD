@@ -1017,7 +1017,7 @@ def pago_compra_administrador(request, pk):
         assert request.user.is_superuser == True
         compra=Compra.objects.get(id=pk)
         assert compra.imgprueba_set.all() != None
-        precio= compra.precio_impresion - (compra.precio_impresion * 0.1)
+        precio= compra.precio - (compra.precio * 0.1)
         paypal_dict = {
             "business": compra.vendedor.email_paypal,
             "amount": str(precio),

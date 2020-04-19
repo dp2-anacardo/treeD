@@ -96,6 +96,7 @@
     {% endfor %}
   </div>
 
+  {%if compra.count == 0%}
   <div class="container text-center">
     <ul class="pagination">
       {% if compra.has_previous %}
@@ -129,4 +130,5 @@
 
     </ul>
   </div>
+  {%endif%}
   {% endblock %}

@@ -81,37 +81,39 @@
   </div>
 </div>
 
+{%if impresiones.count == 0%}
 <div class="container text-center">
   <ul class="pagination">
     {% if impresiones.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Anterior</a></li>
-    {%else %}  
-      <li class="page-item disabled">
-        <span class="page-link">Anterior</span>
-      </li>
+    <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Anterior</a></li>
+    {%else %}
+    <li class="page-item disabled">
+      <span class="page-link">Anterior</span>
+    </li>
     {% endif %}
     {% for num in impresiones.paginator.page_range %}
     {% ifequal num impresiones.number %}
-      <li class="page-item active">
-        <span class="page-link">
-          {{ num }}
-          <span class="sr-only">(current)</span>
-        </span>
-      </li>
+    <li class="page-item active">
+      <span class="page-link">
+        {{ num }}
+        <span class="sr-only">(current)</span>
+      </span>
+    </li>
     {% else %}
-      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-    {% endifequal %} 
-  {% endfor %}
+    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+    {% endifequal %}
+    {% endfor %}
     {% if impresiones.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{impresiones.next_page_number }}">Siguiente</a>
-      </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{impresiones.next_page_number }}">Siguiente</a>
+    </li>
     {%else%}
     <li class="page-item disabled">
       <span class="page-link">Siguiente</span>
     </li>
     {% endif %}
-    
+
   </ul>
 </div>
+{%endif%}
 {% endblock %}

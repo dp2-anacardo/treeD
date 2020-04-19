@@ -56,7 +56,7 @@
   <h1 class="text-center display-4">No has enviado ningún presupuesto</h1>
   {% endfor %}
 
-  {%if presupuestos.count != 0%}
+  {%if presupuestos%}
   <div class="container text-center">
     <ul class="pagination">
       {% if presupuestos.has_previous %}

@@ -45,7 +45,7 @@
     <h1 class="text-center display-4">No has publicado nada</h1>
     {% endfor %}
 </div>
-{%if query.count != 0%}
+{%if query%}
 <div class="container text-center">
     <ul class="pagination">
       {% if query.has_previous %}

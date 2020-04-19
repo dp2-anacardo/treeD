@@ -527,9 +527,9 @@ def comprar_impresion_3d(request, pk, direccion):
         compra = Compra(
             comprador=comprador,
             vendedor=impresion.vendedor,
-            nombre_impresion=impresion.nombre,
-            desc_impresion=impresion.descripcion,
-            precio_impresion=impresion.precio,
+            nombre=impresion.nombre,
+            descripcion=impresion.descripcion,
+            precio=impresion.precio,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False
@@ -843,9 +843,9 @@ def comprar_presupuesto(request, pk, direccion):
         compra = Compra(
             comprador=comprador,
             vendedor=presupuesto.vendedor,
-            nombre_impresion=presupuesto.peticion,
-            desc_impresion=presupuesto.descripcion,
-            precio_impresion=presupuesto.precio,
+            nombre=presupuesto.peticion,
+            descripcion=presupuesto.descripcion,
+            precio=presupuesto.precio,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False

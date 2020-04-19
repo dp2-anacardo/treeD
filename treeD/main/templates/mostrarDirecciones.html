@@ -40,18 +40,19 @@
                     {% csrf_token %}
                     <h1 class="display-4 py-2 text-center">Nueva Dirección</h1>
                     <br>
+                    <div class="text-center">Ciudad</div>
                     {{ form.ciudad }}
                     <br>
-                    <br>
+                    <div class="text-center">Localidad</div>
                     {{ form.localidad }}
                     <br>
-                    <br>
+                    <div class="text-center">Calle</div>
                     {{ form.calle }}
                     <br>
-                    <br>
+                    <div class="text-center">Portal y número</div>
                     {{ form.numero }}
                     <br>
-                    <br>
+                    <div class="text-center">Código Postal</div>
                     {{ form.codigo_postal }}
                     <br>
                     

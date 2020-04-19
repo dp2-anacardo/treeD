@@ -42,8 +42,8 @@ def validate_file_extension(value):
 
 class PedirPresupuestoForm(forms.ModelForm):
 
-    tamaño = forms.IntegerField(label="Tamaño", required=False, widget=forms.NumberInput(
-        attrs={'class': 'form-control', 'placeholder': 'Tamaño'}))
+    tamaño = forms.CharField(label="Tamaño", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Altura x Anchura'}))
     material = forms.CharField(label="Material", required=False, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Material'}))
 

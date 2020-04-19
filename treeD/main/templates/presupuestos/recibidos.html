@@ -45,9 +45,9 @@
         {% endif %}
       </div>
       <div class="col my-auto">
-        <p class="text-center"><a href="{% url 'mostrarPresupuesto_url' p.id %}" class="btn btn-dark ">Ver presupuesto</a></p>
+        <p class="text-center"><a href="{% url 'mostrarPresupuesto_url' p.id %}" class="btn btn-dark ">Ver petición</a></p>
         {% if p.resp_vendedor == True %}
-        <p class="text-center"><a href="{% url 'mostrarRespuesta_url' p.id %}" class="btn btn-dark ">Ver respuesta</a></p>
+        <p class="text-center"><a href="{% url 'mostrarRespuesta_url' p.id %}" class="btn btn-dark ">Ver presupuesto</a></p>
         {% endif %}
       </div>
     </div>

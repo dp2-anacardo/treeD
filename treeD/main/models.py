@@ -15,7 +15,7 @@ class ImgPrueba(models.Model):
         ordering = ('pk',)
 
 class CodigoEnvio(models.Model):
-    codigo_envio = models.TextField(verbose_name='Código de envío')
+    codigo_envio = models.TextField(verbose_name='Código de envío',null=True)
     empresa_envio = models.TextField(verbose_name='Empresa del envío')
     compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
 

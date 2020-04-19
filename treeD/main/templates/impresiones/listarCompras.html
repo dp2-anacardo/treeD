@@ -86,7 +86,12 @@
             {% else %}
             ENVIADO
             {%endif%}
+          
           </p>
+          {% if c.codigoenvio_set.all.0.codigo_envio != None and c.codigoenvio_set.all.0.codigo_envio != "" %}
+        <h5 class="text-center">Código de seguimiento:</h5>
+        <p class="text-center">{{c.codigoenvio_set.all.0.codigo_envio}}</p>
+        {% endif %}
         </div>
       </div>
       <br>

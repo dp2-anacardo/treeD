@@ -267,7 +267,7 @@ class BuscadorForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control w-50 mr-2',
-                   'placeholder': 'Buscar Piezas 3D'}
+                   'placeholder': 'Buscar Impresiones 3D'}
         )
     )
     categorias = forms.ModelMultipleChoiceField(

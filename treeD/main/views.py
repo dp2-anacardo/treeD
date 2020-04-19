@@ -92,7 +92,7 @@ def responder_presupuesto(request, pk):
                 presupuesto_2 = form.save(commit=False)
                 presupuesto_2.resp_vendedor = True
                 presupuesto_2.save()
-                return redirect("/perfil/"+str(p_vendedor.id))
+                return redirect("/presupuesto/recibidos")
             else:
                 return render(request, "responderPresupuesto.html", {
                     "form": form,

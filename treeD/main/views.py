@@ -92,7 +92,7 @@ def responder_presupuesto(request, pk):
                 presupuesto_2 = form.save(commit=False)
                 presupuesto_2.resp_vendedor = True
                 presupuesto_2.save()
-                return redirect("/perfil/"+str(p_vendedor.id))
+                return redirect("/presupuesto/recibidos")
             else:
                 return render(request, "responderPresupuesto.html", {
                     "form": form,
@@ -530,8 +530,6 @@ def comprar_impresion_3d(request, pk, direccion):
             nombre=impresion.nombre,
             descripcion=impresion.descripcion,
             precio=impresion.precio,
-            tamaño=None,
-            material=None,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False
@@ -848,8 +846,6 @@ def comprar_presupuesto(request, pk, direccion):
             nombre=presupuesto.peticion,
             descripcion=presupuesto.descripcion,
             precio=presupuesto.precio,
-            tamaño=presupuesto.tamaño,
-            material=presupuesto.material,
             fecha_compra=fecha_actual,
             direccion=direc,
             pagado=False
@@ -1025,7 +1021,7 @@ def pago_compra_administrador(request, pk):
         paypal_dict = {
             "business": compra.vendedor.email_paypal,
             "amount": str(precio),
-            "item_name": compra.nombre_impresion,
+            "item_name": compra.nombre,
             "currency_code": "EUR",
             "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
             "return": request.build_absolute_uri(reverse('realizarPago_url', args=[compra.id])),

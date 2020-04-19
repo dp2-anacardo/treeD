@@ -63,10 +63,16 @@ class PedirPresupuestoForm(forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
         tamaño = cleaned_data.get("tamaño")
+        material = self.cleaned_data.get('material')
+
         if tamaño !=None and tamaño !="":
-            print("WE ARE IN BOYS")
             if not re.match("^(\d+) x (\d+)*$", tamaño):
                 msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+                raise ValidationError({'tamaño': [msg, ]})
+
+        if material !=None and material !="":
+            if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", material):
+                msg = "El material solo debe contener letras"
                 raise ValidationError({'tamaño': [msg, ]})
 
 
@@ -267,7 +273,7 @@ class BuscadorForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control w-50 mr-2',
-                   'placeholder': 'Buscar Piezas 3D'}
+                   'placeholder': 'Buscar Impresiones 3D'}
         )
     )
     categorias = forms.ModelMultipleChoiceField(

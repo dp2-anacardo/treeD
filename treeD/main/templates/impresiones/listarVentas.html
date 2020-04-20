@@ -23,9 +23,9 @@
         <h5 class="text-center">Comprador:</h5>
         <p class="text-center">
         {{v.comprador.nombre}} {{v.comprador.apellidos}}</p>
-        {% if v.imgprueba_set.all.0 == None %}
         <h5 class="text-center">Dirección:</h5>
         <p class="text-center">{{v.direccion}}</p>
+        {% if v.imgprueba_set.all.0 == None %}
         <div class="text-center">
           <a href="{% url 'subirImagenesPrueba_url' v.id %}" class="btn btn-dark ">Subir Pruebas de Envío</a></div>
         {% endif %}

@@ -128,7 +128,7 @@ class EditarUsernameForm(forms.ModelForm):
             msg = "El nombre de usuario debe tener al menos 6 caracteres"
             raise ValidationError({'username': [msg, ]})
 
-        if not re.match("^[A-Za-z0-9]*$", username):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", username):
             msg = "El nombre de usuario solo puede contener letras y numeros"
             raise ValidationError({'username': [msg, ]})
 
@@ -162,7 +162,7 @@ class EditarPasswordForm(forms.Form):
             msg = "La contraseña debe tener al menos 8 caracteres"
             raise ValidationError({'password': [msg, ]})
 
-        if not re.match("^[A-Za-z0-9]*$", password):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", password):
             msg = "La contraseña solo puede contener letras y numeros"
             raise ValidationError({'password': [msg, ]})
 
@@ -522,7 +522,7 @@ class UserForm(forms.ModelForm):
                 code='password_short',
             )
 
-        if not re.match("^[A-Za-z0-9]*$", password1):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", password1):
             raise forms.ValidationError(
                 self.error_messages['password_letters'],
                 code='password_letters',
@@ -543,7 +543,7 @@ class UserForm(forms.ModelForm):
                 code='username_short',
             )
 
-        if not re.match("^[A-Za-z0-9]*$", username):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", username):
             raise forms.ValidationError(
                 self.error_messages['username_letters'],
                 code='username_letters',

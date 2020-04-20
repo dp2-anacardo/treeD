@@ -709,19 +709,3 @@ class Afiliados(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/cancelarAfiliado/')
         self.assertEqual(response.status_code, 200)
-
-class Home(TestCase):
-    
-    fixtures = ["initialize.xml"]
-
-    def test_hazte_afiliado(self):
-        c = Client()
-        c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/hazteAfiliado/')
-        self.assertEqual(response.status_code, 302)
-
-    def test_info_cancelar_afiliado(self):
-        c = Client()
-        c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/cancelarAfiliado/')
-        self.assertEqual(response.status_code, 200)

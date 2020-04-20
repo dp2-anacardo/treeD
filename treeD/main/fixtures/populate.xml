@@ -567,6 +567,11 @@
         <field type="ImageField" name="imagen">image5.jpg</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">79</field>
     </object>
+    <!--Prueba de envio-->
+    <object pk="96" model="main.ImgPrueba">
+        <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
+        <field to="main.ImgPrueba" name="compra" rel="ManyToOneRel">25</field>
+    </object>
     <!--PRESUPUESTOS-->
     <object pk="32" model="main.Presupuesto">
         <field to="main.perfil" name="interesado" rel="ManyToOneRel">24</field> <!--AAANUEL-->

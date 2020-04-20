@@ -340,17 +340,44 @@ class CRUDImpresiones3D(TestCase):
         response = self.client.get('/impresion/mostrarImpresion/17/')
         self.assertEqual(response.context['impresion'], result.first())
 
-    def test_crear_impresion_3d(self):
+    def test_crear_impresion_3d_get(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/crearImpresion/')
         self.assertEqual(response.status_code, 200)
 
-    def test_modificar_impresion_3d(self):
+    def test_crear_impresion_3d_post(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
+            c.post('/impresion/crearImpresion/', {
+                'nombre': 'TestAnacardo',
+                'descripcion': 'Esto es una impresion de test',
+                'precio': 10,
+                'imagen': imagen
+            }, follow=True)
+            impresion = Impresion.objects.get(nombre='TestAnacardo')
+            self.assertEquals(impresion.nombre, 'TestAnacardo')
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
+
+    def test_modificar_impresion_3d_get(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code, 200)
+
+    def test_modificar_impresion_3d_post(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        c.post('/impresion/editarImpresion/17/', {
+                'nombre': 'TestAnacardo2',
+                'descripcion': 'Esto es una impresion de test',
+                'precio': 10,
+        }, follow=True)
+        impresion = Impresion.objects.get(pk=17)
+        self.assertEquals(impresion.nombre, 'TestAnacardo2')
 
     def test_eliminar_impresion_3d(self):
         c = Client()

@@ -27,7 +27,7 @@
                   {% endif %}
                   <div class="px-2">
                     
-                    <form  role="form"  enctype="multipart/form-data" action="" method="POST" id="upload-image-form"> 
+                    <form  role="form"  enctype="multipart/form-data" action="/impresion/crearImpresion/" method="POST" id="upload-image-form"> 
                         {% csrf_token %}
                         {{formulario1.nombre}}
                         <br>

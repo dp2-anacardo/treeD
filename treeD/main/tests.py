@@ -660,7 +660,7 @@ class EstadisticasVenta(TestCase):
         
 class PagosAdministrador(TestCase):
 
-    fixtures = ["initialize.xml"]
+    fixtures = ["populate.xml"]
 
     def test_listar_compras_valido(self):
         c = Client()
@@ -673,3 +673,21 @@ class PagosAdministrador(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/administrador/compras/')
         self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador_valido(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/pagoCompras/25/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador_no_valido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/administrador/pagoCompras/25/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/pago/25/')
+        self.assertEqual(response.status_code, 200)

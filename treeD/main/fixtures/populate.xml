@@ -570,7 +570,13 @@
     <!--Prueba de envio-->
     <object pk="96" model="main.ImgPrueba">
         <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
-        <field to="main.ImgPrueba" name="compra" rel="ManyToOneRel">25</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">25</field>
+    </object>
+    <!--CodigoEnvio-->
+    <object pk="97" model="main.CodigoEnvio">
+        <field type="CharField" name="codigo_envio">PK43B40100004060128014K</field>
+        <field type="CharField" name="empresa_envio">CORREOS</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">25</field>
     </object>
     <!--PRESUPUESTOS-->
     <object pk="32" model="main.Presupuesto">

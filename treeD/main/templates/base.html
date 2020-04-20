@@ -25,8 +25,9 @@
                         <a href="/impresion/listarImpresiones" class="nav-item nav-link">Impresiones 3D</a>
                         
                         <a href="/usuarios/listar" class="nav-item nav-link">Vendedores</a>
-                       
+                        {% if user.is_superuser == 0 %}
                         <a href="/hazteAfiliado" class="nav-item nav-link">Hazte Afiliado</a>
+                        {% endif %}
                     </div>
                     {% if user.is_authenticated %}
                     <div class="navbar-nav ml-auto">

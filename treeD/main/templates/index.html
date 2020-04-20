@@ -32,7 +32,9 @@
       <br>
       <div class="text-center">
         {% if user.is_authenticated %}
+        {% if user.is_superuser == 0 %}
         <a href="/misPublicaciones/" class="btn btn-dark btn-lg">¡Publica ahora!</a>
+        {% endif %}
         {% else %}
         <a href="/register/" class="btn btn-dark btn-lg">¡Regístrate Ahora!</a>
         {% endif %}
@@ -55,7 +57,9 @@
       <p class="lead mb-0 text-center">Forma parte de nuestro sistema de afliados y aumenta tus ventas</p>
       <br>
       <div class="text-center">
+        {% if user.is_superuser == 0 %}
         <a href="/hazteAfiliado/" class="btn btn-dark btn-lg">¡Hazte Afiliado!</a>
+        {% endif %}
       </div>
       <br>
       </div>

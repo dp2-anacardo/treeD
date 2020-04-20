@@ -103,8 +103,11 @@
         <p class="text-break">{{perfil.descripcion}}</p>
 
         {% if user != perfil.usuario %}
+        {% if user.is_superuser == 0 %}
+
         <br>
         <a href="{% url 'pedirPresupuesto_url' perfil.id %}" class="btn btn-dark m-auto">Pedir Presupuesto</a>
+        {%endif%}
         {%endif%}
 
           <br>

@@ -66,8 +66,13 @@ class PedirPresupuestoForm(forms.ModelForm):
         material = self.cleaned_data.get('material')
 
         if tamaño !=None and tamaño !="":
-            if not re.match("^(\d+) x (\d+)*$", tamaño):
-                msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+            if not re.match("^([1-9]+)([0-9]*) x ([1-9]+)([0-9]*)*$", tamaño):
+                #msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+                msg1 = "El tamaño debe de cumplir las siguientes condiciones. Tener la forma Altura x Anchura "
+                msg2 = "(p.e 30 x 30), tener espacios entre la 'x' (p.e 30 x 30, no 30x30)"
+                msg3 = " y no empezar por 0 ni llevar decimales (p.e no se permite 0 x 0 o "
+                msg4 = "30,1 x 30,1)"
+                msg = msg1 + msg2 + msg3 + msg4
                 raise ValidationError({'tamaño': [msg, ]})
 
         if material !=None and material !="":
@@ -77,10 +82,15 @@ class PedirPresupuestoForm(forms.ModelForm):
 
 
 class ResponderPresupuestoForm(forms.ModelForm):
+
     fecha_envio = forms.DateField(required=False,
         widget=DateInput(attrs={'class': 'form-control',
                                 'placeholder': 'Fecha de envio'})
     )
+
+    precio = forms.DecimalField(
+        decimal_places=2,
+        widget = forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}))
 
     class Meta:
         model = Presupuesto
@@ -90,7 +100,6 @@ class ResponderPresupuestoForm(forms.ModelForm):
             'fecha_envio',
         }
         widgets = {
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),
             'notas': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Notas'}),
         }
 
@@ -281,17 +290,19 @@ class BuscadorForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(),
         required=False
     )
-    precio_min = forms.FloatField(
+    precio_min = forms.DecimalField(
         label='Precio Minimo',
         required=False,
+        decimal_places=2,
         widget=forms.NumberInput(
             attrs={'class': 'form-control w-100 ',
                    'placeholder': 'Precio Minimo'}
         )
     )
-    precio_max = forms.FloatField(
+    precio_max = forms.DecimalField(
         label='Precio Maximo',
         required=False,
+        decimal_places=2,
         widget=forms.NumberInput(
             attrs={'class': 'form-control w-100 ',
                    'placeholder': 'Precio Maximo'}
@@ -311,6 +322,11 @@ class BuscadorForm(forms.Form):
 
 
 class ImpresionForm(forms.ModelForm):
+
+    precio = forms.DecimalField(
+        decimal_places=2,
+        widget = forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}))
+
     class Meta:
         model = Impresion
         fields = {
@@ -323,7 +339,6 @@ class ImpresionForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titulo'}),
             'descripcion': forms.Textarea(
                 attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),
             'categorias': forms.CheckboxSelectMultiple(),
 
         }

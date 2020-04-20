@@ -639,6 +639,12 @@ class VerPresupuestoTest(TestCase):
         response = c.get('/presupuesto/mostrarPresupuesto/32/')
         self.assertEqual(response.status_code, 200)
 
+    def test_ver_respuesta_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarRespuesta/32/')
+        self.assertEqual(response.status_code, 200)
+
     def test_ver_presupuesto_invalido(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
@@ -687,3 +693,35 @@ class PagosAdministrador(TestCase):
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/administrador/compras/')
         self.assertEqual(response.status_code, 302)
+
+class Afiliados(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_hazte_afiliado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/hazteAfiliado/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_info_cancelar_afiliado(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/cancelarAfiliado/')
+        self.assertEqual(response.status_code, 200)
+
+class Home(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_hazte_afiliado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/hazteAfiliado/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_info_cancelar_afiliado(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/cancelarAfiliado/')
+        self.assertEqual(response.status_code, 200)

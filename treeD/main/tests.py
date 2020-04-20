@@ -459,8 +459,22 @@ class RegistroTest(TestCase):
     fixtures = ["initialize.xml"]
 
     def test_registro(self):
-        c = Client()
-        response = c.get('/register/')
+        response = self.client.post('/register/', {
+            'username': 'Probando1',
+            'password1': 'Probando1',
+            'password2': 'Probando1',
+            'nombre': 'Prueba',
+            'apellidos': 'Prueba Test',
+            'email': 'email@gmail.com',
+            'email_paypal': 'paypal@gmail.com',
+            'descripcion': 'Me gusta hacer impresiones 3D',
+            'ciudad': 'Sevilla',
+            'localidad': 'Sevilla',
+            'calle': 'C/Santa María de Ordaz',
+            'numero': 'Nº14 1ºC',
+            'codigo_postal': '41008',
+        }, follow=True)
+        self.assertTemplateUsed(response, 'registration/register.html')
         self.assertEqual(response.status_code, 200)
 
 

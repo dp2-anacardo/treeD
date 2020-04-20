@@ -87,18 +87,6 @@
             ENVIADO
             {% endif %}
           </p>
-          {% if c.tamaño != None %}
-          <h5 class="text-center">Tamaño:</h5>
-          <p class="text-center"></p>
-            {{c.tamaño}}
-          </p>
-          {% endif %}
-          {% if c.material != None %}
-          <h5 class="text-center">Material:</h5>
-          <p class="text-center">
-            {{c.material}}
-          </p>
-          {% endif %}
           {% if c.codigoenvio_set.all.0.codigo_envio != None and c.codigoenvio_set.all.0.codigo_envio != "" %}
         <h5 class="text-center">Código de seguimiento:</h5>
         <p class="text-center">{{c.codigoenvio_set.all.0.codigo_envio}}</p>

@@ -848,6 +848,8 @@ def comprar_presupuesto(request, pk, direccion):
             precio=presupuesto.precio,
             fecha_compra=fecha_actual,
             direccion=direc,
+            tamaño=presupuesto.tamaño,
+            material=presupuesto.material,
             pagado=False
         )
         compra.save()

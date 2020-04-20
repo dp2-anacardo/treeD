@@ -54,7 +54,7 @@ class DirecPerfil(models.Model):
     perfil = models.ForeignKey('Perfil', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.ciudad + ', ' +self.localidad + ', ' +self.calle + ' ' +  self.numero
+        return self.ciudad + ', ' +self.localidad + ', ' +self.codigo_postal + '. ' +self.calle + ' ' +  self.numero
 
     class Meta:
         ordering = ('pk',)

@@ -1,48 +1,54 @@
- {% extends 'base.html' %}
-  {% load static %}
-  {% block content %}
-      <div class="bottom-footer">
-  
-          <div class="container">
-            <div class="row">
-                <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
-                    <h1 class="display-4 py-2 text-truncate text-center">Editar Impresión</h1>
-                    {% if formulario1.errors %}
-                    <div class="alert alert-danger" role="alert">
-                      El precio debe ser mayor que 0
-                    </div>
-                      {% endif %}
-                    <div class="px-2">
-                      
-                      <form  role="form"  enctype="multipart/form-data" action="/impresion/editarImpresion/{{ pk }}/" method="POST" id="upload-image-form"> 
-                          {% csrf_token %}
-                          <div class="text-center">Titulo</div>
-                          {{formulario1.nombre}}
-                          <br>
-                          <div class="text-center">Descripción</div>
-                          {{formulario1.descripcion}}
-                          <br>
-                          <div class="text-center">Precio</div>
-                          {{formulario1.precio}}
-                          <br>
-                          <div class="text-center">Categorias</div>
-                          
-                          <div class="card card-body ">
-                              <ul class="list">
-                              {{formulario1.categorias}}
-                            </ul>
-                          </div>
-                          <br>
-                          
-                          <div class="text-center">
-                          <button type='submit' class="btn btn-primary btn-dark">Editar</button>
-                      </div>
-                      </form>
-  
-                    </div>
-                </div>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="bottom-footer">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
+        <h1 class="display-4 py-2 text-truncate text-center">Editar Impresión</h1>
+        {% if formulario1.errors %}
+          {% for field in formulario1 %}
+          {% for error in field.errors %}
+          <div class="alert alert-danger">
+            {{ error}}
+          </div>
+          {% endfor %}
+          {% endfor %}
+       
+        {% endif %}
+        <div class="px-2">
+
+          <form role="form" enctype="multipart/form-data" action="/impresion/editarImpresion/{{ pk }}/" method="POST"
+            id="upload-image-form">
+            {% csrf_token %}
+            <div class="text-center">Titulo</div>
+            {{formulario1.nombre}}
+            <br>
+            <div class="text-center">Descripción</div>
+            {{formulario1.descripcion}}
+            <br>
+            <div class="text-center">Precio</div>
+            {{formulario1.precio}}
+            <br>
+            <div class="text-center">Categorias</div>
+
+            <div class="card card-body ">
+              <ul class="list">
+                {{formulario1.categorias}}
+              </ul>
             </div>
-          </div>
-          </div>
-  
-  {% endblock %}
+            <br>
+
+            <div class="text-center">
+              <button type='submit' class="btn btn-primary btn-dark">Editar</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

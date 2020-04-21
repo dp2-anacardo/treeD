@@ -370,8 +370,11 @@ class ImpresionForm(forms.ModelForm):
         """
         cleaned_data = self.cleaned_data
         precio = cleaned_data.get("precio")
-
-        if precio <= 0:
+        try:
+            if precio <= 0:
+                msg = "El precio debe ser mayor que 0"
+                raise ValidationError({'precio': [msg, ]})
+        except:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg, ]})
 

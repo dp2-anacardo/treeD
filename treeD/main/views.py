@@ -460,7 +460,7 @@ def eliminar_impresion(request, pk):
 @login_required(login_url="/login/")
 def editar_impresion(request, pk):
 
-    try:
+    #try:
         impresion = Impresion.objects.get(pk=pk)
         vendedor_impresion = impresion.vendedor
         imagenes_impresion = ImgImpresion.objects.filter(impresion=impresion)
@@ -485,8 +485,8 @@ def editar_impresion(request, pk):
                     'imagenes': imagenes_impresion,
                     'pk': pk
                 })
-    except:
-        return redirect('error_url')
+    #except:
+     #   return redirect('error_url')
 
 
 def index(request):

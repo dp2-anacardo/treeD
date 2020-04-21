@@ -1,41 +1,131 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <div class="bottom-footer">
-<div class="container">
-<form action="" method="post">
-  {% csrf_token %}
-  <div class="form-inline justify-content-center">
-    {{form.nombre}}
-    <div class="btn-toolbar">
-    <button type="submit" class="btn btn-dark mr-2">Buscar</button>
-  </div>
-  </div>
-</form>
-</div>
-<br>
-{% for c in query %}
-<div class="container jumbotron">
-  <div class="row">
-    <div class="col my-auto text-center">
-      <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark" >      
-    </div>
-    <div class="col">
-      <br>
-     <h5 class="text-center">Usuario:</h5><p class="text-center">{{c.usuario}}</p>
-     <h5 class="text-center">Descripción:</h5><p class="text-center">{{c.descripcion}}</p>
-    </div>
-    <div class="col  text-center">
-      <br>
-      <br>
-      <br>
-      <a href="{% url 'mostrarPerfil_url' c.id %}" class="btn btn-dark m-auto">Ver perfil</a>
-    </div>
+  <div class="container">
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="form-inline justify-content-center">
+        {{form.nombre}}
+        <div class="btn-toolbar">
+          <button type="submit" class="btn btn-dark mr-2">Buscar</button>
+        </div>
+      </div>
+    </form>
   </div>
   <br>
-</div>
+  {% for c in query %}
+  <div class="container jumbotron">
+    <div class="row">
+      <div class="col my-auto text-center">
+        <img src={{c.imagen.url}} height="200" width="200" class="img-fluid border border-dark">
+        <br>
+        {% if c.puntuacion == 1 %}
+        <br>
+        <div class="rating mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+        </div>
+        {% endif %}
+        {% if c.puntuacion == 2 %}
+        <br>
+        <div class="rating mx-auto">
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          {% endif %}
+          {% if c.puntuacion == 3 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+          {% if c.puntuacion == 4 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+          {% if c.puntuacion == 5 %}
+          <br>
+          <div class="rating mx-auto">
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+            <i class="fa fa-star" aria-hidden="true" style="color: #FFCA00; font-size: 22px;"></i>
+          </div>
+          {% endif %}
+        </div>
+        <div class="col">
+          <br>
+          <h5 class="text-center">Usuario:</h5>
+          <p class="text-center">
+            {%if c.es_afiliado%}
+              <img src="{% static "tick.png" %}" height="20" width="20" >
+            {%endif%}
+          {{c.usuario}}</p>
+
+          <h5 class="text-center">Descripción:</h5>
+          <p class="text-center">{{c.descripcion}}</p>
+        </div>
+        <div class="col  text-center">
+          <br>
+          <br>
+          <br>
+          <a href="{% url 'mostrarPerfil_url' c.id %}" class="btn btn-dark m-auto">Ver perfil</a>
+        </div>
+      </div>
+      <br>
+    </div>
     {% empty %}
     <h3 class="display-2 text-center"> No se han encontrado resultados</h3>
-</div>
-{% endfor %}
-{% endblock %}
+
+    {% endfor %}
+
+    {%if query%}
+    <div class="container text-center">
+      <ul class="pagination">
+        {% if query.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{query.previous_page_number }}">Anterior</a></li>
+        {%else %}
+        <li class="page-item disabled">
+          <span class="page-link">Anterior</span>
+        </li>
+        {% endif %}
+        {% for num in query.paginator.page_range %}
+        {% ifequal num query.number %}
+        <li class="page-item active">
+          <span class="page-link">
+            {{ num }}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endifequal %}
+        {% endfor %}
+        {% if query.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{query.next_page_number }}">Siguiente</a>
+        </li>
+        {%else%}
+        <li class="page-item disabled">
+          <span class="page-link">Siguiente</span>
+        </li>
+        {% endif %}
+
+      </ul>
+    </div>
+    {%endif%}
+
+  </div>
+
+
+
+  {% endblock %}

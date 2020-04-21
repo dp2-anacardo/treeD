@@ -2,12 +2,32 @@
 """
 
 from django import forms
-from main.models import Perfil, DirecPerfil, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Categoria, ImgPrueba, ImgImpresion, ImgCompra, Impresion, Presupuesto, Opinion
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from datetime import date
 import re
 
+
+class CrearOpinionForm(forms.ModelForm):
+    class Meta:
+        model = Opinion
+        fields = {
+            'nota',
+            'opinion',
+        }
+        widgets = {
+            'nota': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 5}),
+            'opinion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Opinion'}),
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        nota = cleaned_data.get("nota")
+
+        if nota < 1 or nota > 5:
+            msg = "La nota debe estar entre 1 y 5"
+            raise ValidationError({'nota': [msg, ]})
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -21,23 +41,56 @@ def validate_file_extension(value):
         raise ValidationError('Los archivos deben ser imagenes .jpg, .png, .jpeg o .bmp')
 
 class PedirPresupuestoForm(forms.ModelForm):
+
+    tamaño = forms.CharField(label="Tamaño", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Altura x Anchura'}))
+    material = forms.CharField(label="Material", required=False, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Material'}))
+
     class Meta:
         model = Presupuesto
         fields = {
             'peticion',
             'descripcion',
+            'tamaño',
+            'material'
         }
         widgets = {
             'peticion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Peticion'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Descripcion'}),
         }
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        tamaño = cleaned_data.get("tamaño")
+        material = self.cleaned_data.get('material')
+
+        if tamaño !=None and tamaño !="":
+            if not re.match("^([1-9]+)([0-9]*) x ([1-9]+)([0-9]*)*$", tamaño):
+                #msg = "El tamaño debe de tener la forma Altura x Anchura, por ejemplo 30 x 30 (Con los espacios entre los números y la x)"
+                msg1 = "El tamaño debe de cumplir las siguientes condiciones. Tener la forma Altura x Anchura "
+                msg2 = "(p.e 30 x 30), tener espacios entre la 'x' (p.e 30 x 30, no 30x30)"
+                msg3 = " y no empezar por 0 ni llevar decimales (p.e no se permite 0 x 0 o "
+                msg4 = "30,1 x 30,1)"
+                msg = msg1 + msg2 + msg3 + msg4
+                raise ValidationError({'tamaño': [msg, ]})
+
+        if material !=None and material !="":
+            if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", material):
+                msg = "El material solo debe contener letras"
+                raise ValidationError({'tamaño': [msg, ]})
+
 
 class ResponderPresupuestoForm(forms.ModelForm):
-    fecha_envio = forms.DateField(
+
+    fecha_envio = forms.DateField(required=False,
         widget=DateInput(attrs={'class': 'form-control',
                                 'placeholder': 'Fecha de envio'})
     )
+
+    precio = forms.DecimalField(
+        decimal_places=2,
+        widget = forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}))
 
     class Meta:
         model = Presupuesto
@@ -47,7 +100,6 @@ class ResponderPresupuestoForm(forms.ModelForm):
             'fecha_envio',
         }
         widgets = {
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),
             'notas': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Notas'}),
         }
 
@@ -57,7 +109,13 @@ class ResponderPresupuestoForm(forms.ModelForm):
         fecha_envio = cleaned_data.get("fecha_envio")
         today = date.today()
 
-        if precio <= 0:
+        if not fecha_envio:
+            raise ValidationError((""), code='invalid')
+        try:
+            if precio <= 0:
+                msg = "El precio debe ser mayor que 0"
+                raise ValidationError({'precio': [msg, ]})
+        except:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg, ]})
 
@@ -82,7 +140,7 @@ class EditarUsernameForm(forms.ModelForm):
             msg = "El nombre de usuario debe tener al menos 6 caracteres"
             raise ValidationError({'username': [msg, ]})
 
-        if not re.match("^[A-Za-z0-9]*$", username):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", username):
             msg = "El nombre de usuario solo puede contener letras y numeros"
             raise ValidationError({'username': [msg, ]})
 
@@ -116,7 +174,7 @@ class EditarPasswordForm(forms.Form):
             msg = "La contraseña debe tener al menos 8 caracteres"
             raise ValidationError({'password': [msg, ]})
 
-        if not re.match("^[A-Za-z0-9]*$", password):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", password):
             msg = "La contraseña solo puede contener letras y numeros"
             raise ValidationError({'password': [msg, ]})
 
@@ -137,7 +195,9 @@ class EditarPerfilForm(forms.ModelForm):
     apellidos = forms.CharField(label="Apellidos", widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Apellidos'}))
     email = forms.CharField(label="Email", widget=forms.EmailInput(
-        attrs={'class': 'form-control', 'placeholder': 'email'}))
+        attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    email_paypal = forms.CharField(label="Email de Paypal", widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}))
     descripcion = forms.CharField(label="Descripción", required=False, widget=forms.Textarea(
         attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}))
     imagen = forms.ImageField(
@@ -154,6 +214,7 @@ class EditarPerfilForm(forms.ModelForm):
             "descripcion",
             "imagen",
             "email",
+            "email_paypal",
         )
 
     def clean_nombre(self):
@@ -183,9 +244,54 @@ class EditarPerfilForm(forms.ModelForm):
 
 
 class AñadirDirecPerfilForm(forms.Form):
-    direccion = forms.CharField(label="Direccion principal", widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}))
+    error_messages = {
+        'codigo_postal_error': ("El codigo postal debe tener 5 números"),
+        'ciudad_error': ("La ciudad solamente puede contener letras"),
+        'localidad_error': ("La localidad solamente puede contener letras"),
+    }
+    ciudad = forms.CharField(label="Ciudad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    localidad = forms.CharField(label="Localidad", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
+    calle = forms.CharField(label="Calle o avenida", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}))
+    numero = forms.CharField(label="Portal y número", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}))
+    codigo_postal = forms.CharField(label="Código postal", widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': '41008'}))
 
+    def clean_codigo_postal(self):
+        codigo_postal = self.cleaned_data.get('codigo_postal')
+
+        if not re.match("^[0-9]{5}$", codigo_postal):
+            raise forms.ValidationError(
+                self.error_messages['codigo_postal_error'],
+                code='codigo_postal_error',
+            )
+        return codigo_postal
+    
+    def clean_ciudad(self):
+        ciudad = self.cleaned_data.get('ciudad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", ciudad):
+            raise forms.ValidationError(
+                self.error_messages['ciudad_error'],
+                code='ciudad_error',
+            )
+        return ciudad
+    
+    def clean_localidad(self):
+        localidad = self.cleaned_data.get('localidad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", localidad):
+            raise forms.ValidationError(
+                self.error_messages['localidad_error'],
+                code='localidad_error',
+            )
+        return localidad
+
+class GDPRForm(forms.Form):
+    checkbox = forms.BooleanField(label="", required=True, widget=forms.CheckboxInput())
 
 class BuscadorForm(forms.Form):
 
@@ -201,7 +307,7 @@ class BuscadorForm(forms.Form):
         required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control w-50 mr-2',
-                   'placeholder': 'Buscar Piezas 3D'}
+                   'placeholder': 'Buscar Impresiones 3D'}
         )
     )
     categorias = forms.ModelMultipleChoiceField(
@@ -209,17 +315,19 @@ class BuscadorForm(forms.Form):
         widget=forms.CheckboxSelectMultiple(),
         required=False
     )
-    precio_min = forms.FloatField(
+    precio_min = forms.DecimalField(
         label='Precio Minimo',
         required=False,
+        decimal_places=2,
         widget=forms.NumberInput(
             attrs={'class': 'form-control w-100 ',
                    'placeholder': 'Precio Minimo'}
         )
     )
-    precio_max = forms.FloatField(
+    precio_max = forms.DecimalField(
         label='Precio Maximo',
         required=False,
+        decimal_places=2,
         widget=forms.NumberInput(
             attrs={'class': 'form-control w-100 ',
                    'placeholder': 'Precio Maximo'}
@@ -239,6 +347,11 @@ class BuscadorForm(forms.Form):
 
 
 class ImpresionForm(forms.ModelForm):
+
+    precio = forms.DecimalField(
+        decimal_places=2,
+        widget = forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}))
+
     class Meta:
         model = Impresion
         fields = {
@@ -251,7 +364,6 @@ class ImpresionForm(forms.ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Titulo'}),
             'descripcion': forms.Textarea(
                 attrs={'class': 'form-control', 'placeholder': 'Descripcion', 'rows': 4}),
-            'precio': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio'}),
             'categorias': forms.CheckboxSelectMultiple(),
 
         }
@@ -261,8 +373,11 @@ class ImpresionForm(forms.ModelForm):
         """
         cleaned_data = self.cleaned_data
         precio = cleaned_data.get("precio")
-
-        if precio <= 0:
+        try:
+            if precio <= 0:
+                msg = "El precio debe ser mayor que 0"
+                raise ValidationError({'precio': [msg, ]})
+        except:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg, ]})
 
@@ -290,6 +405,28 @@ class ImagenesPruebaForm(forms.Form):
             attrs={'multiple': False, 'class': 'form-control-file'}),
             validators=[validate_file_extension]
     )
+
+class CodigoForm(forms.Form):
+    error_messages = {
+        'empresa_envio_error': ("La empresa solo puede contener letras"),
+    }
+    codigo_envio = forms.CharField(label='Código de envío', required=False,
+    widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 'placeholder': 'Código de envío'}))
+
+    empresa_envio = forms.CharField(label='Empresa encargada del envío', required=True,
+    widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 
+    'placeholder': 'Correos, AliExpress'})
+    )
+
+    def clean_empresa_envio(self):
+        empresa_envio = self.cleaned_data.get('empresa_envio')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", empresa_envio):
+            raise forms.ValidationError(
+                self.error_messages['empresa_envio_error'],
+                code='empresa_envio_error',
+            )
+        return empresa_envio
 
 
 class BuscarUsuariosForm(forms.Form):
@@ -330,11 +467,13 @@ class PerfilForm(forms.ModelForm):
             'apellidos',
             'email',
             'descripcion',
+            'email_paypal',
         }
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre'}),
             'apellidos': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellidos'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'email_paypal': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email de Paypal'}),
             'descripcion': forms.Textarea(
                 attrs={'class': 'form-control', 'placeholder': 'Descripción', 'rows': 4}),
         }
@@ -358,17 +497,66 @@ class PerfilForm(forms.ModelForm):
                 code='apellidos_letters',
             )
         return apellidos
+    
+    def __init__(self, *args, **kwargs):
+        super(PerfilForm, self).__init__(*args, **kwargs)
+        self.fields['email_paypal'].required = False
 
 
 class DirecPerfilForm(forms.ModelForm):
+    error_messages = {
+        'codigo_postal_error': ("El código postal debe tener 5 números"),
+        'ciudad_error': ("La ciudad solamente puede contener letras"),
+        'localidad_error': ("La localidad solamente puede contener letras"),
+    }
+    
     class Meta:
         model = DirecPerfil
         fields = {
-            'direccion',
+            'ciudad',
+            'localidad',
+            'calle',
+            'numero',
+            'codigo_postal',
         }
         widgets = {
-            'direccion': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ciudad, Calle Nº, CP'}),
+            'ciudad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'localidad': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Sevilla'}),
+            'calle': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'C/Carretera Carmona'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nº27 2ºIzq'}),
+            'codigo_postal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '41008'}),
+
         }
+    
+    def clean_codigo_postal(self):
+        codigo_postal = self.cleaned_data.get('codigo_postal')
+
+        if not re.match("^[0-9]{5}$", codigo_postal):
+            raise forms.ValidationError(
+                self.error_messages['codigo_postal_error'],
+                code='codigo_postal_error',
+            )
+        return codigo_postal
+
+    def clean_ciudad(self):
+        ciudad = self.cleaned_data.get('ciudad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", ciudad):
+            raise forms.ValidationError(
+                self.error_messages['ciudad_error'],
+                code='ciudad_error',
+            )
+        return ciudad
+    
+    def clean_localidad(self):
+        localidad = self.cleaned_data.get('localidad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", localidad):
+            raise forms.ValidationError(
+                self.error_messages['localidad_error'],
+                code='localidad_error',
+            )
+        return localidad
 
 
 class UserForm(forms.ModelForm):
@@ -412,7 +600,7 @@ class UserForm(forms.ModelForm):
                 code='password_short',
             )
 
-        if not re.match("^[A-Za-z0-9]*$", password1):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", password1):
             raise forms.ValidationError(
                 self.error_messages['password_letters'],
                 code='password_letters',
@@ -433,7 +621,7 @@ class UserForm(forms.ModelForm):
                 code='username_short',
             )
 
-        if not re.match("^[A-Za-z0-9]*$", username):
+        if not re.match("^[A-Za-z0-9\u00f1\u00d1]*$", username):
             raise forms.ValidationError(
                 self.error_messages['username_letters'],
                 code='username_letters',

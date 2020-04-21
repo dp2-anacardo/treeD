@@ -4,7 +4,7 @@
 <div class="bottom-footer">
 <div class="jumbotron">
     <h1 class="display-1 text-center ">Bienvenido a TreeD</h1>
-    <p class="lead text-center">Aquí encontrarás piezas 3D</p>
+    <p class="lead text-center">Aquí encontrarás impresiones 3D</p>
     <hr class="my-4">
     <div class="row">
       <div class="col-lg-4"></div>
@@ -32,7 +32,9 @@
       <br>
       <div class="text-center">
         {% if user.is_authenticated %}
+        {% if user.is_superuser == 0 %}
         <a href="/misPublicaciones/" class="btn btn-dark btn-lg">¡Publica ahora!</a>
+        {% endif %}
         {% else %}
         <a href="/register/" class="btn btn-dark btn-lg">¡Regístrate Ahora!</a>
         {% endif %}
@@ -42,7 +44,7 @@
     <div class="col-md-4">
       <img class="index-icons" src="{% static "presupuesto_default.png" %}" alt="Smiley face" height="120" width="120">
       <h3 class="text-center">Presupuestos</h3>
-      <p class="lead mb-0 text-center">Pida piezas completamente personalizadas a los vendedores</p>
+      <p class="lead mb-0 text-center">Pida impresiones completamente personalizadas a los vendedores</p>
       <br>
       <div class="text-center">
         <a href="/usuarios/listar/" class="btn btn-dark btn-lg">¡Busca Vendedores!</a>
@@ -55,7 +57,9 @@
       <p class="lead mb-0 text-center">Forma parte de nuestro sistema de afliados y aumenta tus ventas</p>
       <br>
       <div class="text-center">
+        {% if user.is_superuser == 0 %}
         <a href="/hazteAfiliado/" class="btn btn-dark btn-lg">¡Hazte Afiliado!</a>
+        {% endif %}
       </div>
       <br>
       </div>

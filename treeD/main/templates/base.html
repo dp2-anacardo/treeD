@@ -25,8 +25,9 @@
                         <a href="/impresion/listarImpresiones" class="nav-item nav-link">Impresiones 3D</a>
                         
                         <a href="/usuarios/listar" class="nav-item nav-link">Vendedores</a>
-                       
+                        {% if user.is_superuser == 0 %}
                         <a href="/hazteAfiliado" class="nav-item nav-link">Hazte Afiliado</a>
+                        {% endif %}
                     </div>
                     {% if user.is_authenticated %}
                     <div class="navbar-nav ml-auto">
@@ -36,11 +37,16 @@
                         </a>
                       
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          {% if user.is_superuser %}
+                          <a class="dropdown-item" href="/administrador/compras">Pago a vendedores</a>
+                          {% else %}
                           <a class="dropdown-item" href="/perfil/{{user.perfil.id}}">Mi Perfil</a>
+                          <a class="dropdown-item" href="/usuarios/estadisticas">Mis Estadísticas</a>
                           <a class="dropdown-item" href="/misPublicaciones/">Mis Publicaciones</a>
                           <a class="dropdown-item" href="/impresion/listarVentas">Mis Ventas</a>
                           <a class="dropdown-item" href="/impresion/listarCompras">Mis Compras</a>
-                          <a class="dropdown-item" href="/presupuesto/enviados">Mis Presupuestos</a>
+                          <a class="dropdown-item" href="/presupuesto/enviados/">Mis Presupuestos</a>
+                          {% endif %}
                           <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                         </div>
                       </div>
@@ -48,7 +54,7 @@
                     {% else %}
                     <div class="navbar-nav ml-auto">
                         <a href="/register" class="nav-item nav-link">Registro</a>
-                        <a href="/login" class="nav-item nav-link" >Login</a>
+                        <a href="/login" class="nav-item nav-link" >Acceso</a>
                     </div>
                     {% endif %}
                 </div>
@@ -65,7 +71,7 @@
             <div class="col-lg-4 text-light text-lg-center" >© 2020 Copyright: TreeD
             </div>
             <div class="col-lg-4 text-lg-right">
-              <a href="#" class="text-light"> Términos de Uso</a>
+              <a href="/gdpr" class="text-light"> Términos y condiciones</a>
           
             </div>
           </div>

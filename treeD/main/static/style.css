@@ -30,3 +30,55 @@ ul{
 .carousel {
   height: 400px;
 }
+
+  .rating {
+  overflow: hidden;
+  display: table;
+  font-size: 20px;
+  color: #FFCA00;
+  font-style: normal;
+}
+
+.rating-star {
+  padding: 0 5px;
+  margin: 0;
+  cursor: pointer;
+  display: block;
+  float: right;
+}
+
+.rating-star:after {
+  position: relative;
+  font-family: FontAwesome;
+  content: '\f006';
+}
+
+.rating-star.checked~.rating-star:after,
+.rating-star.checked:after {
+  content: '\f005';
+}
+
+.rating:hover .rating-star:after {
+  content: '\f006';
+}
+
+.rating-star:hover~.rating-star:after,
+.rating-star:hover:after {
+  content: '\f005' !important;
+}
+
+#id_direccion {
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 200px;
+}
+
+@media only screen and (max-width: 400px) {
+  #id_direccion {
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100px;
+  }
+}

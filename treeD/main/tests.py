@@ -1,9 +1,45 @@
 from django.test import TestCase, Client
-from main.models import Perfil, DirecPerfil, Compra, ImgPrueba, ImgImpresion, Impresion, Presupuesto
+from main.models import Perfil, DirecPerfil, Compra, ImgPrueba, ImgImpresion, Impresion, Presupuesto, Opinion
 from django.contrib.auth.models import User
 from pathlib import Path
 import os
 
+class OpinionTest(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_ver_opiniones(self):
+        response = self.client.get('/perfil/3/')
+        opiniones = Opinion.objects.filter(compra__vendedor__pk=3)
+        self.assertQuerysetEqual(
+            response.context['opiniones'],
+            opiniones, transform=lambda x: x
+        )
+
+    def test_crear_opinion_no_valido(self):
+        """ Test donde un usuario intenta crear
+            una opinion en una compra donde ya
+            opino. Redirijido a pagina de error
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        response = self.client.get("/opinion/crearOpinion/25/", follow=True)
+        self.assertTemplateUsed(response, "impresiones/paginaError.html")
+
+    def test_crear_opinion_valido(self):
+        """ Test donde un usuario intenta crear
+            una opinion en una compra.
+        """
+        self.client.login(username="AAAnuel", password="Usuario2")
+        self.client.post("/opinion/crearOpinion/26/", {
+            "nota": 3,
+            "opinion": "La impresion esta mal hecha, pero el trato ha sido bueno"
+        }, follow=True)
+        opinion = Opinion.objects.get(compra__pk=26, puntuador__pk=24)
+        self.assertEquals(opinion.nota, 3)
+        self.assertEquals(
+            opinion.opinion,
+            "La impresion esta mal hecha, pero el trato ha sido bueno"
+        )
 
 class ImgPruebaTest(TestCase):
 
@@ -20,7 +56,7 @@ class ImgPruebaTest(TestCase):
             img_prueba = list(ImgPrueba.objects.filter(compra=compra))
             self.assertTrue(not img_prueba)
             self.client.post("/compra/subirImagenes/25/", {
-                "imagen": imagen
+                "imagen": imagen, "codigo_envio":"12345", "empresa_envio":"AliExpress"
             }, follow=True)
             img_prueba = ImgPrueba.objects.get(compra=compra)
             self.assertTrue(img_prueba)
@@ -174,7 +210,8 @@ class EditarPerfilTest(TestCase):
             "nombre": 'Manuel',
             "apellidos": "Roldan",
             "descripcion": "Hola soy ManuErCaximba",
-            "email": "caximba@gmail.com"
+            "email": "caximba@gmail.com",
+            "email_paypal": "caximba@gmail.com"
         }, follow=True)
         perfil_actualizado = Perfil.objects.get(nombre="Manuel")
         self.assertEquals(perfil_actualizado.usuario.username, "ManuErCaximba")
@@ -234,20 +271,24 @@ class EditarPerfilTest(TestCase):
         user = User.objects.get(username="Ipatia")
         perfil = Perfil.objects.get(usuario=user)
         response = self.client.post('/añadirDireccion/', {
-            'direccion': 'C/Anacardo, Segundo piso de pistacho, Nº234',
+            'ciudad': 'Sevilla',
+            'localidad': 'Sevilla',
+            'calle': 'C/Anacardo',
+            'numero': 'Segundo piso de pistacho',
+            'codigo_postal': '41001',
         }, follow=True)
         direccion_added = DirecPerfil.objects.get(
-            direccion='C/Anacardo, Segundo piso de pistacho, Nº234')
+            calle='C/Anacardo')
         self.assertTemplateUsed(response, 'mostrarDirecciones.html')
-        self.assertEquals(direccion_added.direccion,
-                          'C/Anacardo, Segundo piso de pistacho, Nº234')
+        self.assertEquals(direccion_added.calle,
+                          'C/Anacardo')
         self.assertEquals(direccion_added.perfil, perfil)
 
         """ Eliminar direccion """
         response = self.client.get(
             '/eliminarDireccion/' + str(direccion_added.id) + '/')
         direccion = list(DirecPerfil.objects.filter(
-            direccion='C/Anacardo, Segundo piso de pistacho, Nº234'))
+            calle='C/Anacardo'))
         self.assertTrue(not direccion)
 
 
@@ -299,17 +340,44 @@ class CRUDImpresiones3D(TestCase):
         response = self.client.get('/impresion/mostrarImpresion/17/')
         self.assertEqual(response.context['impresion'], result.first())
 
-    def test_crear_impresion_3d(self):
+    def test_crear_impresion_3d_get(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/crearImpresion/')
         self.assertEqual(response.status_code, 200)
 
-    def test_modificar_impresion_3d(self):
+    def test_crear_impresion_3d_post(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        file = Path("./main/static/3d.png")
+        with open(file, 'rb') as imagen:
+            c.post('/impresion/crearImpresion/', {
+                'nombre': 'TestAnacardo',
+                'descripcion': 'Esto es una impresion de test',
+                'precio': 10,
+                'imagen': imagen
+            }, follow=True)
+            impresion = Impresion.objects.get(nombre='TestAnacardo')
+            self.assertEquals(impresion.nombre, 'TestAnacardo')
+            path = Path("./carga/imagenes/3d.png")
+            os.remove(path)
+
+    def test_modificar_impresion_3d_get(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/impresion/editarImpresion/17/')
         self.assertEqual(response.status_code, 200)
+
+    def test_modificar_impresion_3d_post(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        c.post('/impresion/editarImpresion/17/', {
+                'nombre': 'TestAnacardo2',
+                'descripcion': 'Esto es una impresion de test',
+                'precio': 10,
+        }, follow=True)
+        impresion = Impresion.objects.get(pk=17)
+        self.assertEquals(impresion.nombre, 'TestAnacardo2')
 
     def test_eliminar_impresion_3d(self):
         c = Client()
@@ -344,7 +412,7 @@ class ComprarImpresionesTest(TestCase):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/impresion/comprar/17/31/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_comprar_impresion_vendedor(self):
         c = Client()
@@ -418,8 +486,22 @@ class RegistroTest(TestCase):
     fixtures = ["initialize.xml"]
 
     def test_registro(self):
-        c = Client()
-        response = c.get('/register/')
+        response = self.client.post('/register/', {
+            'username': 'Probando1',
+            'password1': 'Probando1',
+            'password2': 'Probando1',
+            'nombre': 'Prueba',
+            'apellidos': 'Prueba Test',
+            'email': 'email@gmail.com',
+            'email_paypal': 'paypal@gmail.com',
+            'descripcion': 'Me gusta hacer impresiones 3D',
+            'ciudad': 'Sevilla',
+            'localidad': 'Sevilla',
+            'calle': 'C/Santa María de Ordaz',
+            'numero': 'Nº14 1ºC',
+            'codigo_postal': '41008',
+        }, follow=True)
+        self.assertTemplateUsed(response, 'registration/register.html')
         self.assertEqual(response.status_code, 200)
 
 
@@ -447,7 +529,7 @@ class ListarPresupuestosTest(TestCase):
     def test_listar_presupuestos_interesados(self):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
-        response = c.get('/presupuesto/enviados')
+        response = c.get('/presupuesto/enviados/')
 
         presupuestos_enviados = Presupuesto.objects.all().filter(interesado=24)
 
@@ -458,7 +540,7 @@ class ListarPresupuestosTest(TestCase):
     def test_listar_presupuestos_vendedores(self):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
-        response = c.get('/presupuesto/recibidos')
+        response = c.get('/presupuesto/recibidos/')
 
         presupuestos_recibidos = Presupuesto.objects.all().filter(vendedor=3)
 
@@ -565,7 +647,7 @@ class AceptarPresupuestosTest(TestCase):
         c = Client()
         c.login(username='AAAnuel', password='Usuario2')
         response = c.get('/presupuesto/comprar/32/31/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_comprar_presupuesto_vendedor(self):
         c = Client()
@@ -582,6 +664,12 @@ class VerPresupuestoTest(TestCase):
         c = Client()
         c.login(username='Ipatia', password='Usuario1')
         response = c.get('/presupuesto/mostrarPresupuesto/32/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_ver_respuesta_presupuesto(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/presupuesto/mostrarRespuesta/32/')
         self.assertEqual(response.status_code, 200)
 
     def test_ver_presupuesto_invalido(self):
@@ -606,3 +694,62 @@ class Subscripciones(TestCase):
         c.login(username='Ipatia', password='suario1')
         response = c.get('/usuarios/afiliarse/')
         self.assertEqual(response.status_code, 302)
+
+class EstadisticasVenta(TestCase):
+
+    fixtures = ["initialize.xml"]
+
+    def test_estadisticas_afiliado(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/usuarios/estadisticas/')
+        self.assertEqual(response.status_code, 200)
+        
+class PagosAdministrador(TestCase):
+
+    fixtures = ["populate.xml"]
+
+    def test_listar_compras_valido(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_listar_compras_no_valido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/administrador/compras/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador_valido(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/pagoCompras/25/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador_no_valido(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/administrador/pagoCompras/25/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_pago_administrador(self):
+        c = Client()
+        c.login(username='administrator', password='administrator')
+        response = c.get('/administrador/pago/25/')
+        
+class Afiliados(TestCase):
+    
+    fixtures = ["initialize.xml"]
+
+    def test_hazte_afiliado(self):
+        c = Client()
+        c.login(username='AAAnuel', password='Usuario2')
+        response = c.get('/hazteAfiliado/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_info_cancelar_afiliado(self):
+        c = Client()
+        c.login(username='Ipatia', password='Usuario1')
+        response = c.get('/cancelarAfiliado/')
+        self.assertEqual(response.status_code, 200)

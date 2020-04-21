@@ -20,10 +20,10 @@
                 <div class="card card-body ">
                     
                         {% if direcciones|length == 1 %}
-                            <h6 class="text-center">{{ direcciones.0.direccion }}</h6>
+                            <h6 class="text-center">{{ direcciones.0 }}</h6>
                         {% else %}
                         {% for i in direcciones %}
-                            <h6 class="text-center ">{{ i.direccion }}</h6>
+                            <h6 class="text-center ">{{ i }}</h6>
                             <div class="text-center">
                             <a href="{% url 'eliminarDireccion_url' i.id %}" class="btn btn-primary btn-dark">
                                 Eliminar
@@ -40,7 +40,20 @@
                     {% csrf_token %}
                     <h1 class="display-4 py-2 text-center">Nueva Dirección</h1>
                     <br>
-                    {{ form.direccion }}
+                    <div class="text-center">Ciudad</div>
+                    {{ form.ciudad }}
+                    <br>
+                    <div class="text-center">Localidad</div>
+                    {{ form.localidad }}
+                    <br>
+                    <div class="text-center">Calle</div>
+                    {{ form.calle }}
+                    <br>
+                    <div class="text-center">Portal y número</div>
+                    {{ form.numero }}
+                    <br>
+                    <div class="text-center">Código Postal</div>
+                    {{ form.codigo_postal }}
                     <br>
                     
                     <div class="text-center">

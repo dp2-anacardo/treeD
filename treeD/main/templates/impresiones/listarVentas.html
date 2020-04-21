@@ -11,23 +11,74 @@
         <img src={{v.imgcompra_set.all.0.imagen.url}} height="200" width="200" class="img-fluid border border-dark">
       </div>
       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Nombre de la impresión:</h5><p class="text-center">{{v.nombre_impresion}}</p>
-       <h5 class="text-center">Fecha de compra:</h5><p class="text-center">{{v.fecha_compra}}</p>
-       {% if v.imgprueba_set.all.0 == None %}
-       <div class="text-center">
-       <a href="{% url 'subirImagenesPrueba_url' v.id %}" class="btn btn-dark ">Subir Pruebas de Envío</a></div>
-       {% endif %}
+        <h5 class="text-center">Nombre de la impresión:</h5>
+        <p class="text-center">{{v.nombre}}</p>
+        <h5 class="text-center">Fecha de compra:</h5>
+        <p class="text-center">{{v.fecha_compra}}</p>
+        <h5 class="text-center">Precio:</h5>
+        <p class="text-center">{{v.precio}}€</p>
       </div>
-       <div class="col-lg-4 my-auto">
-       <h5 class="text-center">Precio:</h5><p class="text-center">{{v.precio_impresion}}€</p>
-       <h5 class="text-center">Comprador:</h5><p class="text-center">{{v.comprador}}</p>
+      <div class="col-lg-4 my-auto">
+        
+        <h5 class="text-center">Comprador:</h5>
+        <p class="text-center">
+        {{v.comprador.nombre}} {{v.comprador.apellidos}}</p>
+        <h5 class="text-center">Dirección:</h5>
+        <p class="text-center">{{v.direccion}}</p>
+        {% if v.imgprueba_set.all.0 == None %}
+        <div class="text-center">
+          <a href="{% url 'subirImagenesPrueba_url' v.id %}" class="btn btn-dark ">Subir Pruebas de Envío</a></div>
+        {% endif %}
+        {% if v.imgprueba_set.all.0 != None %}
+        {% if v.codigoenvio_set.all.0.codigo_envio != None and v.codigoenvio_set.all.0.codigo_envio != "" %}
+        <h5 class="text-center">Código de seguimiento:</h5>
+        <p class="text-center">{{v.codigoenvio_set.all.0.codigo_envio}}</p>
+        {% endif %}
+        <h5 class="text-center">Empresa encargada del envío:</h5>
+        <p class="text-center">{{v.codigoenvio_set.all.0.empresa_envio}}</p>
+        {% endif %}
       </div>
     </div>
-    <br>
   </div>
   {% empty %}
   <h1 class="text-center display-4">No has realizado ninguna venta</h1>
   {% endfor %}
+
+  {%if query%}
+  <div class="container text-center">
+    <ul class="pagination">
+      {% if query.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{query.previous_page_number }}">Anterior</a></li>
+      {%else %}
+      <li class="page-item disabled">
+        <span class="page-link">Anterior</span>
+      </li>
+      {% endif %}
+      {% for num in query.paginator.page_range %}
+      {% ifequal num query.number %}
+      <li class="page-item active">
+        <span class="page-link">
+          {{ num }}
+          <span class="sr-only">(current)</span>
+        </span>
+      </li>
+      {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+      {% endifequal %}
+      {% endfor %}
+      {% if query.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{query.next_page_number }}">Siguiente</a>
+      </li>
+      {%else%}
+      <li class="page-item disabled">
+        <span class="page-link">Siguiente</span>
+      </li>
+      {% endif %}
+
+    </ul>
+  </div>
+  {%endif%}
 </div>
 {% endblock %}
 

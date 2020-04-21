@@ -6,9 +6,6 @@
     <form action="/list/" method="post">
       {% csrf_token %}
       <div class="form-inline justify-content-center">
-        <!--
-    <input type="text" class="form-control w-50 mr-2" placeholder="Buscar piezas 3D" name="busqueda"/> 
-    -->
         {{form.nombre}}
         <div class="btn-toolbar">
           <button type="submit" class="btn btn-dark mr-2">Buscar</button>
@@ -63,7 +60,7 @@
             <img class="card-img-top" src={{impresion.imgimpresion_set.all.0.imagen.url}} height="190" width="286">
             <div class="card-body">
               <h5 class="card-title text-center">{{impresion.nombre}}</h5>
-              <p class="card-text text-center">{{impresion.precio}}€</p>
+              <p class="card-text text-center">{{impresion.precio}}€ + 1€ extra</p>
             </div>
           </div>
           <br>
@@ -80,4 +77,40 @@
     </div>
   </div>
 </div>
+
+{%if impresiones%}
+<div class="container text-center">
+  <ul class="pagination">
+    {% if impresiones.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{impresiones.previous_page_number }}">Anterior</a></li>
+    {%else %}
+    <li class="page-item disabled">
+      <span class="page-link">Anterior</span>
+    </li>
+    {% endif %}
+    {% for num in impresiones.paginator.page_range %}
+    {% ifequal num impresiones.number %}
+    <li class="page-item active">
+      <span class="page-link">
+        {{ num }}
+        <span class="sr-only">(current)</span>
+      </span>
+    </li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+    {% endifequal %}
+    {% endfor %}
+    {% if impresiones.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{impresiones.next_page_number }}">Siguiente</a>
+    </li>
+    {%else%}
+    <li class="page-item disabled">
+      <span class="page-link">Siguiente</span>
+    </li>
+    {% endif %}
+
+  </ul>
+</div>
+{%endif%}
 {% endblock %}

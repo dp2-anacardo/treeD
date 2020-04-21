@@ -243,6 +243,8 @@ class EditarPerfilForm(forms.ModelForm):
 class AñadirDirecPerfilForm(forms.Form):
     error_messages = {
         'codigo_postal_error': ("El codigo postal debe tener 5 números"),
+        'ciudad_error': ("La ciudad solamente puede contener letras"),
+        'localidad_error': ("La localidad solamente puede contener letras"),
     }
     ciudad = forms.CharField(label="Ciudad", widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Sevilla'}))
@@ -264,6 +266,26 @@ class AñadirDirecPerfilForm(forms.Form):
                 code='codigo_postal_error',
             )
         return codigo_postal
+    
+    def clean_ciudad(self):
+        ciudad = self.cleaned_data.get('ciudad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", ciudad):
+            raise forms.ValidationError(
+                self.error_messages['ciudad_error'],
+                code='ciudad_error',
+            )
+        return ciudad
+    
+    def clean_localidad(self):
+        localidad = self.cleaned_data.get('localidad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", localidad):
+            raise forms.ValidationError(
+                self.error_messages['localidad_error'],
+                code='localidad_error',
+            )
+        return localidad
 
 class GDPRForm(forms.Form):
     checkbox = forms.BooleanField(label="", required=True, widget=forms.CheckboxInput())
@@ -465,6 +487,8 @@ class PerfilForm(forms.ModelForm):
 class DirecPerfilForm(forms.ModelForm):
     error_messages = {
         'codigo_postal_error': ("El código postal debe tener 5 números"),
+        'ciudad_error': ("La ciudad solamente puede contener letras"),
+        'localidad_error': ("La localidad solamente puede contener letras"),
     }
     
     class Meta:
@@ -494,6 +518,26 @@ class DirecPerfilForm(forms.ModelForm):
                 code='codigo_postal_error',
             )
         return codigo_postal
+
+    def clean_ciudad(self):
+        ciudad = self.cleaned_data.get('ciudad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", ciudad):
+            raise forms.ValidationError(
+                self.error_messages['ciudad_error'],
+                code='ciudad_error',
+            )
+        return ciudad
+    
+    def clean_localidad(self):
+        localidad = self.cleaned_data.get('localidad')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", localidad):
+            raise forms.ValidationError(
+                self.error_messages['localidad_error'],
+                code='localidad_error',
+            )
+        return localidad
 
 
 class UserForm(forms.ModelForm):

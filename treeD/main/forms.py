@@ -111,8 +111,11 @@ class ResponderPresupuestoForm(forms.ModelForm):
 
         if not fecha_envio:
             raise ValidationError((""), code='invalid')
-
-        if precio <= 0:
+        try:
+            if precio <= 0:
+                msg = "El precio debe ser mayor que 0"
+                raise ValidationError({'precio': [msg, ]})
+        except:
             msg = "El precio debe ser mayor que 0"
             raise ValidationError({'precio': [msg, ]})
 

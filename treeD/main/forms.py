@@ -401,6 +401,9 @@ class ImagenesPruebaForm(forms.Form):
     )
 
 class CodigoForm(forms.Form):
+    error_messages = {
+        'empresa_envio_error': ("La empresa solo puede contener letras"),
+    }
     codigo_envio = forms.CharField(label='Código de envío', required=False,
     widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 'placeholder': 'Código de envío'}))
 
@@ -408,6 +411,16 @@ class CodigoForm(forms.Form):
     widget=forms.TextInput(attrs={'class': 'form-control w-100 mr-2', 
     'placeholder': 'Correos, AliExpress'})
     )
+
+    def clean_empresa_envio(self):
+        empresa_envio = self.cleaned_data.get('empresa_envio')
+
+        if not re.match("^[A-Za-zÀ-ÿ\u00f1\u00d1\u0020]*$", empresa_envio):
+            raise forms.ValidationError(
+                self.error_messages['empresa_envio_error'],
+                code='empresa_envio_error',
+            )
+        return empresa_envio
 
 
 class BuscarUsuariosForm(forms.Form):

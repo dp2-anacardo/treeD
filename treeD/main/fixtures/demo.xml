@@ -630,7 +630,7 @@
         <field type="DateField" name="fecha_compra">2020-03-28</field>
         <field type="BooleanField" name="pagado">False</field>
     </object>
-        <object pk="150" model="main.compra">
+    <object pk="150" model="main.compra">
         <field to="main.perfil" name="vendedor" rel="OneToOneRel">99</field>
         <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
         <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
@@ -670,8 +670,48 @@
         <field type="DateField" name="fecha_compra">2020-05-18</field>
         <field type="BooleanField" name="pagado">True</field>
     </object>
-
-<object pk="160" model="main.imgCompra">
+    <object pk="154" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">99</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">44</field>
+        <field type="CharField" name="nombre">Darth Vader</field>
+        <field type="CharField" name="descripcion">Recreación de Darth Vader de la saga Star wars.</field>
+        <field type="FloatField" name="precio">35.0</field>
+        <field type="DateField" name="fecha_compra">2020-05-16</field>
+        <field type="BooleanField" name="pagado">True</field>
+    </object>
+    <object pk="155" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">99</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">41</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">31</field>
+        <field type="CharField" name="nombre">Casa batlló</field>
+        <field type="CharField" name="descripcion">Recreación de casa batlló.</field>
+        <field type="FloatField" name="precio">40.0</field>
+        <field type="DateField" name="fecha_compra">2020-05-12</field>
+        <field type="BooleanField" name="pagado">True</field>
+    </object>
+    <object pk="156" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">99</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">39</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">42</field>
+        <field type="CharField" name="nombre">Trono de hierro de Games of Thrones</field>
+        <field type="CharField" name="descripcion">Recreación del trono de hierro de la serie Games of Thrones.</field>
+        <field type="FloatField" name="precio">25.0</field>
+        <field type="DateField" name="fecha_compra">2020-05-19</field>
+        <field type="BooleanField" name="pagado">True</field>
+    </object>
+    <object pk="157" model="main.compra">
+        <field to="main.perfil" name="vendedor" rel="OneToOneRel">99</field>
+        <field to="main.perfil" name="comprador" rel="OneToOneRel">40</field>
+        <field to="main.direcPerfil" name="direccion" rel="OneToOneRel">43</field>
+        <field type="CharField" name="nombre">Replicas de groot</field>
+        <field type="CharField" name="descripcion">Recreación del personaje Groot de pequeño y de mayor de la saga Marvel.</field>
+        <field type="FloatField" name="precio">55.0</field>
+        <field type="DateField" name="fecha_compra">2020-05-18</field>
+        <field type="BooleanField" name="pagado">True</field>
+    </object>
+    
+    <object pk="160" model="main.imgCompra">
         <field type="ImageField" name="imagen">storm_trooper.png</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">150</field>
     </object>
@@ -686,6 +726,22 @@
     <object pk="163" model="main.imgCompra">
         <field type="ImageField" name="imagen">sagrada_familia.png</field>
         <field to="main.impresion" name="compra" rel="ManyToOneRel">153</field>
+    </object>
+    <object pk="164" model="main.imgCompra">
+        <field type="ImageField" name="imagen">Dark_veider.png</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">154</field>
+    </object>
+    <object pk="165" model="main.imgCompra">
+        <field type="ImageField" name="imagen">casa_batlló.png</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">155</field>
+    </object>
+    <object pk="166" model="main.imgCompra">
+        <field type="ImageField" name="imagen">trono_de_GOT.png</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">156</field>
+    </object>
+    <object pk="167" model="main.imgCompra">
+        <field type="ImageField" name="imagen">groot1.png</field>
+        <field to="main.impresion" name="compra" rel="ManyToOneRel">157</field>
     </object>
 
     <object pk="170" model="main.ImgPrueba">
@@ -704,6 +760,24 @@
         <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
         <field to="main.Compra" name="compra" rel="ManyToOneRel">153</field>
     </object>
+    <object pk="170" model="main.ImgPrueba">
+        <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">154</field>
+    </object>
+    <object pk="174" model="main.ImgPrueba">
+        <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">155</field>
+    </object>
+    <object pk="175" model="main.ImgPrueba">
+        <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">156</field>
+    </object>
+    <object pk="176" model="main.ImgPrueba">
+        <field type="ImageField" name="imagen">pruebaEnvio1.jpg</field>
+        <field to="main.Compra" name="compra" rel="ManyToOneRel">157</field>
+    </object>
+
+
     <!--IMAGENES COMPRAS-->
     <object pk="27" model="main.imgCompra">
         <field type="ImageField" name="imagen">image1.jpg</field>
@@ -849,5 +923,29 @@
         <field to="main.perfil" name="puntuador" rel="OneToOneRel">41</field> <!--AAANUEL-->
         <field type="IntegerField" name="nota">5</field>
         <field type="CharField" name="opinion">¡Una pasada, muy realista!</field>
+    </object>
+    <object pk="202" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">156</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">39</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">5</field>
+        <field type="CharField" name="opinion">¡Espectacular!</field>
+    </object>
+     <object pk="203" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">157</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">40</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">4</field>
+        <field type="CharField" name="opinion">¡Buen acabado y entrega rápida!</field>
+    </object>
+    <object pk="204" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">154</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">41</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">4</field>
+        <field type="CharField" name="opinion">Con esta he completado mi colección</field>
+    </object>
+    <object pk="205" model="main.Opinion">
+        <field to="main.compra" name="compra" rel="ManyToOneRel">155</field>
+        <field to="main.perfil" name="puntuador" rel="OneToOneRel">41</field> <!--AAANUEL-->
+        <field type="IntegerField" name="nota">4</field>
+        <field type="CharField" name="opinion">Ta refacherito</field>
     </object>
 </django-objects>

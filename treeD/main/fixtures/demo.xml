@@ -360,7 +360,7 @@
     <object pk="101" model="main.impresion">
         <field type="CharField" name="nombre">Sagrada familia</field>
         <field type="CharField" name="descripcion">Recreación de la sagrada familia en miniatura.</field>
-        <field type="FloatField" name="precio">30.0</field>
+        <field type="FloatField" name="precio">50.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
             <object pk="16"></object>
@@ -372,6 +372,50 @@
         <field type="CharField" name="nombre">Storm trooper</field>
         <field type="CharField" name="descripcion">Recreación de un strom trooper de la saga Star wars.</field>
         <field type="FloatField" name="precio">20.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="13"></object>
+            <object pk="15"></object>
+            <object pk="16"></object>
+        </field>
+    </object>
+    <object pk="105" model="main.impresion">
+        <field type="CharField" name="nombre">Dark veider</field>
+        <field type="CharField" name="descripcion">Recreación de dark veider de la saga Star wars.</field>
+        <field type="FloatField" name="precio">35.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="13"></object>
+            <object pk="15"></object>
+            <object pk="16"></object>
+        </field>
+    </object>
+    <object pk="107" model="main.impresion">
+        <field type="CharField" name="nombre">Casa batlló</field>
+        <field type="CharField" name="descripcion">Recreación de casa batlló.</field>
+        <field type="FloatField" name="precio">40.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="12"></object>
+            <object pk="4"></object>
+            <object pk="16"></object>
+        </field>
+    </object>
+    <object pk="109" model="main.impresion">
+        <field type="CharField" name="nombre">Trono de hierro de Games of Thrones</field>
+        <field type="CharField" name="descripcion">Recreación del trono de hierro de la serie Games of Thrones.</field>
+        <field type="FloatField" name="precio">25.0</field>
+        <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
+        <field to="main.categoria" name="categorias" rel="ManyToManyRel">
+            <object pk="12"></object>
+            <object pk="4"></object>
+            <object pk="16"></object>
+        </field>
+    </object>
+    <object pk="111" model="main.impresion">
+        <field type="CharField" name="nombre">Replicas de groot</field>
+        <field type="CharField" name="descripcion">Recreación del personaje Groot de pequeño y de mayor de la saga Marvel.</field>
+        <field type="FloatField" name="precio">55.0</field>
         <field to="main.perfil" name="vendedor" rel="ManyToOneRel">99</field>
         <field to="main.categoria" name="categorias" rel="ManyToManyRel">
             <object pk="13"></object>
@@ -468,12 +512,32 @@
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">62</field>
     </object>
     <object pk="102" model="main.imgImpresion">
-        <field type="ImageField" name="imagen">sagrada familia.png</field>
+        <field type="ImageField" name="imagen">sagrada_familia.png</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">101</field>
     </object>
     <object pk="104" model="main.imgImpresion">
-        <field type="ImageField" name="imagen">storm trooper.png</field>
+        <field type="ImageField" name="imagen">storm_trooper.png</field>
         <field to="main.impresion" name="impresion" rel="ManyToOneRel">103</field>
+    </object>
+    <object pk="106" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">Dark_veider.png</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">105</field>
+    </object>
+    <object pk="108" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">casa_batlló.png</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">107</field>
+    </object>
+    <object pk="110" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">trono_de_GOT.png</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">109</field>
+    </object>
+    <object pk="112" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">groot1.png</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">111</field>
+    </object>
+    <object pk="113" model="main.imgImpresion">
+        <field type="ImageField" name="imagen">groot2.png</field>
+        <field to="main.impresion" name="impresion" rel="ManyToOneRel">111</field>
     </object>
     <!--COMPRAS-->
     <object pk="25" model="main.compra">
